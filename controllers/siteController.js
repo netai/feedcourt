@@ -41,7 +41,6 @@ module.exports = {
   },
   // POST /signup
   signup: function(req, res, next) {
-  //hello world
     usersModel.forge(req.body)
     .save()
     .then(function (model) {
