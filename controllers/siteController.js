@@ -2,11 +2,15 @@ var usersModel = require('../models/usersModel');
 var tokenHelper = require('../helpers/token');
 
 module.exports = {
+  // GET /
+  home: function(req, res, next){
+    res.render('outter_layout',{});
+  },
   // POST /login
   login: function(req, res, next) {
     var email = req.body.email;
     var password = req.body.password;
-
+    console.log(email+password);
     usersModel.forge({email: email,password: password})
     .fetch()
     .then(function (model) {
@@ -17,7 +21,7 @@ module.exports = {
           data: {
             id: model.id,
             user_type: model.get('user_type'),
-            name: model.get('name'),
+            name: model.get('full_name'),
             email: model.get('email'),
           },
           token: tokenHelper.createToken(model),
@@ -47,7 +51,8 @@ module.exports = {
     .then(function (model) {
       res.json(model.toJSON());
     })
-    .otherwise(function (error) {
+    .Catch(function (error) {
+      console.log(error);
       res.status(500).json({msg: error.message,code: 'SYSERR'});
     });
   },
