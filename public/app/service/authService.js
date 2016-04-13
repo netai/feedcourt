@@ -1,7 +1,6 @@
-feedcourt.factory('Auth',function($http,$q,AuthToken){
-
+feedcourt.factory('Auth',function($http,$q,AuthToken,feedcourtConstant){
   var _login = function(email,password){
-    return $http.post('/login',{
+    return $http.post('/api/'+feedcourtConstant.v_1_api+'/login',{
       email: email,
       password: password
     })
