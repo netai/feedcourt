@@ -4,9 +4,15 @@ feedcourt.config(function($httpProvider,$routeProvider,$locationProvider){
   $httpProvider.interceptors.push('AuthInterceptor');
 
   $routeProvider.
+  when("/dashboard",{
+    templateUrl: "templates/site/home.html",
+    controller: "siteCtrl",
+    controllerAs: "siteCtrl"
+  }).
   when("/login",{
     templateUrl: "templates/site/login.html",
-    controller: "siteCtrl"
+    controller: "authCtrl",
+    controllerAs: "authCtrl"
   }).
     otherwise({
       redirectTo: '/login'
