@@ -7,8 +7,7 @@ module.exports = {
   createToken: function(user){
     var token = jsonwebtoken.sign({
       id: user.id,
-      name: user.get('name'),
-      email: user.get('email')
+      user_type: user.get('user_type')
     }, secretKey, {
       expirtesInMinute: 1440
     });

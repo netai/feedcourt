@@ -10,7 +10,6 @@ module.exports = {
   login: function(req, res, next) {
     var email = req.body.email;
     var password = req.body.password;
-    console.log(email+password);
     usersModel.forge({email: email,password: password})
     .fetch()
     .then(function (model) {
