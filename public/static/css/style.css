@@ -370,5 +370,6 @@ table.dataTable thead .sorting:after {
 .admin_title{color: #FB8A11 !important; font-size: 30px;font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;}
 .page_title{font-size: 18px;color: #FF7E3F;font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;}
 .dropdown-menu a{color: #FB8A11 !important;}
-.btn-primary{background-color: #DA6927 !important;;border-color: #DA6927 !important;;}
-.btn-primary:hover{background-color: #FF7E3F !important;;border-color: #FF7E3F !important;;}
+.btn-primary{background-color: #DA6927 !important;border-color: #DA6927 !important;}
+.btn-primary:hover{background-color: #FF7E3F !important;border-color: #FF7E3F !important;}
+.status_icon{font-size: 18px !important;}
