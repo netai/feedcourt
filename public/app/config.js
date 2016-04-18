@@ -5,7 +5,7 @@ feedcourt.config(function($httpProvider,$routeProvider,$locationProvider){
 
   $routeProvider.
   when("/dashboard",{
-    templateUrl: "templates/site/home.html",
+    templateUrl: "templates/site/dashboard.html",
     controller: "siteCtrl",
     controllerAs: "siteCtrl"
   }).
@@ -14,7 +14,22 @@ feedcourt.config(function($httpProvider,$routeProvider,$locationProvider){
     controller: "authCtrl",
     controllerAs: "authCtrl"
   }).
-    otherwise({
+  when("/customers",{
+    templateUrl: "templates/customer/customer_list.html",
+    controller: "customerCtrl",
+    controllerAs: "customerCtrl"
+  }).
+  when("/restaurants",{
+    templateUrl: "templates/restaurant/restaurant_list.html",
+    controller: "restaurantCtrl",
+    controllerAs: "restaurantCtrl"
+  }).
+  when("/foodcourts",{
+    templateUrl: "templates/foodcourt/foodcourt_list.html",
+    controller: "foodcourtCtrl",
+    controllerAs: "foodcourtCtrl"
+  }).
+  otherwise({
       redirectTo: '/login'
     });
 

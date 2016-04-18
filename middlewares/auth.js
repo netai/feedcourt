@@ -20,10 +20,10 @@ module.exports = {
     }
   },
   isAdmin: function(req, res, next){
-    if(req.decoded.user_type==1){
+    if(req.decoded.user_type==1 || req.decoded.user_type==2){
       next();
     } else {
       res.status(403).send({status:'error',code: '2403',message: 'Access Denied'});
     }
-  }
+  },
 };

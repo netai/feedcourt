@@ -18,7 +18,6 @@ feedcourt.controller("authCtrl",function($rootScope,$scope,$location,Auth){
   }
 
   authCtrl.doLogout = function(){
-    alert('sdfg');
     Auth.logout();
     $location.path('/logout');
   }

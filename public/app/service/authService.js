@@ -1,8 +1,9 @@
 feedcourt.factory('Auth',function($http,$q,AuthToken,feedcourtConstant){
-  var _login = function(email,password){
+  var _login = function(email,password,user_type){
     return $http.post('/api/'+feedcourtConstant.v_1_api+'/login',{
       email: email,
-      password: password
+      password: password,
+      user_type:user_type
     })
     .success(function(data){
       AuthToken.setToken(data.token);
