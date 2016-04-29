@@ -1,22 +1,22 @@
-var usersModel = require('../models/usersModel');
+var customersModel = require('../models/customersModel');
 
 module.exports = {
   // GET /customer/:id
   getCustomer: function(req, res, next) {
     var id = req.params.id;
-    usersModel.forge({id: id})
+    customersModel.forge({id: id})
     .fetch()
     .then(function (model) {
-      res.json(usersModel.toJSON());
+      res.json(customersModel.toJSON());
     })
-    .otherwise(function (error) {
+    .catch(function (error) {
       res.status(500).json({msg: error.message});
     });
   },
   //GET /customers
   getCustomers: function(req, res, next) {
-    usersModel.query('where','user_type','=', '4')
-    .fetchAll()
+    customersModel.where({user_type:4})
+    .fetchAll({withRelated: ['addresses']})
     .then(function (model) {
       response = {};
       if(model){
@@ -36,7 +36,7 @@ module.exports = {
 
       res.json(response);
     })
-    .otherwise(function (error) {
+    .catch(function (error) {
       res.status(500).json({msg: error.message});
     });
   },
@@ -44,7 +44,7 @@ module.exports = {
   changeStatus: function(req, res, next) {
     var id = req.body.id;
     var status = req.body.status;
-    usersModel.forge({id:id})
+    customersModel.forge({id:id})
     .fetch()
     .then(function (model) {
       model.save({status: status})
@@ -65,7 +65,7 @@ module.exports = {
 
       res.json(response);
     })
-    .otherwise(function (error) {
+    .catch(function (error) {
       res.status(500).json({msg: error.message});
     });
   }

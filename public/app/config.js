@@ -22,12 +22,32 @@ feedcourt.config(function($httpProvider,$routeProvider,$locationProvider){
   when("/restaurants",{
     templateUrl: "templates/restaurant/restaurant_list.html",
     controller: "restaurantCtrl",
-    controllerAs: "restaurantCtrl"
+    controllerAs: "restaurantCtrl",
+    resolve: {slugIdentity: function(){return 'restaurants'}}
+  }).
+  when("/foodcourts/restaurants/:id",{
+    templateUrl: "templates/restaurant/restaurant_list.html",
+    controller: "restaurantCtrl",
+    controllerAs: "restaurantCtrl",
+    resolve: {slugIdentity: function(){return 'foodcourt_restaurants'}}
   }).
   when("/foodcourts",{
     templateUrl: "templates/foodcourt/foodcourt_list.html",
     controller: "foodcourtCtrl",
-    controllerAs: "foodcourtCtrl"
+    controllerAs: "foodcourtCtrl",
+    resolve: {slugIdentity: function(){return 'foodcourts'}}
+  }).
+  when("/restaurant/orders/:id",{
+    templateUrl: "templates/order/order_list.html",
+    controller: "orderCtrl",
+    controllerAs: "orderCtrl",
+    resolve: {slugIdentity: function(){return 'restaurantOrders'}}
+  }).
+  when("/orders",{
+    templateUrl: "templates/order/order_list.html",
+    controller: "orderCtrl",
+    controllerAs: "orderCtrl",
+    resolve: {slugIdentity: function(){return 'orderLists'}}
   }).
   otherwise({
       redirectTo: '/login'

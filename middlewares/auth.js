@@ -20,10 +20,20 @@ module.exports = {
     }
   },
   isAdmin: function(req, res, next){
-    if(req.decoded.user_type==1 || req.decoded.user_type==2){
-      next();
-    } else {
-      res.status(403).send({status:'error',code: '2403',message: 'Access Denied'});
-    }
+
+     var token = req.body.token || req.param('token') || req.headers['x-access-token'];
+     console.log(token);
+    // if(token){
+    //   jsonwebtoken.verify(token, secretKey, function(err,decoded){
+    //     if(err){
+    //       res.status(403).send({status: 'error',code: '2403', message: 'failed to authenticat user'});
+    //     } else {
+    //       req.decoded = decoded;
+    //       next();
+    //     }
+    //   });
+    // } else {
+    //   res.status(403).send({status:'error',code: '2403',message: 'No token provided'});
+    // }
   },
 };

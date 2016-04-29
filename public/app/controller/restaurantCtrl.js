@@ -1,11 +1,19 @@
-feedcourt.controller("restaurantCtrl",function($rootScope,$scope,$location,Auth,restaurantsHttpFacade){
+feedcourt.controller("restaurantCtrl",function(slugIdentity,$rootScope,$scope,$routeParams,$location,Auth,restaurantsHttpFacade){
   var restaurantCtrl = this;
     function init(){
-      if($location.path()=='/restaurants')
-      {
+      if(slugIdentity=='restaurants'){
         restaurantsHttpFacade.getRestaurants().
         success(function(data,status,headers,config){
-          $scope.restaurants=data.data;
+          $scope.restaurants=data;
+          })
+          .error(function(data,status,headers,config){
+            console.log("Internal Server Error.");
+          });
+      }else if(slugIdentity=='foodcourt_restaurants'){
+        var ID=$routeParams.id;
+        restaurantsHttpFacade.getFoodcourtRestaurants(ID).
+        success(function(data,status,headers,config){
+          $scope.restaurants=data;
           })
           .error(function(data,status,headers,config){
             console.log("Internal Server Error.");
@@ -22,5 +30,8 @@ feedcourt.controller("restaurantCtrl",function($rootScope,$scope,$location,Auth,
         .error(function(data,status,headers,config){
           console.log("Internal Server Error.");
         });
+    }
+    restaurantCtrl.viewDetail = function(restaurant){
+      restaurantCtrl.restaurantDetail = restaurant;
     }
 });

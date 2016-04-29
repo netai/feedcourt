@@ -373,3 +373,5 @@ table.dataTable thead .sorting:after {
 .btn-primary{background-color: #DA6927 !important;border-color: #DA6927 !important;}
 .btn-primary:hover{background-color: #FF7E3F !important;border-color: #FF7E3F !important;}
 .status_icon{font-size: 18px !important;}
+.list_back_btn{ float: right;bottom: 0px;left: 0px;clear: both;top: -63px;}
+.list_back_btn a{float: right;bottom: 0px;clear:both;}

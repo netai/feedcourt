@@ -1,42 +1,14 @@
-var restaurantsModel = require('../models/restaurantsModel');
-var foodcourtsModel = require('../models/foodcourtsModel');
+var orderDetailsModel = require('../models/orderDetailsModel');
 
 module.exports = {
-  // GET /Restaurant/:id
-  getRestaurant: function(req, res, next) {
-    var id = req.params.id;
-      restaurantsModel.forge({id:id})
-    .fetch()
-    .then(function (model) {
-      response = {};
-        if(model){
-          response = {
-            data: model.toJSON(),
-            message: 'Restaurant detail',
-            status: 'success',
-            code: '1005'
-          };
-        } else {
-          response = {
-            message: 'no restaurant found',
-            status: 'success',
-            code: '1005'
-          };
-        }
-        res.json(response);
-    })
-    .catch(function (error) {
-      res.status(500).json({msg: error.message});
-    });
-  },
-
-  // GET /Restaurants
-  getRestaurants: function(req, res, next) {
-    restaurantsModel.where({user_type: 3})
-    .fetchAll({withRelated: ['addresses']})
+  // GET /Orders
+  getOrders: function(req, res, next) {
+    orderDetailsModel.forge()
+    .fetchAll({withRelated: ['orderMasterDetail','restaurantDetail']})
     .then(function (model) {
       response = {};
       if(model){
+        console.log(model.toJSON());
         response = {
           data: model.toJSON(),
           message: 'Restaurant list',
@@ -57,11 +29,11 @@ module.exports = {
       res.status(500).json({msg: error.message});
     });
   },
-  // GET /Restaurant under foodcourt/:id
-  getFoodcourtRestaurant: function(req, res, next) {
+  // GET /Orders under Restaurant/:id
+  getRestaurantOrders: function(req, res, next) {
     var id = req.params.id;
-    foodcourtsModel.where({user_type:3,parent_id:id})
-    .fetchAll({withRelated: ['addresses','foodcourt']})
+    orderDetailsModel.where({restaurant_id:id})
+    .fetchAll({withRelated: ['orderMasterDetail','restaurantDetail','shipAddress','billAddress']})
     .then(function (model) {
       console.log(model.toJSON());
       response = {};
@@ -89,7 +61,7 @@ module.exports = {
   changeStatus: function(req, res, next) {
     var id = req.body.id;
     var status = req.body.status;
-    restaurantsModel.forge({id:id})
+    orderDetailsModel.forge({id:id})
     .fetch()
     .then(function (model) {
       model.save({status: status})

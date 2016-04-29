@@ -5,7 +5,7 @@
           <div id="page-wrapper">
               <div class="row">
                   <div class="col-lg-12">
-                      <h1 class="page-header page_title">Foodcourt List</h1>
+                      <h1 class="page-header page_title">Order List</h1>
                   </div>
               </div>
 
@@ -24,45 +24,41 @@
                                       <thead>
                                           <tr>
                                               <th>SL</th>
-                                              <th>
-                                                <a href="" data-ng-click="reverse=false;order('name', false)">Name</a>
-                                      					(<a href="" data-ng-click="order('-name',false)">^</a>)
-                                              </th>
-                                              <th>
-                                                <a href="" data-ng-click="reverse=false;order('email', false)">Email</a>
-                                      					(<a href="" data-ng-click="order('-email',false)">^</a>)
-                                              </th>
-                                              <th>Phone</th>
+                                              <th>Reataurant</th>
+                                              <th>Order QTY</th>
+                                              <th>Amount</th>
+                                              <th>Order Date</th>
                                               <th>Action</th>
                                           </tr>
                                       </thead>
                                       <tbody>
-                                        <tr data-ng-show="foodcourts.length<=0 || !foodcourts"><td align="center" colspan="6">No Result Found.</td></tr>
-                                          <tr data-ng-repeat="foodcourt in foodcourts | orderBy:['+name','+email'] | filter:searchKeyword">
+                                        <tr  data-ng-show="orders.data.length<=0 || !orders.data"><td align="center" colspan="6">No Result Found.</td></tr>
+                                          <tr  data-ng-repeat="order in orders.data | orderBy : 'order_status' : 'reverse' | filter:searchKeyword">
                                                 <td>{{$index+1}}</td>
                                                 <td>
-                                                  <span data-ng-show="foodcourt.full_name.length > 0 ">{{foodcourt.full_name}}</span>
-                                                  <span data-ng-show="foodcourt.full_name.length < 1 || !foodcourt.full_name">---</span>
+                                                  <span data-ng-show="order.restaurantDetail.full_name.length > 0 ">{{order.restaurantDetail.full_name}}</span>
+                                                  <span data-ng-show="order.restaurantDetail.full_name.length < 1 || !order.restaurantDetail.full_name">---</span>
                                                 </td>
                                                 <td>
-                                                  <span data-ng-show="foodcourt.email.length > 0 ">{{foodcourt.email}}</span>
-                                                  <span data-ng-show="foodcourt.email.length < 1 || !foodcourt.email">---</span>
+                                                  <span data-ng-show="order.qty">{{order.qty}}</span>
+                                                  <span data-ng-show="!order.qty">---</span>
                                                 </td>
                                                 <td>
-                                                  <span data-ng-show="foodcourt.phone_no.length > 0 ">{{foodcourt.phone_no}}</span>
-                                                  <span data-ng-show="foodcourt.phone_no.length < 1 || !foodcourt.phone_no">---</span>
+                                                  <span data-ng-show="order.price">{{order.price}}</span>
+                                                  <span data-ng-show="!order.price">---</span>
+                                                </td>
+                                                <td>
+                                                  <span data-ng-show="order.order_date">{{order.order_date | date:'yyyy-MM-dd'}}</span>
+                                                  <span data-ng-show="!order.order_date">---</span>
                                                 </td>
                                                 <td>
                                                     <span>
-                                                      <a data-ng-click="foodcourtCtrl.changeStatus(foodcourt)">
-                                                        <i class="fa fa-check-circle active_fa_fa status_icon" aria-hidden="true" data-ng-if="foodcourt.status==0" alt="Click to Active" title="Click to Active"></i>
-                                                        <i class="fa fa-check-circle inactive_fa_fa status_icon" aria-hidden="true" data-ng-if="foodcourt.status==1" alt="Click to Inactive" title="Click to Inactive"></i></a>
+                                                      <a data-ng-click="order.changeStatus(order)">
+                                                        <i class="fa fa-check-circle active_fa_fa status_icon" aria-hidden="true" data-ng-if="order.order_status==0" alt="Click to Active" title="Click to Active"></i>
+                                                        <i class="fa fa-check-circle inactive_fa_fa status_icon" aria-hidden="true" data-ng-if="order.order_status==1" alt="Click to Inactive" title="Click to Inactive"></i>
+                                                      </a>
                                                     </span> &nbsp;
-                                                <a target="_blank" alt="View Detail" title="View Detail"><i class="fa fa-eye edit_fa_fa status_icon" aria-hidden="true" data-toggle="modalx" data-target="#myModalx"></a></i>&nbsp;
-
-                                                <a href="#foodcourts/restaurants/{{foodcourt.id}}"  alt="View Restaurants" title="View Restaurants"><i class="fa fa-eye edit_fa_fa status_icon" aria-hidden="true" ></a></i>
-
-
+                                                <a target="_blank" alt="View Detail" title="View Detail"><i class="fa fa-eye edit_fa_fa status_icon" aria-hidden="true" data-toggle="modalx" data-target="#myModalx"></i></a>
                                               </td>
                                             </tr>
                                       </tbody>

@@ -1,8 +1,8 @@
-feedcourt.controller("foodcourtCtrl",function($rootScope,$scope,$location,Auth,foodcourtsHttpFacade){
+feedcourt.controller("foodcourtCtrl",function(slugIdentity,$rootScope,$scope,$routeParams,$location,Auth,foodcourtsHttpFacade){
   var foodcourtCtrl = this;
+
   function init(){
-    if($location.path()=='/foodcourts')
-    {
+    if(slugIdentity=='foodcourts'){
       foodcourtsHttpFacade.getFoodcourts().
       success(function(data,status,headers,config){
         $scope.foodcourts=data.data;
@@ -23,4 +23,6 @@ feedcourt.controller("foodcourtCtrl",function($rootScope,$scope,$location,Auth,f
         console.log("Internal Server Error.");
       });
   }
+
+
 });

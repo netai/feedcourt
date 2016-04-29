@@ -5,6 +5,7 @@ function controllersFactory () {
     controllers.site = require('./siteController');
     controllers.foodcourts = require('./foodcourtsController');
     controllers.restaurants = require('./restaurantsController');
+    controllers.orders = require('./ordersController');
 
     return controllers;
 };

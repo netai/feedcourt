@@ -1,43 +1,42 @@
-var usersModel = require('../models/usersModel');
-
+var foodcourtsModel = require('../models/foodcourtsModel');
 module.exports = {
   // GET /Foodcourt/:id
   getFoodcourt: function(req, res, next) {
     var id = req.params.id;
-    usersModel.forge({id: id,user_type:2})
+    foodcourtsModel.forge({id: id,user_type:2})
     .fetch()
     .then(function (model) {
-      res.json(usersModel.toJSON());
+      res.json(foodcourtsModel.toJSON());
     })
-    .otherwise(function (error) {
+    .catch(function (error) {
       res.status(500).json({msg: error.message});
     });
   },
   // GET /Foodcourts
   getFoodcourts: function(req, res, next) {
-    usersModel.query('where','user_type','=', '2')
-    .fetchAll()
+    foodcourtsModel.where({user_type:2})
+    .fetchAll({withRelated: ['addresses']})
     .then(function (model) {
       response = {};
 
       if(model){
         response = {
           data: model.toJSON(),
-          message: 'customer list',
+          message: 'Foodcourt list',
           status: 'success',
-          code: '1003'
+          code: '1007'
         };
       } else {
         response = {
-          message: 'no customer found',
+          message: 'no foodcourt found',
           status: 'success',
-          code: '1003'
+          code: '1007'
         };
       }
 
       res.json(response);
     })
-    .otherwise(function (error) {
+    .catch(function (error) {
       res.status(500).json({msg: error.message});
     });
   },
@@ -45,7 +44,7 @@ module.exports = {
   changeStatus: function(req, res, next) {
     var id = req.body.id;
     var status = req.body.status;
-    usersModel.forge({id:id})
+    foodcourtsModel.forge({id:id})
     .fetch()
     .then(function (model) {
       model.save({status: status})
@@ -53,20 +52,20 @@ module.exports = {
         response = {
           message: 'Foodcourt status update successfully.',
           status: 'success',
-          code: '1004'
+          code: '2007'
         };
       })
-      .catch(function(){
+      .catch(function(err){
         response = {
-          message: 'Foodcourt status update unsuccessfull',
+          message: 'Foodcourt status update unsuccessfull.',
           status: 'error',
-          code: '2004'
+          code: '2007'
         };
       });
 
       res.json(response);
     })
-    .otherwise(function (error) {
+    .catch(function (error) {
       res.status(500).json({msg: error.message});
     });
   }
