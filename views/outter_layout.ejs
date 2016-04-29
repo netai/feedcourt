@@ -31,19 +31,16 @@
 
 <body>
     <!--------Page Content -------->
-    <div class="container">
         <div data-ng-view></div>
-    </div>
 
-    <!-- jQuery -->
+        <!-- jquery JavaScript -->
     <script src="./static/vendor/jquery/jquery.min.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="./static/vendor/bootstrap/js/bootstrap.min.js"></script>
-
     <!-- angular JavaScript -->
     <script src="./static/vendor/angular/angular.min.js"></script>
     <script src="./static/vendor/angular/angular-route.min.js"></script>
+    <!-- bootstrap JavaScript -->
+    <script src="./static/vendor/bootstrap/js/ui-bootstrap-tpls-1.3.2.min.js"></script>
+    <script src="./static/vendor/bootstrap/js/bootstrap.min.js"></script>
 
     <!-- app JavaScript -->
     <script src="./app/app.js"></script>
@@ -52,8 +49,17 @@
     <script src="./app/run.js"></script>
     <script src="./app/service/interceptorService.js"></script>
     <script src="./app/controller/authCtrl.js"></script>
-    <script src="./app/controller/siteCtrl.js"></script>
     <script src="./app/service/authService.js"></script>
+    <script src="./app/service/siteHttpFacade.js"></script>
+    <script src="./app/service/customersHttpFacade.js"></script>
+    <script src="./app/service/restaurantsHttpFacade.js"></script>
+    <script src="./app/service/foodcourtsHttpFacade.js"></script>
+    <script src="./app/service/ordersHttpFacade.js"></script>
+    <script src="./app/controller/siteCtrl.js"></script>
+    <script src="./app/controller/customerCtrl.js"></script>
+    <script src="./app/controller/restaurantCtrl.js"></script>
+    <script src="./app/controller/foodcourtCtrl.js"></script>
+    <script src="./app/controller/orderCtrl.js"></script>
 
 </body>
 
