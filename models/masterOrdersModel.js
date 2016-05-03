@@ -38,4 +38,4 @@ var masterOrdersModel = db.Model.extend({
   }
 });
 
-module.exports = ordersModel;
+module.exports = masterOrdersModel;

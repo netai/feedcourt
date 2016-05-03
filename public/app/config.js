@@ -17,7 +17,8 @@ feedcourt.config(function($httpProvider,$routeProvider,$locationProvider){
   when("/customers",{
     templateUrl: "templates/customer/customer_list.html",
     controller: "customerCtrl",
-    controllerAs: "customerCtrl"
+    controllerAs: "customerCtrl",
+    resolve: {slugIdentity: function(){return 'customers'}}
   }).
   when("/restaurants",{
     templateUrl: "templates/restaurant/restaurant_list.html",
@@ -36,6 +37,12 @@ feedcourt.config(function($httpProvider,$routeProvider,$locationProvider){
     controller: "foodcourtCtrl",
     controllerAs: "foodcourtCtrl",
     resolve: {slugIdentity: function(){return 'foodcourts'}}
+  }).
+  when("/foodcourt/add",{
+    templateUrl: "templates/foodcourt/foodcourt_add.html",
+    controller: "foodcourtCtrl",
+    controllerAs: "foodcourtCtrl",
+    resolve: {slugIdentity: function(){return 'foodcourtAdd'}}
   }).
   when("/restaurant/orders/:id",{
     templateUrl: "templates/order/order_list.html",

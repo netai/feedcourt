@@ -19,6 +19,11 @@ exports.setup = function (params) {
     app.get(v_1_api+'/foodcourts', auth.authenticated, controllers.foodcourts.getFoodcourts);
     //app.get(v_1_api+'/foodcourts/restaurants/:id', auth.authenticated, controllers.foodcourts.getRestaurant);
     app.put(v_1_api+'/foodcourts/changestatus', auth.authenticated, controllers.foodcourts.changeStatus);
+    app.post(v_1_api+'/foodcourts/add', auth.authenticated, controllers.foodcourts.addFoodcourt);
+    app.get(v_1_api+'/foodcourts/states', auth.authenticated, controllers.foodcourts.getStates);
+    app.get(v_1_api+'/foodcourts/cities/:id', auth.authenticated, controllers.foodcourts.getCities);
+
+
 
     // Customer Routes
     app.get(v_1_api+'/customers', auth.authenticated, controllers.customers.getCustomers);

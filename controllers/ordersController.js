@@ -35,7 +35,7 @@ module.exports = {
     orderDetailsModel.where({restaurant_id:id})
     .fetchAll({withRelated: ['orderMasterDetail','restaurantDetail','shipAddress','billAddress']})
     .then(function (model) {
-      console.log(model.toJSON());
+      //console.log(model.toJSON());
       response = {};
         if(model){
           response = {

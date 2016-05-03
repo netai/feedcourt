@@ -1,11 +1,11 @@
-feedcourt.controller("customerCtrl",function($rootScope,$scope,$location,Auth,customersHttpFacade){
+feedcourt.controller("customerCtrl",function(slugIdentity,$rootScope,$scope,$routeParams,$location,Auth,customersHttpFacade){
   var customerCtrl = this;
   function init(){
-    if($location.path()=='/customers')
+    if(slugIdentity=='customers')
     {
       customersHttpFacade.getCustomers().
       success(function(data,status,headers,config){
-          $scope.customers=data.data;
+          $scope.customers=data;
         })
         .error(function(data,status,headers,config){
           console.log("Internal Server Error.");
@@ -22,5 +22,8 @@ feedcourt.controller("customerCtrl",function($rootScope,$scope,$location,Auth,cu
       .error(function(data,status,headers,config){
         console.log("Internal Server Error.");
       });
+  },
+  customerCtrl.viewDetail = function(customer){
+    customerCtrl.customerDetail = customer;
   }
 });

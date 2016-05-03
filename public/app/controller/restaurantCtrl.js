@@ -30,7 +30,7 @@ feedcourt.controller("restaurantCtrl",function(slugIdentity,$rootScope,$scope,$r
         .error(function(data,status,headers,config){
           console.log("Internal Server Error.");
         });
-    }
+    },
     restaurantCtrl.viewDetail = function(restaurant){
       restaurantCtrl.restaurantDetail = restaurant;
     }
