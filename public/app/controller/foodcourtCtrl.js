@@ -1,4 +1,4 @@
-feedcourt.controller("foodcourtCtrl",function(slugIdentity,$rootScope,$scope,$routeParams,$location,Auth,foodcourtsHttpFacade){
+feedcourt.controller("foodcourtCtrl",function(slugIdentity,$rootScope,$scope,$routeParams,$location,Auth,foodcourtsHttpFacade,AuthToken){
   var foodcourtCtrl = this;
 
   function init(){
@@ -19,6 +19,7 @@ feedcourt.controller("foodcourtCtrl",function(slugIdentity,$rootScope,$scope,$ro
         .error(function(data,status,headers,config){
           console.log("Internal Server Error.");
         });
+        $scope.token = AuthToken.getToken();
     }
 
   }
@@ -47,15 +48,22 @@ feedcourt.controller("foodcourtCtrl",function(slugIdentity,$rootScope,$scope,$ro
     foodcourtCtrl.foodcourtDetail = foodcourt;
   },
   foodcourtCtrl.addFoodcourt = function(){
-    foodcourtsHttpFacade.addFoodcourt($scope.dataInput)
-    .success(function(data,status,headers,config){
-        $scope.addreturn=data;
-        $scope.dataInput={};
-      })
-      .error(function(data,status,headers,config){
-        console.log("Internal Server Error.");
-      });
+    alert(addFoodcourtForm.dataInput);
+    // $scope.response = content; // Presumed content is a json string!
+
+    // foodcourtsHttpFacade.addFoodcourt($scope.dataInput)
+    // .success(function(data,status,headers,config){
+    //     $scope.addreturn=data;
+    //     $scope.dataInput={};
+    //   })
+    //   .error(function(data,status,headers,config){
+    //     console.log("Internal Server Error.");
+    //   });
   }
+
+
+
+
 
 
 });
