@@ -1,10 +1,40 @@
-var orderDetailsModel = require('../models/orderDetailsModel');
+var restaurantsModel = require('../models/restaurantsModel');
+var foodcourtsModel = require('../models/foodcourtsModel');
+var citiesModel = require('../models/citiesModel');
 
 module.exports = {
-  // GET /Orders
-  getOrders: function(req, res, next) {
-    orderDetailsModel.forge()
-    .fetchAll({withRelated: ['orderMasterDetail','restaurantDetail']})
+  // GET /Restaurant/:id
+  getRestaurant: function(req, res, next) {
+    var id = req.params.id;
+      restaurantsModel.forge({id:id})
+    .fetch()
+    .then(function (model) {
+      response = {};
+        if(model){
+          response = {
+            data: model.toJSON(),
+            message: 'Restaurant detail',
+            status: 'success',
+            code: '1005'
+          };
+        } else {
+          response = {
+            message: 'no restaurant found',
+            status: 'success',
+            code: '1005'
+          };
+        }
+        res.json(response);
+    })
+    .catch(function (error) {
+      res.status(500).json({msg: error.message});
+    });
+  },
+
+  // GET /Restaurants
+  getRestaurants: function(req, res, next) {
+    restaurantsModel.where({user_type: 3})
+    .fetchAll({withRelated: ['addresses','addresses.state','addresses.city']})
     .then(function (model) {
       response = {};
       if(model){
@@ -21,26 +51,20 @@ module.exports = {
           code: '1005'
         };
       }
-     // res.json(response);
-      res.render('order/order_list',{'dataJsonArr':response});
-      
+
+      res.json(response);
     })
     .catch(function (error) {
-       var response = {
-            message: error.message,
-            status: 'error',
-            code: '2005'
-        };
-       res.render('order/order_list',{'dataJsonArr':response});
+      res.status(500).json({msg: error.message});
     });
   },
-  // GET /Orders under Restaurant/:id
-  getRestaurantOrders: function(req, res, next) {
+  // GET /Restaurant under foodcourt/:id
+  getFoodcourtRestaurant: function(req, res, next) {
     var id = req.params.id;
-    orderDetailsModel.where({restaurant_id:id})
-    .fetchAll({withRelated: ['orderMasterDetail','restaurantDetail','shipAddress','billAddress']})
+    foodcourtsModel.where({user_type:3,parent_id:id})
+    .fetchAll({withRelated: ['addresses','foodcourt']})
     .then(function (model) {
-      //console.log(model.toJSON());
+      console.log(model.toJSON());
       response = {};
         if(model){
           response = {
@@ -56,23 +80,17 @@ module.exports = {
             code: '1005'
           };
         }
-        //res.json(response);
-        res.render('order/order_list',{'dataJsonArr':response});
+        res.json(response);
     })
     .catch(function (error) {
-      var response = {
-            message: error.message,
-            status: 'error',
-            code: '2005'
-        };
-       res.render('order/order_list',{'dataJsonArr':response});
+      res.status(500).json({msg: error.message});
     });
   },
   // Put /Resturant/Changestatus
   changeStatus: function(req, res, next) {
     var id = req.body.id;
     var status = req.body.status;
-    orderDetailsModel.forge({id:id})
+    restaurantsModel.forge({id:id})
     .fetch()
     .then(function (model) {
       model.save({status: status})

@@ -124,7 +124,6 @@ module.exports = {
   },
   // GET /Foodcourts
   getFoodcourts: function(req, res, next) {
-    console.log("foodcourt");
     foodcourtsModel.where({user_type:2})
     .fetchAll({withRelated: ['addresses','addresses.state','addresses.city']})
     .then(function (model) {
@@ -143,16 +142,10 @@ module.exports = {
           code: '1007'
         };
       }
-      //res.json(response);
-      res.render('foodcourt/foodcourt_list');
+      res.json(response);
     })
     .catch(function (error) {
-      var response = {
-            message: error.message,
-            status: 'error',
-            code: '2005'
-        };
-      res.render('foodcourt/foodcourt_list',{'dataJsonArr':response});
+      res.status(500).json({msg: error.message});
     });
   },
   // Put /Foodcourts/Changestatus

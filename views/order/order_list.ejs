@@ -1,0 +1,129 @@
+<% layout('../portal_layout') %>
+<% include ../left_header %>
+<div id="wrapper">
+    <!-- Navigation -->
+      <div data-ng-include="'templates/header_with_left.html'"></div>
+      <div id="wrapper">
+          <div id="page-wrapper">
+              <div class="row">
+                  <div class="col-lg-12">
+                      <h1 class="page-header page_title">Order List</h1>
+                  </div>
+              </div>
+
+              <div class="row">
+                  <div class="col-lg-12">
+                      <div class="panel panel-default">
+                          <!--<div class="panel-heading">
+                              Basic Table
+                          </div>-->
+                          <div class="panel-body">
+                              <div class="table-responsive">
+                                 <div class="form-group col-lg-4">
+                                  <input type="text" class="form-control" name="searchKeyword" placeholder="Search">
+                                 </div>
+                                  <table class="table">
+                                      <thead>
+                                          <tr>
+                                              <th>SL</th>
+                                              <th>Reataurant</th>
+                                              <th>Order QTY</th>
+                                              <th>Amount</th>
+                                              <th>Order Date</th>
+                                              <th>Action</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                      <% if(dataJsonArr.data!=undefined && dataJsonArr.data.length>0 && (dataJsonArr.status!=undefined && dataJsonArr.status=='success')){ %>
+                                        <% var counter=1 %>
+                                        <% for(var i=0; i < dataJsonArr.data.length; i++) { %>
+                                            <tr>
+                                                <td><%= counter++ %></td>
+                                                <td><%= dataJsonArr.data[i].restaurantDetail.full_name %></td>
+                                                <td><%= dataJsonArr.data[i].qty %></td>
+                                                <td><%= dataJsonArr.data[i].price %></td>
+                                                <td><%= dataJsonArr.data[i].order_date %></td>
+                                                <td>
+                                                <a href="javascript:void(0)" alt="View Detail" title="View Detail" data-toggle="modalx" data-target="#myModalx"><img src="./static/assets/images/info.png" class="status_icon"></a>
+                                              </td>
+                                            </tr>
+                                        
+                                        <% } %>
+                                      <% }else{ %>
+                                          <tr><td align="center" colspan="6">No Result Found.</td></tr>
+                                      <% } %>
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+</div>
+
+<!-----./Modal Pop-Up------->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">User Details Info</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped table-bordered table-hover">
+            <tbody>
+                <tr>
+                    <td>Name</td>
+                    <td>TEST DEVELOPER</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>asdd@hgasgh.com</td>
+                </tr>
+                <tr>
+                    <td>Phone-no</td>
+                    <td>45362457</td>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-----./Modal Pop-Up------->
+<!-----./Modal Pop-Up------->
+<div id="myModal2" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">User Details Info</h4>
+      </div>
+      <div class="modal-body">
+        <ul>
+          <li>Name: usename usename usenameusename</li>
+          <li>Email: EmailEmailEmailEmail</li>
+          <li>Phone: 213214234234</li>
+          <li>City: CityCityCityCity</li>
+          <li>State: StateStateState</li>
+          <li>Country: CountryCountry</li>
+          <li>Zip-code: 12343242</li>
+          <li>Total Rate: 5667</li>
+          <li>Avg. Rate: 56.89</li>
+          <li>Status: dsffffsdf</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-----./Modal Pop-Up------->

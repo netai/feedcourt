@@ -8,6 +8,7 @@ module.exports = {
     .then(function (model) {
       response = {};
       if(model){
+        console.log(model.toJSON());
         response = {
           data: model.toJSON(),
           message: 'Restaurant list',
@@ -21,17 +22,11 @@ module.exports = {
           code: '1005'
         };
       }
-     // res.json(response);
-      res.render('order/order_list',{'dataJsonArr':response});
-      
+
+      res.json(response);
     })
     .catch(function (error) {
-       var response = {
-            message: error.message,
-            status: 'error',
-            code: '2005'
-        };
-       res.render('order/order_list',{'dataJsonArr':response});
+      res.status(500).json({msg: error.message});
     });
   },
   // GET /Orders under Restaurant/:id
@@ -56,16 +51,10 @@ module.exports = {
             code: '1005'
           };
         }
-        //res.json(response);
-        res.render('order/order_list',{'dataJsonArr':response});
+        res.json(response);
     })
     .catch(function (error) {
-      var response = {
-            message: error.message,
-            status: 'error',
-            code: '2005'
-        };
-       res.render('order/order_list',{'dataJsonArr':response});
+      res.status(500).json({msg: error.message});
     });
   },
   // Put /Resturant/Changestatus
