@@ -16,7 +16,7 @@ module.exports = {
   //GET /customers
   getCustomers: function(req, res, next) {
     customersModel.where({user_type:4})
-    .fetchAll({withRelated: ['addresses']})
+    .fetchAll({withRelated: ['addresses','addresses.state','addresses.city']})
     .then(function (model) {
       response = {};
       if(model){

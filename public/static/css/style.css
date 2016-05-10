@@ -372,6 +372,13 @@ table.dataTable thead .sorting:after {
 .dropdown-menu a{color: #FB8A11 !important;}
 .btn-primary{background-color: #DA6927 !important;border-color: #DA6927 !important;}
 .btn-primary:hover{background-color: #FF7E3F !important;border-color: #FF7E3F !important;}
-.status_icon{font-size: 18px !important;}
+.status_icon{width:6%;margin: 1px;}
 .list_back_btn{ float: right;bottom: 0px;left: 0px;clear: both;top: -63px;}
 .list_back_btn a{float: right;bottom: 0px;clear:both;}
+.modal-image-container{float: right; margin-right: 26%;}
+.modal-header .close {color: #FF0D0D;opacity: 1; font-size: 26px;}
+.modal-header .close :hover {color: #A90808;opacity: 1; font-size: 26px;}
+.modal-footer .btn-default{color: #FFF;background-color:#FF0D0D;border-color:#FF0D0D;}
+.modal-footer .btn-default :hover{background-color:#A90808;border-color:#A90808;}
+.add_btn{ float: right;bottom: 0px;left: 0px;clear: both;top: -63px;}
+.add_btn a{float: right;bottom: 0px;clear:both;}

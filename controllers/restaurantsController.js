@@ -1,5 +1,6 @@
 var restaurantsModel = require('../models/restaurantsModel');
 var foodcourtsModel = require('../models/foodcourtsModel');
+var citiesModel = require('../models/citiesModel');
 
 module.exports = {
   // GET /Restaurant/:id
@@ -33,7 +34,7 @@ module.exports = {
   // GET /Restaurants
   getRestaurants: function(req, res, next) {
     restaurantsModel.where({user_type: 3})
-    .fetchAll({withRelated: ['addresses']})
+    .fetchAll({withRelated: ['addresses','addresses.state','addresses.city']})
     .then(function (model) {
       response = {};
       if(model){
