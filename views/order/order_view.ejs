@@ -11,12 +11,56 @@
           </div>
         </div>
         <% if(dataJsonArr.data!=undefined && dataJsonArr.status!=undefined && dataJsonArr.status=='success'){ %>
-            <% for(var i=0;i<=dataJsonArr.data.length;i++){ %>
-            <%=dataJsonArr.data[i].orderMaster%>
-                
+            <% for(var i=0;i<dataJsonArr.data.length;i++){ %>
+                <table class="table table-striped table-bordered table-hover">
+                    <tbody>
+                        <tr>
+                            <td>Invoice No</td>
+                            <td><%= dataJsonArr.data[i].invoice_id %></td>
+                        </tr>
+                        <tr>
+                            <td>Subtotal Amount</td>
+                            <td><%= dataJsonArr.data[i].orderMaster.sub_total_amount %></td>
+                        </tr>
+                        <tr>
+                            <td>Total Amount</td>
+                            <td><%= dataJsonArr.data[i].orderMaster.total_amount %></td>
+                        </tr>
+                        <tr>
+                            <td>Order Date</td>
+                            <td><%= dataJsonArr.data[i].order_date %></td>
+                        </tr>
+                        <tr>
+                            <td>Restaurant Name</td>
+                            <td><%= dataJsonArr.data[i].restaurant.full_name %></td>
+                        </tr>
+                        <tr>
+                            <td>Customer Name</td>
+                            <td><%= dataJsonArr.data[i].orderMaster.customer.full_name %></td>
+                        </tr>
+                        <tr>
+                            <td>Bill Address</td>
+                            <td>
+                                Phone no:<%= dataJsonArr.data[i].billAddress.phone_no %>,
+                                State:<%= dataJsonArr.data[i].billAddress.state.name %>
+                                City:<%= dataJsonArr.data[i].billAddress.city.name %>
+                                Zip:<%= dataJsonArr.data[i].billAddress.zip_code %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Ship Address</td>
+                            <td>
+                                Phone no:<%= dataJsonArr.data[i].shipAddress.phone_no %>,
+                                State:<%= dataJsonArr.data[i].shipAddress.state.name %>
+                                City:<%= dataJsonArr.data[i].shipAddress.city.name %>
+                                Zip:<%= dataJsonArr.data[i].shipAddress.zip_code %>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             <% } %>
         <% }else{ %>
-         <tbody><tr>No Result Found.</tr></tbody>
+         <tbody><tr>No Order Found.</tr></tbody>
         <% } %>
       </div>
       <div class="modal-footer">

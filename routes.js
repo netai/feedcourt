@@ -10,6 +10,7 @@ exports.setup = function (params) {
     //site router
 	app.get('/portal', auth.portal_authenticated, controllers.site.dashboard);
     app.all('/portal/login', controllers.site.portal_login);
+    app.all('/portal/changepassword', auth.portal_authenticated, controllers.site.change_password);
     app.get('/portal/logout', controllers.site.portal_logout);
     
     //customers router

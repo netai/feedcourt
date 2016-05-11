@@ -36,7 +36,7 @@ module.exports = {
   // GET /Orders
   getOrders: function(req, res, next) {
     orderDetailsModel.forge()
-    .fetchAll({withRelated: ['orderMasterDetail','restaurantDetail']})
+    .fetchAll({withRelated: ['orderMaster','restaurant']})
     .then(function (model) {
       var context = {};
       if(model){
