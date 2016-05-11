@@ -1,0 +1,64 @@
+<% layout('../portal_layout') %>
+<% include ../left_header %>
+      <div id="wrapper">
+          <div id="page-wrapper">
+              <div class="row">
+                  <div class="col-lg-12">
+                      <h1 class="page-header page_title">Customer List</h1>
+                  </div>
+              </div>
+
+              <div class="row">
+                  <div class="col-lg-12">
+                      <div class="panel panel-default">
+                          <div class="panel-body">
+                              <div class="table-responsive">
+                                  <table class="table">
+                                      <thead>
+                                          <tr>
+                                              <th>SL</th>
+                                              <th>Name</th>
+                                              <th>Email</th>
+                                              <th>Phone</th>
+                                              <th>Action</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                        <% if(customers){ %>
+                                        <% for(var i=0;i<customers.length;i++){ %>
+                                          <tr>
+                                                <td><%=i+1%></td>
+                                                <td>
+                                                  <span><%=customers[i].full_name%></span>
+                                                </td>
+                                                <td>
+                                                  <span><%=customers[i].email%></span>
+                                                </td>
+                                                <td>
+                                                  <span><%=customers[i].phone_no%></span>
+                                                </td>
+
+                                                <td>
+                                                    <a href="javascript:void(0)" alt="View Detail" title="View Detail" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/customers/view/<%=customers[i].id%>"><img src="/static/assets/images/info.png" class="status_icon"></a>
+                                                    <a href="javascript:void(0)">
+                                                      <% if(customers[i].status){ %>
+                                                      <img src="/static/assets/images/inactive.png" class="status_icon" alt="Click to Active" title="Click to Active">
+                                                      <% } else { %>
+                                                      <img src="/static/assets/images/active.png" class="status_icon" alt="Click to Inactive" title="Click to Inactive">
+                                                      <% } %>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                          <% } %>
+                                        <% } else { %>
+                                        <tr><td align="center" colspan="6">No Result Found.</td></tr>
+                                        <% } %>
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>

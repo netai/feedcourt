@@ -372,7 +372,7 @@ table.dataTable thead .sorting:after {
 .dropdown-menu a{color: #FB8A11 !important;}
 .btn-primary{background-color: #DA6927 !important;border-color: #DA6927 !important;}
 .btn-primary:hover{background-color: #FF7E3F !important;border-color: #FF7E3F !important;}
-.status_icon{width:6%;margin: 1px;}
+.status_icon{width:20px;margin: 1px;}
 .list_back_btn{ float: right;bottom: 0px;left: 0px;clear: both;top: -63px;}
 .list_back_btn a{float: right;bottom: 0px;clear:both;}
 .modal-image-container{float: right; margin-right: 26%;}

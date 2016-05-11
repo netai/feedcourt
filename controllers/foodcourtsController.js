@@ -124,7 +124,6 @@ module.exports = {
   },
   // GET /Foodcourts
   getFoodcourts: function(req, res, next) {
-    console.log("foodcourt");
     foodcourtsModel.where({user_type:2})
     .fetchAll({withRelated: ['addresses','addresses.state','addresses.city']})
     .then(function (model) {
@@ -143,8 +142,7 @@ module.exports = {
           code: '1007'
         };
       }
-      //res.json(response);
-      res.render('foodcourt/foodcourt_list');
+      res.render('foodcourt/foodcourt_list',{'dataJsonArr':response});
     })
     .catch(function (error) {
       var response = {

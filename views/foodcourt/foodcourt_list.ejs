@@ -1,3 +1,5 @@
+<% layout('../portal_layout') %>
+<% include ../left_header %>
 <div id="wrapper">
     <!-- Navigation -->
       <div data-ng-include="'templates/header_with_left.html'"></div>
@@ -20,50 +22,41 @@
     </div>-->
     <div class="panel-body">
     <div class="table-responsive">
-     <div class="form-group col-lg-4">
-      <input type="text" class="form-control" name="searchKeyword" data-ng-model="searchKeyword" placeholder="Search">
-     </div>
       <table class="table">
           <thead>
               <tr>
                   <th>SL</th>
-                  <th>
-                    <a href="" data-ng-click="reverse=false;order('name', false)">Name</a>
-          					(<a href="" data-ng-click="order('-name',false)">^</a>)
-                  </th>
-                  <th>
-                    <a href="" data-ng-click="reverse=false;order('email', false)">Email</a>
-          					(<a href="" data-ng-click="order('-email',false)">^</a>)
-                  </th>
+                  <th>Name</th>
+                  <th>Email </th>
                   <th>Phone</th>
                   <th>Action</th>
               </tr>
           </thead>
           <tbody>
-            <tr data-ng-show="foodcourts.data.length<=0 || !foodcourts"><td align="center" colspan="6">No Result Found.</td></tr>
-              <tr data-ng-repeat="foodcourt in foodcourts.data | orderBy:['+name','+email'] | filter:searchKeyword">
-                    <td>{{$index+1}}</td>
-                    <td>
-                      <span data-ng-show="foodcourt.full_name.length > 0 ">{{foodcourt.full_name}}</span>
-                      <span data-ng-show="foodcourt.full_name.length < 1 || !foodcourt.full_name">---</span>
-                    </td>
-                    <td>
-                      <span data-ng-show="foodcourt.email.length > 0 ">{{foodcourt.email}}</span>
-                      <span data-ng-show="foodcourt.email.length < 1 || !foodcourt.email">---</span>
-                    </td>
-                    <td>
-                      <span data-ng-show="foodcourt.phone_no.length > 0 ">{{foodcourt.phone_no}}</span>
-                      <span data-ng-show="foodcourt.phone_no.length < 1 || !foodcourt.phone_no">---</span>
-                    </td>
-                    <td>
-                      <a href="javascript:void(0)" data-ng-click="foodcourtCtrl.viewDetail(foodcourt)" alt="View Detail" title="View Detail" data-toggle="modal" data-target="#viewDetail"><img src="./static/assets/images/info.png" class="status_icon"></a>
-                      <a href="#foodcourts/restaurants/{{foodcourt.id}}"  alt="View Restaurants" title="View Restaurants"><img src="./static/assets/images/restaurant_64.png" class="status_icon"></a>
-                      <a href="javascript:void(0)"  data-ng-click="foodcourtCtrl.changeStatus(foodcourt)">
-                        <img src="./static/assets/images/inactive_32.png" class="status_icon" data-ng-if="foodcourt.status==0" alt="Click to Active" title="Click to Active">
-                        <img src="./static/assets/images/active_32.png" class="status_icon" data-ng-if="foodcourt.status==1" alt="Click to Inactive" title="Click to Inactive">
-                      </a>
-                  </td>
-                </tr>
+            <% if(dataJsonArr.data!=undefined && dataJsonArr.data.length>0 && (dataJsonArr.status!=undefined && dataJsonArr.status=='success')){ %>
+                <% var counter=1 %>
+                <% for(var i=0; i < dataJsonArr.data.length; i++) { %>
+                  <tr>
+                        <td><%= counter++ %></td>
+                        <td><%= dataJsonArr.data[i].full_name %></td>
+                        <td><%= dataJsonArr.data[i].email %></td>
+                        <td> <%= dataJsonArr.data[i].phone_no %></td>
+                        <td>
+                          <a href="javascript:void(0)"  alt="View Detail" title="View Detail" data-toggle="modal" data-target="#viewDetail"><img src="./static/assets/images/info.png" class="status_icon"></a>
+                          <a href="<%= dataJsonArr.data[i].id %>"  alt="View Restaurants" title="View Restaurants"><img src="./static/assets/images/restaurant_64.png" class="status_icon"></a>
+                          <a href="javascript:void(0)">
+                            <% if(dataJsonArr.data[i].status==0){ %>
+                                <img src="./static/assets/images/inactive_32.png" class="status_icon"  alt="Click to Active" title="Click to Active">
+                            <% }else if(dataJsonArr.data[i].status==1){ %>
+                                <img src="./static/assets/images/active_32.png" class="status_icon"  alt="Click to Inactive" title="Click to Inactive">
+                            <% } %>
+                          </a>
+                        </td>
+                  </tr>
+                <% } %>
+              <% }else{ %>
+                  <tr><td align="center" colspan="6">No Result Found.</td></tr>
+              <% } %>
           </tbody>
       </table>
   </div>

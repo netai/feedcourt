@@ -2,42 +2,42 @@ var customersModel = require('../models/customersModel');
 
 module.exports = {
   // GET /customer/:id
-  getCustomer: function(req, res, next) {
+  customer_detail: function(req, res, next) {
     var id = req.params.id;
     customersModel.forge({id: id})
-    .fetch()
+    .fetch({withRelated: ['addresses','addresses.state','addresses.city']})
     .then(function (model) {
-      res.json(customersModel.toJSON());
+      var context = {
+        customer: model.toJSON()
+      };
+      res.render('customer/customer_detail', context);
     })
     .catch(function (error) {
-      res.status(500).json({msg: error.message});
+      console.log(error.message);
+      res.send('Sorry somthing is wrong');
     });
   },
-  //GET /customers
-  getCustomers: function(req, res, next) {
+  //GET /portal/customers
+  customers_list: function(req, res, next) {
     customersModel.where({user_type:4})
     .fetchAll({withRelated: ['addresses','addresses.state','addresses.city']})
     .then(function (model) {
-      response = {};
+
       if(model){
-        response = {
-          data: model.toJSON(),
-          message: 'customer list',
-          status: 'success',
-          code: '1003'
+        var context = {
+          customers: model.toJSON()
         };
       } else {
-        response = {
-          message: 'no customer found',
-          status: 'success',
-          code: '1003'
+        context = {
+          customers: {}
         };
       }
-
-      res.json(response);
+      
+      res.render('customer/customer_list', context);
     })
     .catch(function (error) {
-      res.status(500).json({msg: error.message});
+      console.log(error.message);
+      res.redirect('/portal');
     });
   },
   // Put /Customers/Changestatus
