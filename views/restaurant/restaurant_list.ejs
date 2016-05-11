@@ -1,0 +1,72 @@
+<% layout('../portal_layout') %>
+<% include ../left_header %>
+<div id="wrapper">
+          <div id="page-wrapper">
+              <div class="row">
+                  <div class="col-lg-12">
+                      <h1 class="page-header page_title">Manage Restaurants</h1>
+                  </div>
+              </div>
+
+            <div class="row">
+            <div class="col-lg-12">
+            <div class="panel panel-default">
+            <div class="panel-body">
+            <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>SL</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Rate</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <% if(restaurants){ %>
+                  <% for(var i=0;i<restaurants.length;i++){ %>
+                    <tr>
+                          <td><%=i+1%></td>
+                          <td>
+                            <span><%=restaurants[i].full_name%></span>
+                          </td>
+                          <td>
+                            <span><%=restaurants[i].email%></span>
+                          </td>
+                          <td>
+                            <span><%=restaurants[i].phone_no%></span>
+                          </td>
+                          <td>
+                            <span><%=restaurants[i].avg_rate%></span>
+                          </td>
+                          <td>
+                            <span><%=restaurants[i].status==1?'Active':'Inactive'%></span>
+                          </td>
+                          <td>
+                              <a href="javascript:void(0)" alt="View Detail" title="View Detail" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/restaurants/view/<%=restaurants[i].id%>"><img src="/static/assets/images/info.png" class="status_icon"></a>
+                              <a href="/portal/restaurants/orders/<%=restaurants[i].id%>"  alt="View Orders" title="View Orders"><img src="/static/assets/images/order_64.png" class="status_icon"></a>
+                              <a href="/portal/restaurants/changestatus/<%=restaurants[i].id%>">
+                                <% if(restaurants[i].status){ %>
+                                <img src="/static/assets/images/inactive.png" class="status_icon" alt="Click to Inactive" title="Click to Inactive">
+                                <% } else { %>
+                                <img src="/static/assets/images/active.png" class="status_icon" alt="Click to Active" title="Click to Active">
+                                <% } %>
+                              </a>
+                        </td>
+                      </tr>
+                      <% } %>
+                      <% } else { %>
+                      <tr><td align="center" colspan="6">No Result Found.</td></tr>
+                      <% } %>
+                </tbody>
+            </table>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+          </div>
+</div>

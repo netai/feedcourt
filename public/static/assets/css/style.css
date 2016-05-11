@@ -367,7 +367,7 @@ table.dataTable thead .sorting:after {
   cursor: pointer;
 }
 .drop-down-top{margin: 7px;}
-.admin_title{color: #FB8A11 !important; font-size: 30px;font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;}
+.admin_title{color: #FB8A11 !important; font-size: 30px;font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;font-weight: bold;}
 .page_title{font-size: 18px;color: #FF7E3F;font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;}
 .dropdown-menu a{color: #FB8A11 !important;}
 .btn-primary{background-color: #DA6927 !important;border-color: #DA6927 !important;}
@@ -382,3 +382,4 @@ table.dataTable thead .sorting:after {
 .modal-footer .btn-default :hover{background-color:#A90808;border-color:#A90808;}
 .add_btn{ float: right;bottom: 0px;left: 0px;clear: both;top: -63px;}
 .add_btn a{float: right;bottom: 0px;clear:both;}
+#pop-content{min-height:200px;}

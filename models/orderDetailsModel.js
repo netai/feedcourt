@@ -11,10 +11,10 @@ var orderDetailsModel = db.Model.extend({
   validations: {price: ['required'], qty:['required'],order_master_id: ['required']},
   validate: function() {return new Checkit(this.validations).run(this.attributes);},
   tableName: 'order_details',
-  orderMasterDetail: function() {
+  orderMaster: function() {
       return this.belongsTo(orderMasterModel,'order_master_id');  // belongsTo, hasMany, morphMany, morphTo
   },
-  restaurantDetail: function() {
+  restaurant: function() {
       return this.belongsTo(usersModel,'restaurant_id');  // belongsTo, hasMany, morphMany, morphTo
   },
   shipAddress: function() {

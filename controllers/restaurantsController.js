@@ -3,56 +3,39 @@ var foodcourtsModel = require('../models/foodcourtsModel');
 var citiesModel = require('../models/citiesModel');
 
 module.exports = {
-  // GET /Restaurant/:id
-  getRestaurant: function(req, res, next) {
+  // GET /portal/restaurants/view/:id
+  restaurants_detail: function(req, res, next) {
     var id = req.params.id;
       restaurantsModel.forge({id:id})
-    .fetch()
+    .fetch({withRelated: ['addresses','addresses.state','addresses.city']})
     .then(function (model) {
-      response = {};
-        if(model){
-          response = {
-            data: model.toJSON(),
-            message: 'Restaurant detail',
-            status: 'success',
-            code: '1005'
+          var context = {
+            restaurant: model.toJSON()
           };
-        } else {
-          response = {
-            message: 'no restaurant found',
-            status: 'success',
-            code: '1005'
-          };
-        }
-        res.json(response);
+          res.render('restaurant/restaurants_detail', context);
     })
     .catch(function (error) {
-      res.status(500).json({msg: error.message});
+      console.log(error.message);
+      res.send('Sorry somthing is wrong');
     });
   },
 
-  // GET /Restaurants
-  getRestaurants: function(req, res, next) {
+  // GET /portal/restaurants
+  restaurants_list: function(req, res, next) {
     restaurantsModel.where({user_type: 3})
     .fetchAll({withRelated: ['addresses','addresses.state','addresses.city']})
     .then(function (model) {
-      response = {};
       if(model){
-        response = {
-          data: model.toJSON(),
-          message: 'Restaurant list',
-          status: 'success',
-          code: '1005'
+        var context = {
+          restaurants: model.toJSON(),
         };
       } else {
-        response = {
-          message: 'no restaurant found',
-          status: 'success',
-          code: '1005'
+        context = {
+          restaurants: {}
         };
       }
 
-      res.json(response);
+      res.render('restaurant/restaurant_list', context);
     })
     .catch(function (error) {
       res.status(500).json({msg: error.message});
@@ -87,32 +70,24 @@ module.exports = {
     });
   },
   // Put /Resturant/Changestatus
-  changeStatus: function(req, res, next) {
-    var id = req.body.id;
-    var status = req.body.status;
+  change_status: function(req, res, next) {
+    var id = req.params.id;
     restaurantsModel.forge({id:id})
     .fetch()
     .then(function (model) {
+      var status = model.get('status')==1?0:1;
       model.save({status: status})
       .then(function(){
-        response = {
-          message: 'Restaurant status update successfully.',
-          status: 'success',
-          code: '2006'
-        };
+        res.redirect('/portal/restaurants');
       })
-      .catch(function(err){
-        response = {
-          message: 'Restaurant status update unsuccessfull.',
-          status: 'error',
-          code: '2006'
-        };
+      .catch(function(error){
+        console.log(error.message);
+        res.redirect('/portal');
       });
-
-      res.json(response);
     })
     .catch(function (error) {
-      res.status(500).json({msg: error.message});
+        console.log(error.message);
+        res.redirect('/portal');
     });
   }
 };

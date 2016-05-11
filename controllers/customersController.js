@@ -1,7 +1,7 @@
 var customersModel = require('../models/customersModel');
 
 module.exports = {
-  // GET /customer/:id
+  // GET /portal/customers/view/:id
   customer_detail: function(req, res, next) {
     var id = req.params.id;
     customersModel.forge({id: id})
@@ -40,33 +40,25 @@ module.exports = {
       res.redirect('/portal');
     });
   },
-  // Put /Customers/Changestatus
-  changeStatus: function(req, res, next) {
-    var id = req.body.id;
-    var status = req.body.status;
+  // GET portal/customers/changestatus
+  change_status: function(req, res, next) {
+    var id = req.params.id;
     customersModel.forge({id:id})
     .fetch()
     .then(function (model) {
+      var status = model.get('status')==1?0:1;
       model.save({status: status})
       .then(function(){
-        response = {
-          message: 'Customer status update successfully.',
-          status: 'success',
-          code: '1004'
-        };
+        res.redirect('/portal/customers');
       })
-      .catch(function(){
-        response = {
-          message: 'customer status update unsuccessfull.',
-          status: 'error',
-          code: '2004'
-        };
+      .catch(function(error){
+        console.log(error.message);
+        res.redirect('/portal');
       });
-
-      res.json(response);
     })
     .catch(function (error) {
-      res.status(500).json({msg: error.message});
+      console.log(error.message);
+      res.redirect('/portal');
     });
   }
 };

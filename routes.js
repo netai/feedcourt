@@ -15,13 +15,21 @@ exports.setup = function (params) {
     //customers router
     app.get('/portal/customers', auth.portal_authenticated, controllers.customers.customers_list);
     app.get('/portal/customers/view/:id', auth.portal_authenticated, controllers.customers.customer_detail);
+    app.get('/portal/customers/changestatus/:id', auth.portal_authenticated, controllers.customers.change_status);
+    
+    //restaurants router
+    app.get('/portal/restaurants', auth.portal_authenticated, controllers.restaurants.restaurants_list);
+    app.get('/portal/restaurants/view/:id', auth.portal_authenticated, controllers.restaurants.restaurants_detail);
+    app.get('/portal/restaurants/changestatus/:id', auth.portal_authenticated, controllers.restaurants.change_status);
     
     //orders route
     app.get('/portal/orders',controllers.orders.getOrders);
     app.get('/portal/restaurant/orders/:id',controllers.orders.getRestaurantOrders);
+    app.get('/portal/order/detail/:id',controllers.orders.getOrder);
     
     //foodcourts route
     app.get('/portal/foodcourts',controllers.foodcourts.getFoodcourts);
+    app.get('/portal/feedcourt/detail/:id',controllers.foodcourts.getFoodcourt);
     //app.put('/portal/foodcourts/changestatus',controllers.foodcourts.changeStatus);
     //app.post('/portal/foodcourts/add',controllers.foodcourts.addFoodcourt);
 

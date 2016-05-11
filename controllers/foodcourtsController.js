@@ -9,22 +9,22 @@ module.exports = {
   getStates: function(req, res, next){
     statesModel.fetchAll()
     .then(function (model) {
-      response = {};
+      var context = {};
       if(model){
-        response = {
+        context = {
           data: model.toJSON(),
           message: 'State List',
           status: 'success',
           code: '1007'
         };
       } else {
-        response = {
+        context = {
           message: 'No State Found',
           status: 'success',
           code: '1007'
         };
       }
-      res.json(response);
+      res.json(context);
     })
     .catch(function (error) {
       res.status(500).json({msg: error.message});
@@ -36,22 +36,22 @@ module.exports = {
     citiesModel.where({state_id:id})
     .fetchAll()
     .then(function (model) {
-      response = {};
+      var context = {};
       if(model){
-        response = {
+        context = {
           data: model.toJSON(),
           message: 'Citiy List',
           status: 'success',
           code: '1007'
         };
       } else {
-        response = {
+        context = {
           message: 'No City Found',
           status: 'success',
           code: '1007'
         };
       }
-      res.json(response);
+      res.json(context);
     })
     .catch(function (error) {
       res.status(500).json({msg: error.message});
@@ -110,49 +110,71 @@ module.exports = {
     // });
   },
 
-  // GET /Foodcourt/:id
-  getFoodcourt: function(req, res, next) {
-    var id = req.params.id;
-    foodcourtsModel.forge({id: id,user_type:2})
-    .fetch()
-    .then(function (model) {
-      res.json(foodcourtsModel.toJSON());
-    })
-    .catch(function (error) {
-      res.status(500).json({msg: error.message});
-    });
-  },
+ 
   // GET /Foodcourts
   getFoodcourts: function(req, res, next) {
     foodcourtsModel.where({user_type:2})
     .fetchAll({withRelated: ['addresses','addresses.state','addresses.city']})
     .then(function (model) {
-      response = {};
+      var context = {};
       if(model){
-        response = {
+        context = {
           data: model.toJSON(),
           message: 'Foodcourt list',
           status: 'success',
           code: '1007'
         };
       } else {
-        response = {
+        context = {
           message: 'no foodcourt found',
           status: 'success',
           code: '1007'
         };
       }
-      res.render('foodcourt/foodcourt_list',{'dataJsonArr':response});
+      res.render('foodcourt/foodcourt_list',{'dataJsonArr':context});
     })
     .catch(function (error) {
-      var response = {
+      var context = {
             message: error.message,
             status: 'error',
             code: '2005'
         };
-      res.render('foodcourt/foodcourt_list',{'dataJsonArr':response});
+      res.render('foodcourt/foodcourt_list',{'dataJsonArr':context});
     });
   },
+   // GET /Foodcourt/:id
+  getFoodcourt: function(req, res, next) {
+    var id = req.params.id;
+    foodcourtsModel.forge({id: id,user_type:2})
+    .fetch({withRelated: ['addresses','addresses.state','addresses.city']})
+    .then(function (model) {
+     var context = {};
+      if(model){
+        context = {
+          data: model.toJSON(),
+          message: 'Foodcourt Detail',
+          status: 'success',
+          code: '1007'
+        };
+      } else {
+        context = {
+          message: 'no foodcourt found',
+          status: 'success',
+          code: '1007'
+        };
+      }
+      res.render('foodcourt/foodcourt_detail',{'dataJsonArr':context});
+    })
+    .catch(function (error) {
+     var context = {
+            message: error.message,
+            status: 'error',
+            code: '2005'
+      };
+      res.render('foodcourt/foodcourt_detail',{'dataJsonArr':context});
+    });
+  },
+  
   // Put /Foodcourts/Changestatus
   changeStatus: function(req, res, next) {
     var id = req.body.id;
@@ -162,21 +184,12 @@ module.exports = {
     .then(function (model) {
       model.save({status: status})
       .then(function(){
-        response = {
+        var context = {
           message: 'Foodcourt status update successfully.',
           status: 'success',
           code: '2007'
         };
       })
-      .catch(function(err){
-        response = {
-          message: 'Foodcourt status update unsuccessfull.',
-          status: 'error',
-          code: '2007'
-        };
-      });
-
-      res.json(response);
     })
     .catch(function (error) {
       res.status(500).json({msg: error.message});

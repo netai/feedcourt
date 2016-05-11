@@ -9,7 +9,7 @@ var orderMasterModel = db.Model.extend({
   validations: {total_amount: ['required'], sub_total_amount:['required'],invoice_id: ['required'],customer_id:['required'],restaurant_id:['required']},
   validate: function() {return new Checkit(this.validations).run(this.attributes);},
   tableName: 'order_master',
-  customerDetails: function() {
+  customer: function() {
       return this.belongsTo(usersModel,'customer_id');  // belongsTo, hasMany, morphMany, morphTo
   },
 });

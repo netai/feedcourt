@@ -1,6 +1,7 @@
+
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Cutomer Detail</h4>
+        <h4 class="modal-title">Restaurant Detail</h4>
       </div>
       <div class="modal-body">
       <div class="col-lg-12">
@@ -14,23 +15,31 @@
             <tbody>
                 <tr>
                     <td>Name</td>
-                    <td><%=customer.full_name%></td>
+                    <td><%=restaurant.full_name%></td>
                 </tr>
                 <tr>
                     <td>Email</td>
-                    <td><%=customer.email%></td>
+                    <td><%=restaurant.email%></td>
                 </tr>
                 <tr>
                     <td>Phone-no</td>
-                    <td><%=customer.phone_no%></td>
+                    <td><%=restaurant.phone_no%></td>
                 </tr>
                 <tr>
                     <td>State</td>
-                    <td><%=customer.addresses.state.name%></td>
+                    <td><%=restaurant.addresses.state.name%></td>
                 </tr>
                 <tr>
                     <td>City</td>
-                    <td><%=customer.addresses.city.name%></td>
+                    <td><%=restaurant.addresses.city.name%></td>
+                </tr>
+                <tr>
+                    <td>No. of Rate</td>
+                    <td><%=restaurant.total_rate%></td>
+                </tr>
+                <tr>
+                     <td>Avg. Rate</td>
+                    <td><%=restaurant.avg_rate%></td>
                 </tr>
             </tbody>
         </table>

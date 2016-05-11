@@ -41,7 +41,7 @@
                                                 <td><%= dataJsonArr.data[i].price %></td>
                                                 <td><%= dataJsonArr.data[i].order_date %></td>
                                                 <td>
-                                                <a href="javascript:void(0)" alt="View Detail" title="View Detail" data-toggle="modalx" data-target="#myModalx"><img src="./static/assets/images/info.png" class="status_icon"></a>
+                                                <a href="javascript:void(0)" alt="View Detail" title="View Detail" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/order/detail/<%=dataJsonArr.data[i].id%>"><img src="/static/assets/images/info.png" class="status_icon"></a>
                                               </td>
                                             </tr>
                                         

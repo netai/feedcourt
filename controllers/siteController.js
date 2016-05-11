@@ -1,5 +1,4 @@
 var usersModel = require('../models/usersModel');
-var tokenHelper = require('../helpers/token');
 
 module.exports = {
   // GET /

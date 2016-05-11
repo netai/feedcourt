@@ -4,7 +4,7 @@
           <div id="page-wrapper">
               <div class="row">
                   <div class="col-lg-12">
-                      <h1 class="page-header page_title">Customer List</h1>
+                      <h1 class="page-header page_title">Manage Customers</h1>
                   </div>
               </div>
 
@@ -20,6 +20,7 @@
                                               <th>Name</th>
                                               <th>Email</th>
                                               <th>Phone</th>
+                                              <th>Status</th>
                                               <th>Action</th>
                                           </tr>
                                       </thead>
@@ -37,14 +38,16 @@
                                                 <td>
                                                   <span><%=customers[i].phone_no%></span>
                                                 </td>
-
+                                                <td>
+                                                  <span><%=customers[i].status==1?'Active':'Inactive'%></span>
+                                                </td>
                                                 <td>
                                                     <a href="javascript:void(0)" alt="View Detail" title="View Detail" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/customers/view/<%=customers[i].id%>"><img src="/static/assets/images/info.png" class="status_icon"></a>
-                                                    <a href="javascript:void(0)">
+                                                    <a href="/portal/customers/changestatus/<%=customers[i].id%>">
                                                       <% if(customers[i].status){ %>
-                                                      <img src="/static/assets/images/inactive.png" class="status_icon" alt="Click to Active" title="Click to Active">
+                                                      <img src="/static/assets/images/inactive.png" class="status_icon" alt="Click to Inactive" title="Click to Inactive">
                                                       <% } else { %>
-                                                      <img src="/static/assets/images/active.png" class="status_icon" alt="Click to Inactive" title="Click to Inactive">
+                                                      <img src="/static/assets/images/active.png" class="status_icon" alt="Click to Active" title="Click to Active">
                                                       <% } %>
                                                     </a>
                                                 </td>
