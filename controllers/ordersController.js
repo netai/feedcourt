@@ -1,8 +1,8 @@
 var orderDetailsModel = require('../models/orderDetailsModel');
 
 module.exports = {
-  // GET /Order/details/:id
-  getOrder: function(req, res, next) {
+  // GET /portal/order/view/:id
+  order_detail: function(req, res, next) {
      var id = req.params.id;
      orderDetailsModel.where({order_master_id: id})
     .fetchAll({withRelated: ['orderMaster','restaurant','orderMaster.customer','shipAddress','billAddress','shipAddress.state','shipAddress.city','billAddress.state','billAddress.city']})
@@ -13,13 +13,11 @@ module.exports = {
           data: model.toJSON(),
           message: 'Order Detail',
           status: 'success',
-          code: '1005'
         };
       } else {
         context = {
           message: 'No Order Found',
           status: 'success',
-          code: '1005'
         };
       }
       res.render('order/order_view',{'dataJsonArr':context});
@@ -28,13 +26,12 @@ module.exports = {
        var context = {
             message: error.message,
             status: 'error',
-            code: '2005'
         };
        res.render('order/order_view',{'dataJsonArr':context});
     });
   },
-  // GET /Orders
-  getOrders: function(req, res, next) {
+ // GET /portal/orders
+  order_list: function(req, res, next) {
     orderDetailsModel.forge()
     .fetchAll({withRelated: ['orderMaster','restaurant']})
     .then(function (model) {
@@ -42,15 +39,13 @@ module.exports = {
       if(model){
         context = {
           data: model.toJSON(),
-          message: 'Restaurant list',
+          message: 'Order List',
           status: 'success',
-          code: '1005'
         };
       } else {
         context = {
-          message: 'no restaurant found',
+          message: 'No Record Found',
           status: 'success',
-          code: '1005'
         };
       }
       res.render('order/order_list',{'dataJsonArr':context});
@@ -59,11 +54,15 @@ module.exports = {
        var context = {
             message: error.message,
             status: 'error',
-            code: '2005'
         };
        res.render('order/order_list',{'dataJsonArr':context});
     });
   },
+  
+  
+  
+  
+  
   // GET /Orders under Restaurant/:id
   getRestaurantOrders: function(req, res, next) {
     var id = req.params.id;
@@ -95,7 +94,7 @@ module.exports = {
             status: 'error',
             code: '2005'
         };
-       res.render('order/order_list',{'dataJsonArr':context});
+      res.render('order/order_list',{'dataJsonArr':context});
     });
   },
   // Put /Resturant/Changestatus

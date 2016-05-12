@@ -1,7 +1,6 @@
+<% layout('../portal_layout') %>
+<% include ../left_header %>
 <div id="wrapper">
-  <!-- Navigation -->
-    <div data-ng-include="'templates/header_with_left.html'"></div>
-    <div id="wrapper">
       <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
@@ -14,58 +13,46 @@
         <div class="row">
           <!-- <div class="col-lg-11"> -->
             <div class="col-md-5 col-md-offset-2">
-              <div data-ng-if="addreturn.status=='success'"><p>{{addreturn.message}}</p></div>
-
-              <!-- <form  data-ng-submit="foodcourtCtrl.addFoodcourt()" name="form">
-                Upload on form submit or button click
-  Single Image with validations
-  <div class="button" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'"
-    ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100"
-    ngf-resize="{width: 100, height: 100}">Select</div>
-  Multiple files
-  <div class="button" ngf-select ng-model="files" ngf-multiple="true">Select</div>
-  Drop files: <div ngf-drop ng-model="files" class="drop-box">Drop</div>
-  <button type="submit" >submit</button>
-</form> -->
-
-
-            <form role="form" method="post" data-ng-submit="foodcourtCtrl.addFoodcourt()" name="addFoodcourtForm" enctype="multipart/form-data">
-              <input  type="hidden"  ng-model="token">
+            <form role="form" method="post" name="addFoodcourt" enctype="multipart/form-data">
                 <div class="form-group">
                   <label class="control-label">Name:</label>
-                  <input  type="text" class="form-control" data-ng-required="true" autofocus data-ng-model="foodcourtCtrl.dataInput.full_name">
+                  <input  type="text" name="full_name" class="form-control required" autofocus >
                 </div>
                 <div class="form-group">
                   <label class="control-label">Email:</label>
-                  <input type="email" class="form-control"  autofocus data-ng-model="foodcourtCtrl.dataInput.email" data-ng-required="true">
+                  <input  type="email" name="email" class="form-control required"  >
                 </div>
                 <div class="form-group">
                   <label class="control-label">Password:</label>
-                  <input type="password" class="form-control" type="email" autofocus data-ng-model="foodcourtCtrl.dataInput.password" data-ng-required="true">
+                  <input  type="password" name="password" class="form-control required" >
+                </div>
+                <div class="form-group">
+                  <label class="control-label">Confirm Password:</label>
+                  <input  type="password" name="cpassword" class="form-control required" >
                 </div>
                 <div class="form-group">
                   <label class="control-label">Phone Number:</label>
-                  <input type="number" class="form-control" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')" data-ng-required="true" autofocus data-ng-model="foodcourtCtrl.dataInput.phone_no">
+                  <input  type="text" name="phone_no" class="form-control required number" >
                 </div>
                 <div class="form-group">
                     <label>State:</label>
-                    <select class="form-control" data-ng-required="true" autofocus data-ng-model="foodcourtCtrl.dataInput.state_id" data-ng-change="foodcourtCtrl.getCities(foodcourtCtrl.dataInput.state_id)" data-ng-options="state.id as state.name for state in states.data">
+                    <select class="form-control required" name="state">
                         <option value="">---Select State---</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>City:</label>
-                    <select class="form-control" data-ng-required="true" autofocus data-ng-model="foodcourtCtrl.dataInput.city_id" data-ng-options="city.id as city.name for city in cities.data">
+                    <select class="form-control required" name="city">
                         <option value="">---Select City---</option>
                     </select>
                 </div>
                 <div class="form-group">
                   <label class="control-label">Zip:</label>
-                  <input type="number" class="form-control" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')" data-ng-required="true" autofocus data-ng-model="foodcourtCtrl.dataInput.zip_code">
+                  <input type="number" class="form-control required" name="zip">
                 </div>
                 <div class="form-group">
                   <label class="control-label">Image:</label>
-                  <input type="file" class="form-control"  data-ng-model="foodcourtCtrl.dataInput.image" data-ng-required="true" name="image">
+                  <input type="file" class="form-control required" name="image">
                 </div>
 
                 <div class="form-group">
@@ -75,15 +62,31 @@
           </div>
         </div>
     </div>
-  </div>
 </div>
 
 
-// <script>
+<script>
+ 
 // 		$(document).ready(function(){
 // 			$("#addForm").validate({
 // 				errorPlacement: function(error,element) {
 // 					return true;
 // 				}
 // 			});
-// </script>
+
+$(document).ready(function(){
+	$.get('/portal/state',function(data) {
+      $.each(data.state,function(idx,val){
+        $("select[name='state']").append('<option value="'+val.id+'">'+val.name+'</option>');
+      });
+    });
+  $('select[name="state"]').change(function(){
+    $("select[name='city']").html('<option value="">---Select City---</option>');
+	$.get('/portal/city/'+$(this).val(),function(data) {
+      $.each(data.city,function(idx,val){
+        $("select[name='city']").append('<option value="'+val.id+'">'+val.name+'</option>');
+      });
+    });
+  });
+	});
+</script>

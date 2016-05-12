@@ -3,9 +3,15 @@
 <div id="wrapper">
           <div id="page-wrapper">
               <div class="row">
+                <% if(typeof foodcourt!=='undefined'){ %>
+                  <div class="col-lg-12">
+                      <h1 class="page-header page_title"><%= foodcourt.full_name %>&nbsp;> Restaurant List</h1>
+                  </div>
+                <% }else{ %>
                   <div class="col-lg-12">
                       <h1 class="page-header page_title">Manage Restaurants</h1>
                   </div>
+                  <% } %>
               </div>
 
             <div class="row">
@@ -26,7 +32,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                  <% if(restaurants){ %>
+                  <% if(typeof restaurants!=='undefined'){ %>
                   <% for(var i=0;i<restaurants.length;i++){ %>
                     <tr>
                           <td><%=i+1%></td>

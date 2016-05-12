@@ -10,7 +10,7 @@
                       <h1 class="page-header page_title">Foodcourt List</h1>
                   </div>
                   <div class="col-lg-2 add_btn" >
-                    <a class="btn btn-success" href="#/foodcourt/add">Add Foodcourt</a>
+                    <a class="btn btn-success" href="/portal/foodcourt/add">Add Foodcourt</a>
                   </div>
               </div>
 
@@ -29,6 +29,7 @@
                   <th>Name</th>
                   <th>Email </th>
                   <th>Phone</th>
+                  <th>Status</th>
                   <th>Action</th>
               </tr>
           </thead>
@@ -41,15 +42,17 @@
                         <td><%= dataJsonArr.data[i].full_name %></td>
                         <td><%= dataJsonArr.data[i].email %></td>
                         <td> <%= dataJsonArr.data[i].phone_no %></td>
+                        <td><span><%=dataJsonArr.data[i].status==1?'Active':'Inactive'%></span> </td>
                         <td>
-                          <a href="javascript:void(0)"  alt="View Detail" title="View Detail" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/feedcourt/detail/<%=dataJsonArr.data[i].id%>"><img src="/static/assets/images/info.png" class="status_icon"></a>
+                          <a href="javascript:void(0)"  alt="View Detail" title="View Detail" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/feedcourt/view/<%=dataJsonArr.data[i].id%>"><img src="/static/assets/images/info.png" class="status_icon"></a>
                           
-                          <a href="<%= dataJsonArr.data[i].id %>"  alt="View Restaurants" title="View Restaurants"><img src="/static/assets/images/restaurant_64.png" class="status_icon"></a>
-                          <a href="javascript:void(0)">
+                          <a href="/portal/foodcourt/restaurants/<%= dataJsonArr.data[i].id %>"  alt="View Restaurants" title="View Restaurants"><img src="/static/assets/images/restaurant_64.png" class="status_icon"></a>
+                          
+                          <a href="/portal/foodcourt/changestatus/<%=dataJsonArr.data[i].id%>">
                             <% if(dataJsonArr.data[i].status==0){ %>
-                                <img src="/static/assets/images/inactive.png" class="status_icon"  alt="Click to Active" title="Click to Active">
+                                <img src="/static/assets/images/inactive.png" class="status_icon"  alt="Click to Inactive" title="Click to Inactive">
                             <% }else if(dataJsonArr.data[i].status==1){ %>
-                                <img src="/static/assets/images/active.png" class="status_icon"  alt="Click to Inactive" title="Click to Inactive">
+                                <img src="/static/assets/images/active.png" class="status_icon"  alt="Click to Active" title="Click to Active">
                             <% } %>
                           </a>
                         </td>
