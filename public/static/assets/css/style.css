@@ -355,6 +355,7 @@ table.dataTable thead .sorting:after {
 .error{
   color:#ff4444;
   padding: 5px;
+  font-weight:normal;
 }
 .inactive_fa_fa{
   color: #FF0000;
@@ -376,10 +377,8 @@ table.dataTable thead .sorting:after {
 .list_back_btn{ float: right;bottom: 0px;left: 0px;clear: both;top: -63px;}
 .list_back_btn a{float: right;bottom: 0px;clear:both;}
 .modal-image-container{float: right; margin-right: 26%;}
-.modal-header .close {color: #FF0D0D;opacity: 1; font-size: 26px;}
-.modal-header .close :hover {color: #A90808;opacity: 1; font-size: 26px;}
-.modal-footer .btn-default{color: #FFF;background-color:#FF0D0D;border-color:#FF0D0D;}
-.modal-footer .btn-default :hover{background-color:#A90808;border-color:#A90808;}
+.modal-header .close {color: #DA6927;opacity: 1; font-size: 26px;}
 .add_btn{ float: right;bottom: 0px;left: 0px;clear: both;top: -63px;}
 .add_btn a{float: right;bottom: 0px;clear:both;}
 #pop-content{min-height:200px;}
+.cancel{margin-left:20px!important;}

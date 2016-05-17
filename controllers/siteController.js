@@ -135,5 +135,60 @@ module.exports = {
         res.json(context);
     });
   },
-  
+  // GET /Foodcourt List/
+  foodcourt_list: function(req, res, next){
+    //var id=req.params.id;
+    usersModel.where({status:'1',user_type:'2'}) 
+    .fetchAll({columns:['id','full_name']})
+    .then(function (model) {
+      var context = {};
+      if(model){
+        context = {
+          foodcourt: model.toJSON(),
+        };
+      } else {
+        context = {
+          foodcourt: {},
+        };
+      }
+      res.json(context);
+    })
+    .catch(function (error) {
+      var context = {
+          foodcourt: {},
+          message: error.message,
+          status: 'error',
+        };
+        res.json(context);
+    });
+  },
+    // GET /emailexist/
+  email_exist: function(req, res, next){
+    var email=req.body.email;
+    usersModel.where({email:email})
+    .fetch()
+    .then(function (model) {
+      var context = {};
+      if(model){
+        context = {
+          message: 'email exist',
+          status: true
+        };
+      } else {
+        context = {
+          message: 'email not exist',
+          status: false
+        };
+      }
+      res.json(context);
+    })
+    .catch(function (error) {
+      var context = {
+          city: {},
+          message: error.message,
+          status: 'error',
+        };
+        res.json(context);
+    });
+  },
 };

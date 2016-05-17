@@ -12,8 +12,10 @@ exports.setup = function (params) {
     app.all('/portal/login', controllers.site.portal_login);
     app.all('/portal/changepassword', auth.portal_authenticated, controllers.site.change_password);
     app.get('/portal/logout', controllers.site.portal_logout);
-    app.all('/portal/state', controllers.site.state_list);
-    app.all('/portal/city/:id', controllers.site.city_list);
+    app.all('/portal/state',auth.portal_authenticated, controllers.site.state_list);
+    app.all('/portal/city/:id',auth.portal_authenticated, controllers.site.city_list);
+    app.all('/portal/foodcourt_list/',auth.portal_authenticated, controllers.site.foodcourt_list);
+    app.all('/portal/emailexist/', controllers.site.email_exist);
     
     
     
@@ -26,17 +28,18 @@ exports.setup = function (params) {
     app.get('/portal/restaurants', auth.portal_authenticated, controllers.restaurants.restaurants_list);
     app.get('/portal/restaurants/view/:id', auth.portal_authenticated, controllers.restaurants.restaurants_detail);
     app.get('/portal/restaurants/changestatus/:id', auth.portal_authenticated, controllers.restaurants.change_status);
+    app.all('/portal/restaurant/add',auth.portal_authenticated,controllers.restaurants.add_restaurant);
     
     //orders route
-    app.get('/portal/orders',controllers.orders.order_list);
-    app.get('/portal/restaurant/orders/:id',controllers.orders.getRestaurantOrders);
-    app.get('/portal/order/view/:id',controllers.orders.order_detail);
+    app.get('/portal/orders',auth.portal_authenticated,controllers.orders.order_list);
+    app.get('/portal/restaurant/orders/:id',auth.portal_authenticated,controllers.orders.getRestaurantOrders);
+    app.get('/portal/order/view/:id',auth.portal_authenticated,controllers.orders.order_detail);
     
     //foodcourts route
-    app.get('/portal/foodcourts',controllers.foodcourts.foodcourt_list);
-    app.get('/portal/feedcourt/view/:id',controllers.foodcourts.foodcourt_detail);
-    app.get('/portal/foodcourt/changestatus/:id',controllers.foodcourts.change_status);
-    app.get('/portal/foodcourt/restaurants/:id',controllers.foodcourts.restaurant_list);
+    app.get('/portal/foodcourts',auth.portal_authenticated,controllers.foodcourts.foodcourt_list);
+    app.get('/portal/feedcourt/view/:id',auth.portal_authenticated,controllers.foodcourts.foodcourt_detail);
+    app.get('/portal/foodcourt/changestatus/:id',auth.portal_authenticated,controllers.foodcourts.change_status);
+    app.get('/portal/foodcourt/restaurants/:id',auth.portal_authenticated,controllers.foodcourts.restaurant_list);
     app.all('/portal/foodcourt/add',controllers.foodcourts.add_foodcourt);
     
     

@@ -47,20 +47,17 @@ module.exports = {
     foodcourtsModel.where({user_type:3,parent_id:id})
     .fetchAll({withRelated: ['addresses','foodcourt']})
     .then(function (model) {
-      console.log(model.toJSON());
-      response = {};
+      var response = {};
         if(model){
           response = {
             data: model.toJSON(),
             message: 'Restaurant list under foodcourt.',
             status: 'success',
-            code: '1005'
           };
         } else {
           response = {
             message: 'no restaurant found under foodcourt',
             status: 'success',
-            code: '1005'
           };
         }
         res.json(response);
@@ -89,5 +86,13 @@ module.exports = {
         console.log(error.message);
         res.redirect('/portal');
     });
-  }
+  },
+  // POST /portal/restaurant/add
+  add_restaurant: function(req, res, next) {
+    if(req.method == 'POST'){
+        console.log(req.method);
+    } else {
+      res.render('restaurant/restaurant_add');
+    }
+  },
 };

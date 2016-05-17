@@ -1,13 +1,13 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var engine = require('ejs-locals');
-
-var config = require('./config/app');
-var controllers = require('./controllers');
-var routes = require('./routes');
+var express = require('express'),
+    path = require('path'),
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser'),
+    session = require('express-session'),
+    engine = require('ejs-locals');
+    
+var config = require('./config/app'),
+    controllers = require('./controllers'),
+    routes = require('./routes');
 
 var app = express();
 
@@ -19,6 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
+
 app.use(session({
   secret: config.sessionSecret,
   resave: true,
@@ -30,8 +31,7 @@ routes.setup({
     'controllers': controllers,
     'app': app
 });
-//var feedcourt = require('./app/routes/feedcourt')(app,express);
-//app.use('/',feedcourt);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

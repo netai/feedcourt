@@ -1,8 +1,12 @@
-var foodcourtsModel = require('../models/foodcourtsModel');
-var statesModel = require('../models/statesModel');
-var citiesModel = require('../models/citiesModel');
-var addressModel = require('../models/addressModel');
-var restaurantsModel = require('../models/restaurantsModel');
+var foodcourtsModel = require('../models/foodcourtsModel'),
+    statesModel = require('../models/statesModel'),
+    citiesModel = require('../models/citiesModel'),
+    addressModel = require('../models/addressModel'),
+    restaurantsModel = require('../models/restaurantsModel'),
+    formidable = require('formidable'),
+    fs   = require('fs-extra'),
+    path = require('path'),
+    util = require('util');
 
 module.exports = {
   // GET /portal/restaurants
@@ -125,9 +129,35 @@ module.exports = {
   },
   // POST /portal/foodcourt/add
   add_foodcourt: function(req, res, next) {
-    var id = req.body;
-    res.render('foodcourt/foodcourt_add');
+    if(req.method == 'POST'){
+      var form = new formidable.IncomingForm();
+      form.parse(req, function(err, fields, files) {
+        if(err){
+          console.log(err);
+        } else {
+          res.writeHead(200, {'content-type': 'text/plain'});
+          res.write('received upload:\n\n');
+          console.log(fields);
+          res.end(util.inspect({fields: fields, files: files}));
+        }
+      });
+          // form.on('end', function() {
+          //   var temp_path = this.openedFiles[0].path;
+          //   var file_name = this.openedFiles[0].name;
+          //   var new_location = path.join(__dirname,'..','public','media','images',file_name);
+          //   fs.copy(temp_path, new_location, function(err) {
+          //     if (err) {
+          //       console.error(err);
+          //     } else {
+          //       console.log(new_location);
+          //     }
+          //   });
+          // });
+      form.on('fileBegin', function(name, file) {
+          file.path = path.join(__dirname,'..','public','media','images',file.name);
+      });
+    } else {
+      res.render('foodcourt/foodcourt_add');
+    }
   },
-  
-  
 };
