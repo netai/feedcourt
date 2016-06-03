@@ -12,9 +12,11 @@
                       <h1 class="page-header page_title">Manage Restaurants</h1>
                   </div>
                   <% } %>
+                  <% if(typeof SessionData.user_type!='undefined' && (SessionData.user_type=='1' || SessionData.user_type=='2' )){ %>
                   <div class="col-lg-2 add_btn" >
                     <button class="btn btn-success pop-link" data-href="/portal/restaurant/add" data-toggle="modal" data-target="#popup">Add Restaurant</button>
                   </div>
+                  <% } %>
               </div>
               
 
@@ -57,6 +59,9 @@
                           </td>
                           <td>
                               <a href="javascript:void(0)" alt="View Detail" title="View Detail" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/restaurants/view/<%=restaurants[i].id%>"><img src="/static/assets/images/info.png" class="status_icon"></a>
+                              
+                              <a href="/portal/menu/<%=restaurants[i].id%>" alt="View Menu" title="View Menu"><img src="/static/assets/images/menu.png"></a>
+                              
                               <a href="/portal/restaurants/orders/<%=restaurants[i].id%>"  alt="View Orders" title="View Orders"><img src="/static/assets/images/order_64.png" class="status_icon"></a>
                               <a href="/portal/restaurants/changestatus/<%=restaurants[i].id%>">
                                 <% if(restaurants[i].status){ %>
@@ -65,6 +70,8 @@
                                 <img src="/static/assets/images/active.png" class="status_icon" alt="Click to Active" title="Click to Active">
                                 <% } %>
                               </a>
+                              &nbsp;
+                              <a href="javascript:void(0)" alt="Edit Menu" title="Edit Menu" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/restaurant/edit/<%=restaurants[i].id%>"><img src="/static/assets/images/edit.png" class="status_icon"></a>
                         </td>
                       </tr>
                       <% } %>

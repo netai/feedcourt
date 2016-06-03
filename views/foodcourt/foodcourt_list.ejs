@@ -34,27 +34,29 @@
               </tr>
           </thead>
           <tbody>
-            <% if(dataJsonArr.data!=undefined && dataJsonArr.data.length>0 && (dataJsonArr.status!=undefined && dataJsonArr.status=='success')){ %>
+            <% if(typeof foodcourt!='undefined' && foodcourt.length>0 && status=='success'){ %>
                 <% var counter=1 %>
-                <% for(var i=0; i < dataJsonArr.data.length; i++) { %>
+                <% for(var i=0; i < foodcourt.length; i++) { %>
                   <tr>
                         <td><%= counter++ %></td>
-                        <td><%= dataJsonArr.data[i].full_name %></td>
-                        <td><%= dataJsonArr.data[i].email %></td>
-                        <td> <%= dataJsonArr.data[i].phone_no %></td>
-                        <td><span><%=dataJsonArr.data[i].status==1?'Active':'Inactive'%></span> </td>
+                        <td><%=foodcourt[i].full_name %></td>
+                        <td><%= foodcourt[i].email %></td>
+                        <td> <%= foodcourt[i].phone_no %></td>
+                        <td><span><%=foodcourt[i].status==1?'Active':'Inactive'%></span> </td>
                         <td>
-                          <a href="javascript:void(0)"  alt="View Detail" title="View Detail" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/feedcourt/view/<%=dataJsonArr.data[i].id%>"><img src="/static/assets/images/info.png" class="status_icon"></a>
+                          <a href="javascript:void(0)"  alt="View Detail" title="View Detail" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/feedcourt/view/<%=foodcourt[i].id%>"><img src="/static/assets/images/info.png" class="status_icon"></a>
                           
-                          <a href="/portal/foodcourt/restaurants/<%= dataJsonArr.data[i].id %>"  alt="View Restaurants" title="View Restaurants"><img src="/static/assets/images/restaurant_64.png" class="status_icon"></a>
+                          <a href="/portal/foodcourt/restaurants/<%= foodcourt[i].id %>"  alt="View Restaurants" title="View Restaurants"><img src="/static/assets/images/restaurant.png" class="status_icon"></a>
                           
-                          <a href="/portal/foodcourt/changestatus/<%=dataJsonArr.data[i].id%>">
-                            <% if(dataJsonArr.data[i].status==0){ %>
+                          <a href="/portal/foodcourt/changestatus/<%=foodcourt[i].id%>">
+                            <% if(foodcourt[i].status==0){ %>
                                 <img src="/static/assets/images/inactive.png" class="status_icon"  alt="Click to Inactive" title="Click to Inactive">
-                            <% }else if(dataJsonArr.data[i].status==1){ %>
+                            <% }else if(foodcourt[i].status==1){ %>
                                 <img src="/static/assets/images/active.png" class="status_icon"  alt="Click to Active" title="Click to Active">
                             <% } %>
                           </a>
+                          &nbsp;
+                          <a href="javascript:void(0)" alt="Edit Menu" title="Edit Foodcourt" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/foodcourt/edit/<%=foodcourt[i].id%>"><img src="/static/assets/images/edit.png" class="status_icon"></a>
                         </td>
                   </tr>
                 <% } %>

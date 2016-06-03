@@ -1097,7 +1097,7 @@ $.extend($.validator, {
 		digits: function(value, element) {
 			return this.optional(element) || /^\d+$/.test(value);
 		},
-        ////// new addition in infoware solutions
+        ////// new addition 
 		decimal: function(value, element) {
 			return this.optional(element) || /^(\d{0,5})(\.\d{2})$/.test(value);
 		},
@@ -1116,11 +1116,11 @@ $.extend($.validator, {
 		inputFormat: function(value, element,param) {
 			var part=param.split('-');
 			var regu="^";
-			for(p=0;p<part.length;p++){
+			for(var p=0;p<part.length;p++){
 			    regu+="\\d{"+part[p].length+"}-";
 			}
 			regu=regu.slice(0,-1)+"$";
-			pattern=new RegExp(regu);    
+			var pattern=new RegExp(regu);    
 			return this.optional(element) || pattern.test(value);           
 		},
 		accept: function(value, element,param) {

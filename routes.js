@@ -1,6 +1,8 @@
 var auth = require('./middlewares/auth');
+var multer = require('multer');
 
 exports.setup = function (params) {
+    var upload = multer({ dest: './tmp' });
     var app = params.app
     var controllers = params.controllers;
     var v1_api = '/api/v1';
@@ -8,6 +10,7 @@ exports.setup = function (params) {
     /*****************portal router*********************/
     
     //site router
+    app.get('/', controllers.site.home);
 	app.get('/portal', auth.portal_authenticated, controllers.site.dashboard);
     app.all('/portal/login', controllers.site.portal_login);
     app.all('/portal/changepassword', auth.portal_authenticated, controllers.site.change_password);
@@ -15,6 +18,10 @@ exports.setup = function (params) {
     app.all('/portal/state',auth.portal_authenticated, controllers.site.state_list);
     app.all('/portal/city/:id',auth.portal_authenticated, controllers.site.city_list);
     app.all('/portal/foodcourt_list/',auth.portal_authenticated, controllers.site.foodcourt_list);
+    app.all('/portal/cuisines_list/', controllers.site.cuines_list);
+    app.get('/portal/unit_list/', controllers.site.unit_list);
+    app.all('/portal/menu_list/', controllers.site.menu_list);
+    
     app.all('/portal/emailexist/', controllers.site.email_exist);
     
     
@@ -28,7 +35,9 @@ exports.setup = function (params) {
     app.get('/portal/restaurants', auth.portal_authenticated, controllers.restaurants.restaurants_list);
     app.get('/portal/restaurants/view/:id', auth.portal_authenticated, controllers.restaurants.restaurants_detail);
     app.get('/portal/restaurants/changestatus/:id', auth.portal_authenticated, controllers.restaurants.change_status);
-    app.all('/portal/restaurant/add',auth.portal_authenticated,controllers.restaurants.add_restaurant);
+    app.all('/portal/restaurant/edit/:id',controllers.restaurants.edit_restaurant);
+    app.all('/portal/restaurant/add',controllers.restaurants.add_restaurant);
+    
     
     //orders route
     app.get('/portal/orders',auth.portal_authenticated,controllers.orders.order_list);
@@ -40,7 +49,31 @@ exports.setup = function (params) {
     app.get('/portal/feedcourt/view/:id',auth.portal_authenticated,controllers.foodcourts.foodcourt_detail);
     app.get('/portal/foodcourt/changestatus/:id',auth.portal_authenticated,controllers.foodcourts.change_status);
     app.get('/portal/foodcourt/restaurants/:id',auth.portal_authenticated,controllers.foodcourts.restaurant_list);
-    app.all('/portal/foodcourt/add',controllers.foodcourts.add_foodcourt);
+    app.all('/portal/foodcourt/add',auth.portal_authenticated,upload.single('image'),controllers.foodcourts.add_foodcourt);
+    app.all('/portal/foodcourt/edit/:id',controllers.foodcourts.edit_foodcourt);
+    
+    //cuisines route
+    app.get('/portal/cuisines',auth.portal_authenticated,controllers.cuisines.cuisines_list);
+    app.get('/portal/cuisines/view/:id',auth.portal_authenticated,controllers.cuisines.cuisines_detail);
+    app.get('/portal/cuisines/changestatus/:id',auth.portal_authenticated,controllers.cuisines.change_status);
+    app.get('/portal/cuisines/delete/:id',auth.portal_authenticated,controllers.cuisines.cuisines_delete);
+    app.all('/portal/cuisines/add',controllers.cuisines.add_cuisines);
+    
+    //Menu Route
+    app.get('/portal/menu/:id',auth.portal_authenticated,controllers.menues.menu_list);
+    app.get('/portal/menu/view/:id',auth.portal_authenticated,controllers.menues.menu_view);
+    app.get('/portal/menu/delete/:id',auth.portal_authenticated,controllers.menues.menu_delete);
+    app.get('/portal/menu/changestatus/:id',auth.portal_authenticated,controllers.menues.change_status);
+    app.all('/portal/add_menu/:id',auth.portal_authenticated,controllers.menues.menu_add);
+    
+    //app.get('/portal/menu/:id',auth.portal_authenticated,controllers.menues.menu_list);
+    
+    //Review 
+     app.get('/portal/reviews',auth.portal_authenticated,controllers.reviews.review_list);
+     app.get('/portal/review/changestatus',auth.portal_authenticated,controllers.reviews.change_status);
+     
+    
+    
     
     
 

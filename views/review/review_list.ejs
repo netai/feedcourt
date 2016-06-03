@@ -1,0 +1,73 @@
+<% layout('../portal_layout') %>
+<% include ../left_header %>
+<div id="wrapper">
+    <!-- Navigation -->
+      <div data-ng-include="'templates/header_with_left.html'"></div>
+      <div id="wrapper">
+          <div id="page-wrapper">
+              <div class="row">
+                  <div class="col-lg-12">
+                      <h1 class="page-header page_title">Manage Reviews</h1>
+                  </div>
+              </div>
+
+    <div class="row">
+    <div class="col-lg-12">
+    <div class="panel panel-default">
+    <!--<div class="panel-heading">
+    Basic Table
+    </div>-->
+    <div class="panel-body">
+    <div class="table-responsive">
+      <table class="table">
+          <thead>
+              <tr>
+                  <th>SL</th>
+                  <th>Review By</th>
+                  <th>Review To </th>
+                  <th>Comment</th>
+                  <th>Date</th>
+                  <th>Action</th>
+              </tr>
+          </thead>
+          <tbody>
+            <% if(typeof reviews!='undefined' && reviews.length>0){ %>
+                <% var counter=1 %>
+                <% for(var i=0; i < reviews.length; i++) { %>
+                  <tr>
+                      <td><%= counter++ %></td>
+                      <td><%=reviews[i].users.full_name %></td>
+                      <td><%= reviews[i].restaurants.full_name %></td>
+                      <td><%= reviews[i].comment %></td>
+                      <td>
+                        <%= reviews[i].review_date %>
+                       
+                      </td>
+                      <td>
+                        <% if(reviews[i].status=='0'){ %>
+                        <a href="/portal/review/changestatus?action=approve&id=<%=reviews[i].id%>">
+                          <img src="/static/assets/images/active.png" class="status_icon"  alt="Click to Approve" title="Click to Approve">
+                        </a>
+                        <a href="/portal/review/changestatus?action=delete&id=<%=reviews[i].id%>">
+                            <img src="/static/assets/images/delete.png" class="status_icon"  alt="Click to Delete" title="Click to Delete">
+                        </a>
+                        <% }else if(reviews[i].status=='1'){ %>
+                          <a href="/portal/review/changestatus?action=delete&id=<%=reviews[i].id%>">
+                            <img src="/static/assets/images/delete.png" class="status_icon"  alt="Click to Delete" title="Click to Delete">
+                          </a>
+                        <% } %>
+                      </tr>
+                <% } %>
+              <% }else{ %>
+                  <tr><td align="center" colspan="6">No Result Found.</td></tr>
+              <% } %>
+          </tbody>
+      </table>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+    </div>
+  </div>
+  </div>

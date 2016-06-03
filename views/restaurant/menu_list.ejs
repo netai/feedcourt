@@ -1,0 +1,84 @@
+<% layout('../portal_layout') %>
+<% include ../left_header %>
+<div id="wrapper">
+          <div id="page-wrapper">
+              <div class="row">
+                <% if(typeof restaurant!=='undefined'){ %>
+                  <div class="col-lg-12">
+                      <h1 class="page-header page_title"><%= restaurant.full_name %>&nbsp;> Manage Menu</h1>
+                  </div>
+                <% }else{ %>
+                  <div class="col-lg-12">
+                      <h1 class="page-header page_title">Manage Menu</h1>
+                  </div>
+                  <% } %>
+                  <div class="col-lg-2 add_btn" >
+                    <button class="btn btn-success pop-link" data-href="/portal/add_menu/<%= restaurant.id %>" data-toggle="modal" data-target="#popup">Add Menu</button>
+                  </div>
+              </div>
+              
+
+            <div class="row">
+            <div class="col-lg-12">
+            <div class="panel panel-default">
+            <div class="panel-body">
+            <div class="table-responsive">
+            <table class="table">
+               <thead>
+                    <tr>
+                        <th>SL</th>
+                        <th>Menu Name</th>
+                        <th>Cuisine</th>
+                        <th>Price</th>
+                        <th>Unit</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <% if(typeof menues!=='undefined'){ %>
+                  <% for(var i=0;i<menues.length;i++){ %>
+                    <tr>
+                          <td><%=i+1%></td>
+                          <td>
+                            <span><%=menues[i].title%></span>
+                          </td>
+                          <td>
+                            <span><%=menues[i].cuisines.title%></span>
+                          </td>
+                          <td>
+                            <span><%=menues[i].price%></span>
+                          </td>
+                          <td>
+                            <span><%if(typeof menues[i].unites.title!=undefined){%><%=menues[i].unites.title%><%}%></span>
+                          </td>
+                          <td>
+                            <span><%=menues[i].status==1?'Active':'Inactive'%></span>
+                          </td>
+                          <td>
+                              <a href="javascript:void(0)" alt="View Detail" title="View Detail" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/menu/view/<%=menues[i].id%>"><img src="/static/assets/images/info.png" class="status_icon"></a>
+                              
+                              <a href="/portal/menu/delete/<%=menues[i].id%>" alt="Delete" title="Delete"><img src="/static/assets/images/delete.png"  class="status_icon"></a>
+                              
+                              <a href="/portal/menu/changestatus/<%=menues[i].id%>">
+                                <% if(menues[i].status){ %>
+                                <img src="/static/assets/images/inactive.png" class="status_icon" alt="Click to Inactive" title="Click to Inactive">
+                                <% } else { %>
+                                <img src="/static/assets/images/active.png" class="status_icon" alt="Click to Active" title="Click to Active">
+                                <% } %>
+                              </a>
+                        </td>
+                      </tr>
+                      <% } %>
+                      <% } else { %>
+                      <tr><td align="center" colspan="6">No Result Found.</td></tr>
+                      <% } %>
+                </tbody>
+            </table>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+          </div>
+</div>
