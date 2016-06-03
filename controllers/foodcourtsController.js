@@ -3,109 +3,156 @@ var foodcourtsModel = require('../models/foodcourtsModel'),
     citiesModel = require('../models/citiesModel'),
     addressModel = require('../models/addressModel'),
     restaurantsModel = require('../models/restaurantsModel'),
-    formidable = require('formidable'),
-    fs   = require('fs-extra'),
-    path = require('path'),
-    util = require('util');
+    usersModel = require('../models/usersModel'),
+    imagesModel = require('../models/imagesModel'),
+    utility = require('../helpers/utility');
 
 module.exports = {
   // GET /portal/restaurants
   restaurant_list: function(req, res, next) {
+    var sess = req.session;
     var id = req.params.id;
-    foodcourtsModel.forge({id: id,user_type:2})
-    .fetch()
-    .then(function (model){
-      var foodcourtDetail=model.toJSON();
-       restaurantsModel.where({parent_id: id,user_type: 3})
-      .fetchAll({withRelated: ['addresses','addresses.state','addresses.city']})
-      .then(function (restaurant) {
-        var context = {};
-        if(restaurant){
-          context = {
-            foodcourt:foodcourtDetail,
-            restaurants: restaurant.toJSON(),
-            message: 'Foodcourt list',
-            status: 'success',
-          };
-        } else {
-          context = {
-            foodcourt:{},
-            restaurants:{},
-            message: 'no foodcourt found',
-            status: 'success',
-          };
-        }
-        res.render('restaurant/restaurant_list', context);
-      })
-      .catch(function (error) {
-         res.redirect('/portal/foodcourts');
-      });
-    })
-    .catch(function (error) {
-      res.redirect('/portal/foodcourts');
-    });
+    if(typeof sess.user_type!='undefined' && sess.user_type=='2'){
+        foodcourtsModel.forge({id: sess.user_id,user_type:2})
+        .fetch()
+        .then(function (model){
+          var foodcourtDetail=model.toJSON();
+           restaurantsModel.where({parent_id: sess.user_id,user_type: 3})
+          .fetchAll({withRelated: ['addresses','addresses.state','addresses.city']})
+          .then(function (restaurant) {
+            var context = {};
+            if(restaurant){
+              context = {
+                foodcourt:foodcourtDetail,
+                restaurants: restaurant.toJSON(),
+                'SessionData':sess,
+                message: 'Foodcourt list',
+                status: 'success',
+              };
+            } else {
+              context = {
+                foodcourt:{},
+                restaurants:{},
+                'SessionData':sess,
+                message: 'no foodcourt found',
+                status: 'success',
+              };
+            }
+            res.render('restaurant/restaurant_list', context);
+          })
+          .catch(function (error) {
+             res.redirect('/portal/foodcourts');
+          });
+        })
+        .catch(function (error) {
+          res.redirect('/portal/foodcourts');
+        });
+    } else{
+        foodcourtsModel.forge({id: id,user_type:2})
+        .fetch()
+        .then(function (model){
+          var foodcourtDetail=model.toJSON();
+           restaurantsModel.where({parent_id: id,user_type: 3})
+          .fetchAll({withRelated: ['addresses','addresses.state','addresses.city']})
+          .then(function (restaurant) {
+            var context = {};
+            if(restaurant){
+              context = {
+                foodcourt:foodcourtDetail,
+                restaurants: restaurant.toJSON(),
+                'SessionData':sess,
+                message: 'Foodcourt list',
+                status: 'success',
+              };
+            } else {
+              context = {
+                foodcourt:{},
+                restaurants:{},
+                'SessionData':sess,
+                message: 'no foodcourt found',
+                status: 'success',
+              };
+            }
+            res.render('restaurant/restaurant_list', context);
+          })
+          .catch(function (error) {
+             res.redirect('/portal/foodcourts');
+          });
+        })
+        .catch(function (error) {
+          res.redirect('/portal/foodcourts');
+        });
+    }
   },
   // GET portal/foodcourts
   foodcourt_list: function(req, res, next) {
+    var sess = req.session;
     var id = req.params.id;
+    if(typeof sess.user_type !='undefined' && sess.user_type!=1){
+      res.redirect('/portal');
+    }
     foodcourtsModel.where({user_type:2})
     .fetchAll({withRelated: ['addresses','addresses.state','addresses.city']})
     .then(function (model) {
       var context = {};
       if(model){
         context = {
-          data: model.toJSON(),
+          foodcourt: model.toJSON(),
+          'SessionData':sess,
           message: 'Foodcourt list',
           status: 'success',
         };
       } else {
         context = {
-          data:{},
+          foodcourt:{},
+          'SessionData':sess,
           message: 'no foodcourt found',
           status: 'success',
         };
       }
-      res.render('foodcourt/foodcourt_list',{'dataJsonArr':context});
+      res.render('foodcourt/foodcourt_list',context);
     })
     .catch(function (error) {
       var context = {
-            data:{},
+            foodcourt:{},
+            'SessionData':sess,
             message: error.message,
             status: 'error',
         };
-      res.render('foodcourt/foodcourt_list',{'dataJsonArr':context});
+      res.render('foodcourt/foodcourt_list',context);
     });
   },
     // GET portal/foodcourt_view/:id
   foodcourt_detail: function(req, res, next) {
+    var sess = req.session;
     var id = req.params.id;
     foodcourtsModel.forge({id: id,user_type:2})
     .fetch({withRelated: ['addresses','addresses.state','addresses.city']})
     .then(function (model) {
      var context = {};
-      if(model){
-        context = {
-          data: model.toJSON(),
-          message: 'Foodcourt Detail',
-          status: 'success',
-        };
-      } else {
-        context = {
-          data:{},
-          message: 'no foodcourt found',
-          status: 'success',
-        };
-      }
-      res.render('foodcourt/foodcourt_detail',{'dataJsonArr':context});
+
+        
+        var foodcourt_res =model.toJSON();
+        
+        imagesModel.forge({type:'1',reference_id:foodcourt_res.id})
+        .fetch()
+        .then(function (image){
+          context = {
+            foodcourt: model.toJSON(),
+            image:(image?image.toJSON():'')
+          };
+          res.render('foodcourt/foodcourt_detail',context);
+        });
     })
     .catch(function (error) {
      var context = {
-            data:{},
+            foodcourt:{},
+            'SessionData':sess,
             message: error.message,
             status: 'error',
             code: '2005'
       };
-      res.render('foodcourt/foodcourt_detail',{'dataJsonArr':context});
+      res.render('foodcourt/foodcourt_detail',context);
     });
   },
   // GET portal/foodcourt/changestatus
@@ -129,35 +176,124 @@ module.exports = {
   },
   // POST /portal/foodcourt/add
   add_foodcourt: function(req, res, next) {
+    var sess = req.session;
     if(req.method == 'POST'){
-      var form = new formidable.IncomingForm();
-      form.parse(req, function(err, fields, files) {
-        if(err){
-          console.log(err);
-        } else {
-          res.writeHead(200, {'content-type': 'text/plain'});
-          res.write('received upload:\n\n');
-          console.log(fields);
-          res.end(util.inspect({fields: fields, files: files}));
-        }
-      });
-          // form.on('end', function() {
-          //   var temp_path = this.openedFiles[0].path;
-          //   var file_name = this.openedFiles[0].name;
-          //   var new_location = path.join(__dirname,'..','public','media','images',file_name);
-          //   fs.copy(temp_path, new_location, function(err) {
-          //     if (err) {
-          //       console.error(err);
-          //     } else {
-          //       console.log(new_location);
-          //     }
-          //   });
-          // });
-      form.on('fileBegin', function(name, file) {
-          file.path = path.join(__dirname,'..','public','media','images',file.name);
+      
+      var address_data={
+        'state_id': req.body.state,
+        'city_id': req.body.city,
+        'zip_code': req.body.zip,
+        'phone_no': req.body.phone_no,
+        'email_id': req.body.email
+      }
+
+      addressModel.forge(address_data)
+      .save()
+      .then(function (save_address){
+        var save_address_resp=save_address.toJSON();
+        var req_data = {
+          email: req.body.email,
+          full_name: req.body.full_name,
+          password: req.body.password,
+          phone_no: req.body.phone_no,
+          address_id:save_address_resp.id,
+          user_type: 2,
+          status: 1
+       }
+        usersModel.forge(req_data)
+        .save()
+        .then(function (model) {
+          if(req.file.originalname!=undefined){
+            var file_name = utility.getFileName(req.file.originalname);
+            utility.saveImageAndThumb(req.file,file_name,function(){
+              imagesModel.forge({img_name: file_name, type: 1, reference_id: model.id, added_by: sess.user_id})
+              .save()
+              .then(function (imgmodel) {})
+              .catch(function (error) {
+                console.log(error.message);
+              });
+          }); 
+          }
+          res.redirect('/portal/foodcourts');
+        })
+        .catch(function (error) {
+          console.log(error.message);
+          res.redirect('/portal/foodcourts');
+        });
+      })
+      .catch(function (error) {
+        console.log(error.message);
+        res.redirect('/portal/foodcourts');
       });
     } else {
-      res.render('foodcourt/foodcourt_add');
+      res.render('foodcourt/foodcourt_add',{'SessionData':sess});
     }
   },
+  
+  // GET or POST /portal/restaurant/edit
+   edit_foodcourt: function(req, res, next) {
+     var foodcourt_id= req.params.id;
+      var sess = req.session;
+       if(req.method == 'POST'){
+            foodcourtsModel.forge({id:req.body.foodcourt_id,})
+            .fetch()
+            .then(function (is_foodcourt){
+              if(is_foodcourt){
+                var address_data={'state_id':req.body.state,'city_id':req.body.city,'zip_code':req.body.zip,'phone_no':req.body.phone_no,'email_id':req.body.email}; //addressModel
+                    addressModel.forge({id:is_foodcourt.address_id})
+                    .fetch()
+                    .then(function (is_address){
+                        is_address.save(address_data).then(function (){
+                          var foodcourt_data={'full_name':req.body.full_name,'user_type':3,'parent_id':req.body.foodcourt,'address_id':is_foodcourt.address_id,'email':is_foodcourt.email,'password':is_foodcourt.password,'phone_no':req.body.phone_no}; 
+                          is_foodcourt.save(foodcourt_data).then(function (model){
+                            
+                            if(req.file.originalname!=undefined){
+                              var file_name = utility.getFileName(req.file.originalname);
+                              utility.saveImageAndThumb(req.file,file_name,function(){
+                                imagesModel.forge({img_name: file_name, type: 1, reference_id: model.id, added_by: sess.user_id})
+                                .save()
+                                .then(function (imgmodel) {})
+                                .catch(function (error) {
+                                  console.log(error.message);
+                                });
+                              }); 
+                            }
+                            
+                            
+                            
+                            res.redirect('/portal/foodcourts');
+                          });
+                      
+                        });
+                    })
+                    .catch(function (error) {
+                      res.redirect('/portal/foodcourts');
+                    });
+              } else {
+                res.redirect('/portal/foodcourts');
+              }
+            });
+      } else {
+        if(foodcourt_id!=""){
+           foodcourtsModel.forge({id:foodcourt_id,})
+            .fetch({withRelated: ['addresses','addresses.state','addresses.city']})
+            .then(function (model){
+              var contex = {};
+              if(model){
+                var context = {
+                  foodcourts: model.toJSON(),
+                  'SessionData':sess,
+                };
+                res.render('foodcourt/foodcourt_edit', context);
+              } else {
+               res.redirect('/portal/foodcourts');
+              }
+            });
+          } else{
+            res.redirect('/portal/restaurants');
+          }
+      }
+  },
+  
+  
 };

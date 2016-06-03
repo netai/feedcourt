@@ -3,40 +3,44 @@ var customersModel = require('../models/customersModel');
 module.exports = {
   // GET /portal/customers/view/:id
   customer_detail: function(req, res, next) {
+     var sess = req.session;
     var id = req.params.id;
     customersModel.forge({id: id})
     .fetch({withRelated: ['addresses','addresses.state','addresses.city']})
     .then(function (model) {
       var context = {
-        customer: model.toJSON()
+        customer: model.toJSON(),
+        'SessionData':sess
       };
       res.render('customer/customer_detail', context);
     })
     .catch(function (error) {
-      console.log(error.message);
+      //console.log(error.message);
       res.send('Sorry somthing is wrong');
     });
   },
   //GET /portal/customers
   customers_list: function(req, res, next) {
+     var sess = req.session;
     customersModel.where({user_type:4})
     .fetchAll({withRelated: ['addresses','addresses.state','addresses.city']})
     .then(function (model) {
 
       if(model){
         var context = {
-          customers: model.toJSON()
+          customers: model.toJSON(),
+          'SessionData':sess
         };
       } else {
         context = {
-          customers: {}
+          customers: {},
+          'SessionData':sess
         };
       }
-      
       res.render('customer/customer_list', context);
     })
     .catch(function (error) {
-      console.log(error.message);
+      //console.log(error.message);
       res.redirect('/portal');
     });
   },

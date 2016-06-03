@@ -76,18 +76,20 @@
 <script>
 	$(document).ready(function(){
 	   	$.get('/portal/state',function(data) {
-      $.each(data.state,function(idx,val){
-        $("select[name='state']").append('<option value="'+val.id+'">'+val.name+'</option>');
+        $.each(data.state,function(idx,val){
+          $("select[name='state']").append('<option value="'+val.id+'">'+val.name+'</option>');
+        });
       });
-  });
   	  $("#addFoodcourtForm").validate({
 				rules: {
 					cpassword:{equalTo: "#password"},
 				},
 				submitHandler : function(form) {
+				  $('button').prop('disabled',true);
 				   $.post('/portal/emailexist',{email:$('#email').val()},function(data) {
           if(data.status){
             $('#email').after('<label for="email" generated="true" class="error">Email address exist, please enter other email address.</label>');
+            $('button').prop('disabled',false);
           } else {
             form.submit();
           }

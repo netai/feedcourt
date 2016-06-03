@@ -1,11 +1,20 @@
 var usersModel = require('../models/usersModel');
 var statesModel = require('../models/statesModel');
 var citiesModel = require('../models/citiesModel');
+var cuisinesModel = require('../models/cuisinesModel');
+var unitesModel = require('../models/unitesModel');
+var menuesModel =require('../models/menuesModel');
 
 module.exports = {
-  // GET /
+    // GET /
+  home: function(req, res, next){
+    var sess = req.session;
+    res.render('site/home',{});
+  },
+  // GET /portal
   dashboard: function(req, res, next){
-    res.render('site/dashboard',{});
+    var sess = req.session;
+    res.render('site/dashboard',{'SessionData':sess});
   },
   // ALL /portal/login
   portal_login: function(req, res, next) {
@@ -16,7 +25,8 @@ module.exports = {
         if(req.method == 'POST'){
         var email = req.body.email;
         var password = req.body.password;
-        usersModel.forge({email: email,password: password})
+        usersModel.where({'email':email,'password':password,'status':'1'})
+        .where('user_type','!=','4')
         .fetch()
         .then(function (model) {
           if(model){
@@ -46,8 +56,8 @@ module.exports = {
   },
   // ALL /portal/changepassword
   change_password: function(req, res, next) {
+        var sess = req.session;
         if(req.method == 'POST'){
-          var sess = req.session;
         var opassword = req.body.opassword;
         var npassword = req.body.npassword;
         usersModel.forge({password: opassword,id: sess.user_id})
@@ -64,7 +74,8 @@ module.exports = {
             });
           } else {
             var context = {
-              error: 'Wrong Old Password'
+              error: 'Wrong Old Password',
+              'SessionData':sess,
             };
             res.render('site/change_password', context);
           }
@@ -74,7 +85,7 @@ module.exports = {
           res.redirect('/portal');
         });
       } else {
-        res.render('site/change_password', {error:''});
+        res.render('site/change_password', {error:'','SessionData':sess});
       }
 
   },
@@ -162,7 +173,79 @@ module.exports = {
         res.json(context);
     });
   },
-    // GET /emailexist/
+  // GET /cusine list/
+  cuines_list: function(req, res, next){
+    //var id=req.params.id;
+    cuisinesModel.where({status:'1'}) 
+    .fetchAll({columns:['id','title']})
+    .then(function (model) {
+      var context = {};
+      if(model){
+        context = {
+          cuisines: model.toJSON(),
+        };
+      } else {
+        context = {
+          cuisines: {},
+        };
+      }
+      res.json(context);
+    })
+    .catch(function (error) {
+      var context = {
+          cuisines: {},
+          message: error.message,
+          status: 'error',
+        };
+        res.json(context);
+    });
+  },
+  // GET /Unit list/
+  unit_list: function(req, res, next){
+   var title=req.query.term;
+    unitesModel.where({'status':'1'})
+    .where('title', 'LIKE', '%'+title+'%')
+    .fetchAll({columns:['id','title']})
+    .then(function (model) {
+      var unit_list=[];
+      if(model){
+        var unit_arr= model.toArray();
+        unit_arr.forEach(function(row,idx){
+          unit_list[idx]={value: row.get('title'), id: row.get('id') };
+        });
+      }
+      res.json(unit_list);
+    })
+    .catch(function (error) {
+      var context = {
+          unit: {},
+          message: error.message,
+          status: 'error',
+        };
+        res.json(context);
+    });
+  },
+  // GET /menu list/
+  menu_list: function(req, res, next){
+   var restaurant_id= req.body.restaurant_id;
+   var title_menu=req.body.menu;
+    menuesModel.where({'added_by':restaurant_id,'status':'1'})
+    .where('title', 'LIKE', '%'+title_menu+'%')
+    .fetchAll({columns:['id','title']})
+    .then(function (model) {
+      var menu_list={};
+      if(model){
+        var menu_list= model.toJSON();
+         
+      } 
+      res.json(menu_list);
+    })
+    .catch(function (error) {
+      var context = {};
+        res.json(context);
+    });
+  },
+  // GET /emailexist/
   email_exist: function(req, res, next){
     var email=req.body.email;
     usersModel.where({email:email})
