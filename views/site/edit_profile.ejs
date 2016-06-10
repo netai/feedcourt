@@ -1,0 +1,115 @@
+<% layout('../portal_layout') %>
+<% include ../left_header %>
+<div id="wrapper">
+      <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+              <h1 class="page-header page_title">My Profile</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5 col-md-offset-2">
+              <% if(error){ %>
+              <div class="error"><%=error%></div>
+              <% } %>
+            <form role="form" method="post" id="EditProfileFrm" action="/portal/profile">
+                
+                <input  type="hidden" name="user_id" value="<%=SessionData.user_id%>" />
+                <div class="form-group">
+                  <label class="control-label">Name:</label>
+                  <input  type="text" name="name" value="<%=profile.full_name%>" class="form-control required" autofocus/>
+                </div>
+                <div class="form-group">
+                  <label class="control-label">Email:</label>
+                  <input type="text" name="email" value="<%=profile.email%>" class="form-control required email" id="email"  />
+                </div>
+                <div class="form-group">
+                  <label class="control-label">Phone:</label>
+                  <input type="text" name="phone" value="<%=profile.phone_no%>" class="form-control required number" >
+                </div>
+                
+                <div class="form-group">
+                  <label class="control-label">State:</label>
+                   <select class="form-control required" name="state" data-select="<%=profile.addresses.state.id%>">
+                        <option value="">---Select State---</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                  <label class="control-label">City:</label>
+                   <select class="form-control required" name="city" data-select="<%=profile.addresses.city.id%>">
+                        <option value="">---Select City---</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                  <label class="control-label">Zip:</label>
+                  <input type="text" name="zip" value="<%=profile.addresses.zip_code%>" class="form-control required" >
+                </div>
+                
+                <div class="form-group">
+                  <button type="submit"  class="btn btn-primary">Save</button>
+                </div>
+            </form>
+          </div>
+        </div>
+    </div>
+  </div>
+
+
+<script>
+	$(document).ready(function(){
+  	     $("#EditProfileFrm").validate({
+		rules: {
+				 	
+			},
+			submitHandler : function(form) {
+			  $('button').prop('disabled',true);
+			  	
+				 $.post('/portal/emailexist',{email:$('#email').val(),id:$('input[name="user_id"]').val()},function(data) {
+				     console.log(data);
+                  if(data.status){
+                    $('#email').after('<label for="email" generated="true" class="error">Email address exist, please enter other email address.</label>');
+                    $('button').prop('disabled',false);
+                  } else {
+                    form.submit();
+                  }
+                });
+			}
+		});
+		$.get('/portal/state',function(data) {
+            $.each(data.state,function(idx,val){
+              var selected="";
+                if(val.id==$("select[name='state']").data('select')){
+                  selected="selected";
+                  get_city($("select[name='state']").data('select'));
+                }
+              $("select[name='state']").append('<option value="'+val.id+'" '+selected+'>'+val.name+'</option>');
+            });
+          });
+          
+       	$('select[name="state"]').change(function(){
+                $("select[name='city']").html('<option value="">---Select City---</option>');
+              	$.get('/portal/city/'+$(this).val(),function(data) {
+                    $.each(data.city,function(idx,val){
+                      $("select[name='city']").append('<option value="'+val.id+'">'+val.name+'</option>');
+                    });
+                  });
+              });
+    	});
+    	function get_city(state_id=null){
+            if(state_id!=null){
+              $("select[name='city']").html('<option value="">---Select City---</option>');
+            	$.get('/portal/city/'+state_id,function(data) {
+                  $.each(data.city,function(idx,val){
+                    var selected="";
+                    if(val.id==$("select[name='city']").data('select')){
+                      selected="selected";
+                    }
+                    $("select[name='city']").append('<option value="'+val.id+'" '+selected+'>'+val.name+'</option>');
+                  });
+                });
+            }
+        }
+
+</script>
+	

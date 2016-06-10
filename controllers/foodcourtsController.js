@@ -235,40 +235,35 @@ module.exports = {
      var foodcourt_id= req.params.id;
       var sess = req.session;
        if(req.method == 'POST'){
-            foodcourtsModel.forge({id:req.body.foodcourt_id,})
+            foodcourtsModel.forge({id:req.body.foodcourt_id})
             .fetch()
             .then(function (is_foodcourt){
               if(is_foodcourt){
-                var address_data={'state_id':req.body.state,'city_id':req.body.city,'zip_code':req.body.zip,'phone_no':req.body.phone_no,'email_id':req.body.email}; //addressModel
-                    addressModel.forge({id:is_foodcourt.address_id})
-                    .fetch()
-                    .then(function (is_address){
-                        is_address.save(address_data).then(function (){
-                          var foodcourt_data={'full_name':req.body.full_name,'user_type':3,'parent_id':req.body.foodcourt,'address_id':is_foodcourt.address_id,'email':is_foodcourt.email,'password':is_foodcourt.password,'phone_no':req.body.phone_no}; 
-                          is_foodcourt.save(foodcourt_data).then(function (model){
-                            
-                            if(req.file.originalname!=undefined){
-                              var file_name = utility.getFileName(req.file.originalname);
-                              utility.saveImageAndThumb(req.file,file_name,function(){
-                                imagesModel.forge({img_name: file_name, type: 1, reference_id: model.id, added_by: sess.user_id})
-                                .save()
-                                .then(function (imgmodel) {})
-                                .catch(function (error) {
-                                  console.log(error.message);
-                                });
-                              }); 
-                            }
-                            
-                            
-                            
-                            res.redirect('/portal/foodcourts');
-                          });
-                      
-                        });
-                    })
+               var foodcourt_data=is_foodcourt.toJSON();
+               var save_foodcourt_data={'full_name':req.body.full_name,'user_type':2,'parent_id':'0','address_id':foodcourt_data.address_id,'email':foodcourt_data.email,'password':foodcourt_data.password,'phone_no':req.body.phone_no};
+                is_foodcourt.save(save_foodcourt_data).then(function (model){
+                  foodcourt_data=model.toJSON();
+                 var address_data={'state_id':req.body.state,'city_id':req.body.city,'zip_code':req.body.zip,'phone_no':req.body.phone_no,'email_id':foodcourt_data.email}; //addressModel
+                 addressModel.forge({id:foodcourt_data.address_id})
+                .fetch()
+                .then(function (save_adress){
+                  save_adress.save(address_data).then(function(){});
+                });
+                if(req.file.originalname!=undefined){
+                  var file_name = utility.getFileName(req.file.originalname);
+                  utility.saveImageAndThumb(req.file,file_name,function(){
+                    imagesModel.forge({img_name: file_name, type: '1', reference_id: foodcourt_data.id, added_by: sess.user_id})
+                    .save()
+                    .then(function (imgmodel) {})
                     .catch(function (error) {
-                      res.redirect('/portal/foodcourts');
+                      console.log(error.message);
                     });
+                  }); 
+                }
+                  res.redirect('/portal/foodcourts');
+                }).catch(function (error) {
+                  res.redirect('/portal/foodcourts');
+                });
               } else {
                 res.redirect('/portal/foodcourts');
               }

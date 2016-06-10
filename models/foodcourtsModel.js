@@ -3,7 +3,7 @@ var db = require('../config/db');
 var addressModel = require('./addressModel');
 var citiesModel = require('./citiesModel');
 var statesModel = require('./statesModel');
-var usersModel = require('./statesModel');
+var usersModel = require('./usersModel');
 var foodcourtsModel = db.Model.extend({
   constructor: function() {
     db.Model.apply(this, arguments); // super()

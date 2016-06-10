@@ -7,6 +7,7 @@ var express = require('express'),
     
 var config = require('./config/app'),
     controllers = require('./controllers'),
+    api_controllers = require('./api'),
     routes = require('./routes');
 
 var app = express();
@@ -29,6 +30,7 @@ app.use(cookieParser());
 
 routes.setup({
     'controllers': controllers,
+    'api_controllers': api_controllers,
     'app': app
 });
 

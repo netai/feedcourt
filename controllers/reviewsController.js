@@ -8,8 +8,13 @@ module.exports = {
   // GET /portal/reviews/
   review_list: function(req, res, next) {
     var sess = req.session;
+    var review_conditions={};
+    if(sess.user_type!==undefined && sess.user_type==3){
+      var review_conditions={review_to:sess.user_id};
+    }
     var context ={};
     reviewsModel.where('status','!=','2')
+    .where(review_conditions)
     .fetchAll({withRelated: ['users','restaurants']})
     .then(function (model) {
       if(model){

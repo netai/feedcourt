@@ -1,21 +1,22 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Add Cuisine</h4>
+        <h4 class="modal-title">Edit Cuisine</h4>
       </div>
-      <form role="form" method="post" action="/portal/cuisines/add" id="addCuisinesForm" name="addCuisines">
+      <form role="form" method="post" action="/portal/cuisines/edit/<%=cuisin.id%>" id="addCuisinesForm" name="addCuisines">
+        <input  type="hidden" value="<%=cuisin.id%>" name="cuisin_id">
       <div class="modal-body">
         <div class="row">
             <div class="col-md-12">
               <div class="col-md-8">
                 <div class="form-group">
                   <label class="control-label">Title:</label>
-                  <input  type="text" name="title" class="form-control required" autofocus >
+                  <input  type="text" value="<%=cuisin.title%>" name="title" class="form-control required" autofocus >
                 </div>
                 </div>
                 <div class="col-md-8">
                 <div class="form-group">
                   <label class="control-label">Description:</label>
-                   <textarea class="form-control required" rows="5" name="description"></textarea>
+                   <textarea class="form-control required"  rows="5" name="description"><%=cuisin.description %></textarea>
                 </div>
                 </div>
           </div>

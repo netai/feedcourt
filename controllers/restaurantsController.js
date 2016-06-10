@@ -182,34 +182,26 @@ module.exports = {
         res.render('restaurant/restaurant_add',{'SessionData':sess});
       }
   },
-  
   // GET or POST /portal/restaurant/edit
    edit_restaurant: function(req, res, next) {
-     var restaurant_id= req.params.id;
+     var restaurant_id=req.params.id;
       var sess = req.session;
       if(req.method == 'POST'){
+          restaurant_id=req.body.restaurant_id;
             restaurantsModel.forge({id:restaurant_id,})
             .fetch()
             .then(function (is_restaurant){
-              if(is_restaurant){
-                var address_data={'state_id':req.body.state,'city_id':req.body.city,'zip_code':req.body.zip,'phone_no':req.body.phone_no,'email_id':req.body.email}; //addressModel
-                    addressModel.forge({id:is_restaurant.address_id})
-                    .fetch()
-                    .then(function (is_address){
-                        is_address.save(address_data).then(function (){
-                          var restaurant_data={'full_name':req.body.full_name,'user_type':3,'parent_id':req.body.foodcourt,'address_id':is_restaurant.address_id,'email':req.body.email,'password':req.body.password,'phone_no':req.body.phone_no}; 
-                          is_restaurant.save(restaurant_data).then(function (){
-                            res.redirect('/portal/restaurants');
-                          });
-                      
-                        });
-                    })
-                    .catch(function (error) {
-                      res.redirect('/portal/restaurants');
-                    });
-              } else {
+              var restaurant_data=is_restaurant.toJSON();
+              var update_restaurant_data={'full_name':req.body.full_name,'user_type':3,'parent_id':req.body.foodcourt,'address_id':restaurant_data.address_id,'email':restaurant_data.email,'password':restaurant_data.password,'phone_no':req.body.phone_no}; 
+              is_restaurant.save(update_restaurant_data).then(function (){
+                var address_data={'country_id':'1','state_id':req.body.state,'city_id':req.body.city,'zip_code':req.body.zip,'phone_no':req.body.phone_no};
+                addressModel.forge({id:restaurant_data.address_id})
+                .fetch()
+                .then(function (save_adress){
+                  save_adress.save(address_data).then(function(){});
+                });
                 res.redirect('/portal/restaurants');
-              }
+              });
             });
       } else {
         if(restaurant_id!=""){

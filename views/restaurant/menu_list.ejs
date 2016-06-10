@@ -3,9 +3,9 @@
 <div id="wrapper">
           <div id="page-wrapper">
               <div class="row">
-                <% if(typeof restaurant!=='undefined'){ %>
+                <% if(typeof restaurant!=='undefined' ){ %>
                   <div class="col-lg-12">
-                      <h1 class="page-header page_title"><%= restaurant.full_name %>&nbsp;> Manage Menu</h1>
+                      <h1 class="page-header page_title"><% if(restaurant.full_name!==undefined){%><%= restaurant.full_name %>&nbsp;> <% } %>Manage Menu</h1>
                   </div>
                 <% }else{ %>
                   <div class="col-lg-12">
@@ -67,6 +67,8 @@
                                 <img src="/static/assets/images/active.png" class="status_icon" alt="Click to Active" title="Click to Active">
                                 <% } %>
                               </a>
+                              
+                              <a href="javascript:void(0)" alt="Edit Menu" title="Edit Menu" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/edit_menu/<%= restaurant.id %>/<%=menues[i].id%>"><img src="/static/assets/images/edit.png" class="status_icon"></a>
                         </td>
                       </tr>
                       <% } %>

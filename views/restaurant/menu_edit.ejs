@@ -1,17 +1,18 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Add Menu</h4>
+        <h4 class="modal-title">Edit Menu</h4>
       </div>
-      <form role="form" method="post" action="/portal/add_menu/<%= restaurant_id %>" id="addMenu" name="addMenu" enctype="multipart/form-data" >
+      <form role="form" method="post" action="/portal/edit_menu/<%= restaurant_id %>/<%= menu.id %>" id="addMenu" name="addMenu" enctype="multipart/form-data" >
       
       <input  type="hidden" name="restaurant_id" value="<%= restaurant_id %>" >
+      <input  type="hidden" name="menu_id" value="<%= menu.id %>">
       <div class="modal-body">
         <div class="row">
             <div class="col-md-12">
               <div class="col-md-6">
                   <div class="form-group">
                       <label>Cuisine:</label>
-                      <select class="form-control required" name="cuisine">
+                      <select class="form-control required" name="cuisine" data-select="<%=menu.cuisine_id%>">
                           <option value="">---Select Cuisine---</option>
                       </select>
                   </div>
@@ -19,26 +20,26 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="control-label">Title:</label>
-                    <input  type="text" name="title" class="form-control required" autofocus >
+                    <input  type="text" value="<%=menu.title%>" name="title" class="form-control required" autofocus >
                 </div>
               </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label class="control-label">Price:</label>
-                    <input  type="text" name="price" class="form-control required decimal">
+                    <input  type="text" value="<%=menu.price%>" name="price" class="form-control required decimal">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label class="control-label">Unit:</label>
-                    <input  type="text" name="unit"  class="form-control required" >
-                    <input type="hidden" name="unit_id" value="0"/>
+                    <input  type="text" value="<%=unit.title%>" name="unit"  class="form-control required" >
+                    <input type="hidden" name="unit_id" value="<%=menu.unit_id%>"/>
                   </div>
                 </div>
                 <div class="col-md-12">
                   <div class="form-group">
                     <label class="control-label">Description:</label>
-                    <textarea name="description" class="form-control required"></textarea>
+                    <textarea name="description" class="form-control required"><%=menu.description%></textarea>
                   </div>
                 </div>
           </div>
@@ -58,8 +59,10 @@
 	$(document).ready(function(){
 	   $("#addMenu").validate({ });
      	$.get('/portal/cuisines_list',function(data) {
+     	  var selected_val=$("select[name='cuisine']").data('select');
           $.each(data.cuisines,function(idx,val){
-            $("select[name='cuisine']").append('<option value="'+val.id+'">'+val.title+'</option>');
+            var select= selected_val==val.id?'selected':'';
+            $("select[name='cuisine']").append('<option value="'+val.id+'" '+select+'>'+val.title+'</option>');
           });
       });
     //get uint list

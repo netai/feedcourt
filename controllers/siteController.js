@@ -1,4 +1,5 @@
 var usersModel = require('../models/usersModel');
+var addressModel = require('../models/addressModel');
 var statesModel = require('../models/statesModel');
 var citiesModel = require('../models/citiesModel');
 var cuisinesModel = require('../models/cuisinesModel');
@@ -54,6 +55,58 @@ module.exports = {
     }
 
   },
+  
+  edit_profile:function(req,res,next){
+    var sess=req.session;
+    var contex={};
+    if(typeof sess.user_id!=undefined && sess.user_id!=""){
+      if(req.method=='POST'){
+        usersModel.forge({id:sess.user_id})
+        .fetch()
+        .then(function(is_profile_data){
+            var profile_data=is_profile_data.toJSON();
+            var update_profile_data={'full_name':req.body.name,'user_type':profile_data.user_type,'parent_id':profile_data.parent_id,'address_id':profile_data.address_id,'email':req.body.email,'password':profile_data.password,'phone_no':req.body.phone};
+            is_profile_data.save(update_profile_data).then(function(){
+                addressModel.forge({id:profile_data.address_id})
+                .fetch()
+                .then(function(is_address){
+                    var address_data={'state_id':req.body.state,'city_id':req.body.city,'zip_code':req.body.zip,'phone_no':req.body.phone,'email_id':req.body.email}; 
+                    is_address.save(address_data).then(function(){
+                      res.redirect('/portal/profile');
+                    })
+                    .catch(function (error) {
+                      console.log(error.message);
+                      res.redirect('/portal');
+                    });
+                })
+                .catch(function (error) {
+                    console.log(error.message);
+                    res.redirect('/portal');
+                });
+            });
+        }).catch(function (error) {
+          console.log(error.message);
+          res.redirect('/portal/profile');
+        });
+        
+      } else{
+        usersModel.forge({id:sess.user_id})
+        .fetch({withRelated: ['addresses','addresses.state','addresses.city']})
+        .then(function(profile_data){
+          contex={'profile':profile_data.toJSON(),'SessionData':sess,'error':''};
+          res.render('site/edit_profile',contex);
+        })
+        .catch(function (error) {
+          console.log(error.message);
+          res.redirect('/portal');
+        });
+      }
+      
+    } else {
+      res.redirect('/portal');
+    }
+  },
+
   // ALL /portal/changepassword
   change_password: function(req, res, next) {
         var sess = req.session;
@@ -248,30 +301,98 @@ module.exports = {
   // GET /emailexist/
   email_exist: function(req, res, next){
     var email=req.body.email;
-    usersModel.where({email:email})
-    .fetch()
-    .then(function (model) {
-      var context = {};
-      if(model){
-        context = {
-          message: 'email exist',
-          status: true
-        };
-      } else {
-        context = {
-          message: 'email not exist',
-          status: false
-        };
-      }
-      res.json(context);
-    })
-    .catch(function (error) {
-      var context = {
-          city: {},
-          message: error.message,
-          status: 'error',
-        };
-        res.json(context);
-    });
+    if(typeof req.body.id!=undefined && req.body.id!=null && req.body.id!=""){
+      usersModel.where({'email':email, facebook_id:0})
+      .where('id','!=', req.body.id)
+      .fetch()
+      .then(function (model) {
+          var context = {};
+          if(model){
+            context = {
+              message: 'email exist',
+              status: true
+            };
+          } else {
+            context = {
+              message: 'email not exist',
+              status: false
+            };
+          }
+          res.json(context);
+        })
+        .catch(function (error) {
+          var context = {
+              city: {},
+              message: error.message,
+              status: 'error',
+            };
+            res.json(context);
+        });
+      
+      
+    } else {
+      
+        usersModel.where({email:email,facebook_id:0})
+        .fetch()
+        .then(function (model) {
+          var context = {};
+          if(model){
+            context = {
+              message: 'email exist',
+              status: true
+            };
+          } else {
+            context = {
+              message: 'email not exist',
+              status: false
+            };
+          }
+          res.json(context);
+        })
+        .catch(function (error) {
+          var context = {
+              city: {},
+              message: error.message,
+              status: 'error',
+            };
+            res.json(context);
+        });
+          
+    }
   },
+  
+  mail_test : function(req, res, next){
+    var nodemailer = require('nodemailer');
+    var transporter = nodemailer.createTransport({
+        service: 'SMTP',
+        host: 'smtp.webfaction.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: 'feedcourt', // Your email id
+            pass: 'feedcourt123' // Your password
+        }
+    });
+    
+    
+var mailOptions = {
+    from: 'info@feedcourt.com', // sender address
+    to: 'net.nayek@gmail.com', // list of receivers
+    subject: 'test email', // Subject line
+    text: 'hello world' //, // plaintext body
+    // html: '<b>Hello world ✔</b>' // You can choose to send an HTML body instead
+};
+    
+transporter.sendMail(mailOptions, function(error, info){
+    if(error){
+        console.log(error);
+        res.json({yo: 'error'});
+    }else{
+        console.log('Message sent: ' + info.response);
+        res.json({yo: info.response});
+    };
+});
+  },
+  
+  
 };

@@ -16,6 +16,7 @@
       <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
     </a>
           <ul class="dropdown-menu">
+            <li><a href="/portal/profile">My Profile</a></li>
             <li><a href="/portal/changepassword">Change Password</a></li>
             <li><a href="/portal/logout">Logout</a></li>
         </ul>
@@ -25,17 +26,22 @@
     <div class="sidebar-nav navbar-collapse">
         <ul class="nav" id="side-menu">
           <li><a href="/portal"><img src="/static/assets/images/dashboard.png" style="width:12%">&nbsp;&nbsp;Dashboard</a></li>
-          <% if(typeof SessionData.user_type!='undefined' && SessionData.user_type=='1'){ %>
+          <% if(typeof SessionData.user_type!==undefined && SessionData.user_type=='1'){ %>
               <li><a href="/portal/customers"><img src="/static/assets/images/customer_48.png" style="width:12%">&nbsp;&nbsp;Manage Customers</a></li>
           <% } %>
-          <% if(typeof SessionData.user_type!='undefined' && (SessionData.user_type!='3')){ %>
+          <% if(typeof SessionData.user_type!==undefined && (SessionData.user_type!='3')){ %>
           <li><a href="/portal/restaurants"><img src="/static/assets/images/restaurant.png" style="width:12%"> &nbsp;Manage Restaurant</a></li>
           <% } %>
-          <% if(typeof SessionData.user_type!='undefined' && (SessionData.user_type=='1')){ %>
+          
+          <% if(typeof SessionData.user_type!==undefined && (SessionData.user_type=='3')){ %>
+          <li><a href="/portal/menu/<%= SessionData.user_id%>"><img src="/static/assets/images/menu.png" style="width:12%"> &nbsp;Manage Menu</a></li>
+          <% } %>
+          
+          <% if(typeof SessionData.user_type!==undefined  && (SessionData.user_type=='1')){ %>
               <li><a href="/portal/foodcourts"><img src="/static/assets/images/feedcourt_128.png" style="width:12%">&nbsp;Manage Foodcourt</a></li>
               <% } %>
             <li><a href="/portal/orders"><img src="/static/assets/images/order_64.png" style="width:12%">&nbsp;Manage Orders</a></li>
-            <% if(typeof SessionData.user_type!='undefined' && (SessionData.user_type=='1')){ %>
+            <% if(typeof SessionData.user_type!==undefined && (SessionData.user_type=='1')){ %>
                   <li><a href="/portal/cuisines"><img src="/static/assets/images/cuisine.png" style="width:12%">&nbsp;Manage Cuisines</a></li>
             <% } %>
             <li><a href="/portal/reviews"><img src="/static/assets/images/review.png" style="width:12%">&nbsp;Manage Reviews</a></li>

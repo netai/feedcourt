@@ -24,7 +24,7 @@
                 <div class="col-md-6">
                 <div class="form-group">
                   <label class="control-label">Email:</label>
-                  <input  type="email" name="email" value="<%=restaurants.email%>" class="form-control required email" readonly="true"  id="email">
+                  <input  type="email" name="email" value="<%=restaurants.email%>" class="form-control" readonly="true"  id="email">
                 </div>
                 </div>
                 <div class="col-md-6">
@@ -70,17 +70,17 @@
 				// rules: {
 				// 	cpassword:{equalTo: "#password"},
 				// },
-				submitHandler : function(form) {
-				  $('button').prop('disabled',true);
-				   $.post('/portal/emailexist',{email:$('#email').val()},function(data) {
-          if(data.status){
-            $('#email').after('<label for="email" generated="true" class="error">Email address exist, please enter other email address.</label>');
-            $('button').prop('disabled',false);
-          } else {
-            form.submit();
-          }
-        });
-				}
+				// submitHandler : function(form) {
+				//   $('button').prop('disabled',true);
+				//   $.post('/portal/emailexist',{email:$('#email').val()},function(data) {
+    //       if(data.status){
+    //         $('#email').after('<label for="email" generated="true" class="error">Email address exist, please enter other email address.</label>');
+    //         $('button').prop('disabled',false);
+    //       } else {
+    //         form.submit();
+    //       }
+    //     });
+				// }
 			});
      	$.get('/portal/state',function(data) {
           $.each(data.state,function(idx,val){

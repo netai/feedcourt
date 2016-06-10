@@ -95,7 +95,7 @@ module.exports = {
   add_cuisines: function(req, res, next) {
      var sess = req.session;
     if(req.method == 'POST'){
-          cuisinesModel.forge(req.body)
+          cuisinesModel.forge({'title':req.body.title,'description':req.body.description,'status':'1'})
           .save()
           .then(function (model){
             if(model){
@@ -108,6 +108,39 @@ module.exports = {
       res.render('cuisines/cuisines_add',{'SessionData':sess});
     }
   },
+  
+   // POST /portal/cuisine/edit
+  edit_cuisines: function(req, res, next) {
+      var sess = req.session;
+      var cuisine_id=req.params.id;
+      var contex={};
+      if(req.method == 'POST'){
+          cuisine_id=req.body.cuisin_id;
+          cuisinesModel.forge({id:cuisine_id})
+          .fetch()
+          .then(function (is_cuisines){
+            if(is_cuisines){
+              var cuisine_data=is_cuisines.toJSON();
+              is_cuisines.save({'title':req.body.title,'description':req.body.description,'status':cuisine_data.status}).then(function(){
+                res.redirect('/portal/cuisines');
+              });
+            } else {
+              res.render('cuisines/cuisines_edit',{'SessionData':sess});
+            }
+          });
+      } else if(cuisine_id>0) {
+        cuisinesModel.forge({id:cuisine_id})
+        .fetch()
+        .then(function (model){
+          contex={'cuisin':model.toJSON(),'SessionData':sess};
+           res.render('cuisines/cuisines_edit',contex);
+        });
+       
+      } else {
+        res.render('cuisines/cuisines_edit',{'SessionData':sess});
+      }
+  },
+  
   
   
 };
