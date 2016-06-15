@@ -2,7 +2,7 @@ var auth = require('./middlewares/auth');
 var multer = require('multer');
 
 exports.setup = function (params) {
-    var upload = multer({ dest: './tmp' });
+    var upload = multer({ dest: './temp' });
     var app = params.app;
     var controllers = params.controllers;
     var api_controllers = params.api_controllers;
@@ -21,7 +21,7 @@ exports.setup = function (params) {
     
     //site router
     app.get('/', controllers.site.home);
-	app.get('/portal', auth.portal_authenticated, controllers.site.dashboard);
+	   app.get('/portal', auth.portal_authenticated, controllers.site.dashboard);
     app.all('/portal/login', controllers.site.portal_login);
     app.all('/portal/changepassword', auth.portal_authenticated, controllers.site.change_password);
     app.get('/portal/logout', controllers.site.portal_logout);
@@ -87,14 +87,8 @@ exports.setup = function (params) {
      //My-Profile
      app.all('/portal/profile',auth.portal_authenticated,controllers.site.edit_profile);
      
-      app.get('/portal/sent_mail',controllers.site.mail_test);
+     app.all('/portal/restaurant_images/view/:id',auth.portal_authenticated,upload.single('image'),controllers.restaurants.resturant_images);
+     
+     app.get('/portal/sent_mail',controllers.site.mail_test);
     
-    
-    
-    
-    
-    
-
-
-
 };

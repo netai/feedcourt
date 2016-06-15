@@ -1,13 +1,12 @@
-var restaurantsModel = require('../models/restaurantsModel');
-var foodcourtsModel = require('../models/foodcourtsModel');
-var citiesModel = require('../models/citiesModel');
-var addressModel = require('../models/addressModel');
-var usersModel = require('../models/usersModel');
+var restaurantsModel =require('../models/restaurantsModel');
+var foodcourtsModel =require('../models/foodcourtsModel');
+var citiesModel =require('../models/citiesModel');
+var addressModel =require('../models/addressModel');
+var usersModel =require('../models/usersModel');
 var menuesModel =require('../models/menuesModel');
+var imagesModel =require('../models/imagesModel');
 var utility = require('../helpers/utility');
-var fs   = require('fs-extra'),
-    path = require('path'),
-    util = require('util');
+
 
 module.exports = {
   // GET /portal/restaurants/view/:id
@@ -188,7 +187,7 @@ module.exports = {
       var sess = req.session;
       if(req.method == 'POST'){
           restaurant_id=req.body.restaurant_id;
-            restaurantsModel.forge({id:restaurant_id,})
+            restaurantsModel.forge({id:restaurant_id})
             .fetch()
             .then(function (is_restaurant){
               var restaurant_data=is_restaurant.toJSON();
@@ -205,7 +204,7 @@ module.exports = {
             });
       } else {
         if(restaurant_id!=""){
-           restaurantsModel.forge({id:restaurant_id,})
+           restaurantsModel.forge({id:restaurant_id})
             .fetch({withRelated: ['addresses','addresses.state','addresses.city']})
             .then(function (model){
               var contex = {};
@@ -224,8 +223,34 @@ module.exports = {
           }
       }
   },
-  
-  
+  // portal/restaurant_images/view/:id restaurant images add or edit
+  resturant_images:function(req,res,next){
+    var restaurant_id=req.params.id;
+    var sess = req.session;
+    var contex={};
+    if(req.method == 'POST'){
+      if(req.file.originalname!=undefined){
+        var file_name = utility.getFileName(req.file.originalname);
+        utility.saveImageAndThumb(req.file,file_name,function(){
+          imagesModel.forge({img_name: file_name, type: 1, reference_id:restaurant_id, added_by: sess.user_id})
+          .save()
+          .then(function (imgmodel) {
+            res.redirect('/portal/restaurants');
+          })
+          .catch(function (error) {
+            console.log(error.message);
+          });
+        }); 
+      }
+    } else {
+      imagesModel.where({reference_id:restaurant_id,type:'1'})
+      .fetchAll()
+      .then(function (restaurant_images){
+            contex={'SessionData':sess,'restaurant_images':restaurant_images.toJSON(),'restaurant_id':restaurant_id};
+            res.render('restaurant/restaurant_images_view',contex);
+      });
+    }
+  },
   
   
 };

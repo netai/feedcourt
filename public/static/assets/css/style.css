@@ -390,3 +390,10 @@ table.dataTable thead .sorting:after {
 .api-table table tr th{background-color: #d9d9d9;}
 .api-table table tr td,th{padding:10px;text-align: center;}
 .api-table table tr:nth-child(odd){background-color: #ebebeb;}
+.thumb_fixed_height{height:180px !important;}
+.thumb_fixed_height img{max-height:160px !important;}
+.delete_img{display: none; position: absolute;right: 21px;bottom: 24px;}
+.delete_img img{width:16px;}
+.image_default_status{display: none;position: absolute; bottom: 24px;}
+.image_default_status img{width:16px;}
+.thumb_fixed_height:hover > span {display:inline;}

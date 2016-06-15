@@ -362,36 +362,43 @@ module.exports = {
   },
   
   mail_test : function(req, res, next){
-    var nodemailer = require('nodemailer');
-    var transporter = nodemailer.createTransport({
-        service: 'SMTP',
-        host: 'smtp.webfaction.com',
-        port: 465,
-        secure: true,
-        auth: {
-            user: 'feedcourt', // Your email id
-            pass: 'feedcourt123' // Your password
+var nodemailer = require("nodemailer");
+var smtpTransport = require('nodemailer-smtp-transport');
+
+var transport = nodemailer.createTransport(smtpTransport({
+    host : "smtp.webfaction.com",
+    secureConnection : true,
+    port: 465,
+    auth : {
+        user : "feedcourt",
+        pass : "feedcourt123"
+    }
+}));
+
+    var mailOptions={
+        from : "info@feedcourt.com",
+        to : "net.nayek@gmail.com",
+        subject : "Your Subject",
+        text : "Your Text",
+/*        html : "<b>HTML GENERATED</b>",
+        attachments : [
+            {   // file on disk as an attachment
+                filename: 'text3.txt',
+                path: 'Your File path' // stream this file
+            }
+        ]*/
+    }
+
+    transport.sendMail(mailOptions, function(error, response){
+        if(error){
+            console.log(error);
+            res.end("error");
+        }else{
+            console.log(response.response.toString());
+            console.log("Message sent: " + response.message);
+            res.end("sent");
         }
     });
-    
-    
-var mailOptions = {
-    from: 'info@feedcourt.com', // sender address
-    to: 'net.nayek@gmail.com', // list of receivers
-    subject: 'test email', // Subject line
-    text: 'hello world' //, // plaintext body
-    // html: '<b>Hello world ✔</b>' // You can choose to send an HTML body instead
-};
-    
-transporter.sendMail(mailOptions, function(error, info){
-    if(error){
-        console.log(error);
-        res.json({yo: 'error'});
-    }else{
-        console.log('Message sent: ' + info.response);
-        res.json({yo: info.response});
-    };
-});
   },
   
   
