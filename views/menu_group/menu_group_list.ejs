@@ -1,0 +1,133 @@
+<% layout('../portal_layout') %>
+<% include ../left_header %>
+<div id="wrapper">
+  <div id="page-wrapper">
+    <div class="row">
+      <% if(restaurant.length>0 && restaurant[0].full_name!==undefined ){ %>
+        <%if(foodcourt_id!=="" && foodcourt_id!==undefined){%>
+        <div class="col-lg-12">
+              <h1 class="page-header page_title"><% if(restaurant[0].full_name!==undefined){%><a href="/portal/foodcourt/restaurants/<%=foodcourt_id%>"><%= restaurant[0].full_name %></a>&nbsp;> <% } %>Manage Menu Group</h1>
+          </div>
+        <%} else{%>
+        <div class="col-lg-12">
+              <h1 class="page-header page_title"><% if(restaurant[0].full_name!==undefined){%><a href="/portal/restaurants"><%= restaurant[0].full_name %></a>&nbsp;> <% } %>Manage Menu Group</h1>
+          </div>
+        <%}%>
+      <% }else{ %>
+        <div class="col-lg-12">
+            <h1 class="page-header page_title">Manage Menu Group</h1>
+        </div>
+        <% } %>
+        <div class="col-lg-2 add_btn" >
+          <button class="btn btn-success pop-link" data-href="/portal/menu_group_add/<%=restaurant[0].id%>" data-toggle="modal" data-target="#popup">Add Menu Group</button>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="dataTable_wrapper">
+              <table class="table" id="dataTableApnd">
+               <thead>
+                    <tr>
+                        <th>SL</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <% if(typeof menu_group!=='undefined'){ %>
+                  <% for(var i=0;i<menu_group.length;i++){ %>
+                    <tr>
+                          <td align="center"><%=i+1%></td>
+                           <td>
+                             <span><%if(menu_group[i].menu_group_images.length>0 && menu_group[i].menu_group_images[0].img_name!==undefined ){%>
+                              <img class="img-responsive" src="/media/images/thumb/<%= menu_group[i].menu_group_images[0].img_name%>" width='50px' height='50px' alt="">
+                             <%}%></span>
+                           </td>
+                          <td align="center">
+                            <span><%=menu_group[i].name%></span>
+                          </td>
+                          <td align="center">
+                            <span><%=menu_group[i].description%></span>
+                          </td>
+                          
+                          <td align="center">
+                            <span><%=menu_group[i].status==1?'Active':'Inactive'%></span>
+                          </td>
+                          <td align="center">
+                          <a href="javascript:void(0)"  alt="View Detail" title="View Detail" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/menu_group_view/<%=restaurant[0].id%>/<%=menu_group[i].id%>"><img src="/static/assets/images/info.png" class="status_icon"></a>
+                          <a href="/portal/menu_group_delete/<%=restaurant[0].id%>/<%= menu_group[i].id %>"  alt="Delete" title="Delete"><img src="/static/assets/images/delete.png" class="status_icon"></a>
+                          
+                          <a href="/portal/menu_group_change_status/<%=restaurant[0].id%>/<%=menu_group[i].id%>">
+                            <% if(menu_group[i].status==0){ %>
+                                <img src="/static/assets/images/inactive.png" class="status_icon"  alt="Click to Active" title="Click to Active">
+                            <% }else if(menu_group[i].status==1){ %>
+                                <img src="/static/assets/images/active.png" class="status_icon"  alt="Click to Inactive" title="Click to Inactive">
+                            <% } %>
+                          </a>
+                          
+                          <a href="javascript:void(0)" alt="Edit" title="Edit" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/menu_group_edit/<%=restaurant[0].id%>/<%=menu_group[i].id%>"><img src="/static/assets/images/edit.png" class="status_icon"></a>
+                        </td>
+                      </tr>
+                      <% } %>
+                      <% } else { %>
+                      <tr><td align="center" colspan="6">No Result Found.</td></tr>
+                      <% } %>
+                </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <!-- /.Icon Table -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Icon Info
+                    </div>
+                     <!-- /.panel-heading -->
+                    <div class="panel-body">
+                      <img src="/static/assets/images/info.png" class="status_icon">&nbsp;View Detail&nbsp;&nbsp;|&nbsp;
+                      <img src="/static/assets/images/delete.png" class="status_icon">&nbsp;Delete&nbsp;&nbsp;|&nbsp;
+                      <img src="/static/assets/images/active.png" class="status_icon">&nbsp;Click to Active&nbsp;&nbsp;|&nbsp;
+                      <img src="/static/assets/images/inactive.png" class="status_icon">&nbsp;Click to Inactive&nbsp;&nbsp;|&nbsp;
+                      <img src="/static/assets/images/edit.png" class="status_icon">&nbsp;Edit&nbsp;&nbsp;
+                      <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+        </div>
+        <!-- /.Icon Table -->
+    
+    
+    
+  </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#dataTableApnd').DataTable({
+          responsive: true,
+          scroller:    false,
+          // sort:false,
+          "oLanguage":{
+          "sEmptyTable":"No Records found.",
+  				"emptyTable": "No Records found.",
+  				},
+  				"language": {
+  					"emptyTable": "No Records found.",
+  				},
+  				"aoColumnDefs" : [ { "bSortable" : false, "aTargets" : [ "sorting_disabled" ] } ],
+  				"iDisplayLength": 10, //Pagination limit
+      });
+    });
+  </script>

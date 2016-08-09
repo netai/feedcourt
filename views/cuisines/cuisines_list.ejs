@@ -1,49 +1,40 @@
 <% layout('../portal_layout') %>
 <% include ../left_header %>
 <div id="wrapper">
-    <!-- Navigation -->
-      <div data-ng-include="'templates/header_with_left.html'"></div>
-      <div id="wrapper">
-          <div id="page-wrapper">
-              <div class="row">
-                  <div class="col-lg-12">
-                      <h1 class="page-header page_title">Manage Cuisine</h1>
-                  </div>
-                  <div class="col-lg-2 add_btn" >
-                    <button class="btn btn-success pop-link" data-href="/portal/cuisines/add" data-toggle="modal" data-target="#popup">Add Cuisine</button>
-                  </div>
-              </div>
-
+  <div id="page-wrapper">
+     <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header page_title">Manage Cuisine</h1>
+        </div>
+        <div class="col-lg-2 add_btn" >
+          <button class="btn btn-success pop-link" data-href="/portal/cuisines/add" data-toggle="modal" data-target="#popup">Add Cuisine</button>
+        </div>
+    </div>
     <div class="row">
-    <div class="col-lg-12">
-    <div class="panel panel-default">
-    <!--<div class="panel-heading">
-    Basic Table
-    </div>-->
-    <div class="panel-body">
-    <div class="table-responsive">
-      <table class="table">
-          <thead>
-              <tr>
-                  <th>SL</th>
-                  <th>Title</th>
-                  <th>Description</th>
-              </tr>
-          </thead>
-          <tbody>
-            <% if(typeof cuisines!=undefined && cuisines.length>0 ){ %>
-                <% var counter=1 %>
-                <% for(var i=0; i < cuisines.length; i++) { %>
+      <div class="col-lg-12">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="dataTable_wrapper">
+              <table class="table" id="dataTableApnd">
+                <thead>
                   <tr>
-                        <td><%= counter++ %></td>
-                        <td><%= cuisines[i].title %></td>
-                        <td><%=cuisines[i].description %></td>
-                        <td><span><%=cuisines[i].status==1?'Active':'Inactive'%></span> </td>
-                        <td>
+                    <th>SL</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if(typeof cuisines!=undefined && cuisines.length>0 ){ %>
+                  <% var counter=1 %>
+                  <% for(var i=0; i < cuisines.length; i++) { %>
+                    <tr>
+                       <td align="center"><%= counter++ %></td>
+                        <td align="center"><%= cuisines[i].title %></td>
+                        <td align="center"><%=cuisines[i].description %></td>
+                        <td align="center">
                           <a href="javascript:void(0)"  alt="View Detail" title="View Detail" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/cuisines/view/<%=cuisines[i].id%>"><img src="/static/assets/images/info.png" class="status_icon"></a>
-                          
                           <a href="/portal/cuisines/delete/<%= cuisines[i].id %>"  alt="Delete cuisine" title="Delete cuisine"><img src="/static/assets/images/delete.png" class="status_icon"></a>
-                          
                           <a href="/portal/cuisines/changestatus/<%=cuisines[i].id%>">
                             <% if(cuisines[i].status==0){ %>
                                 <img src="/static/assets/images/inactive.png" class="status_icon"  alt="Click to Inactive" title="Click to Inactive">
@@ -51,24 +42,66 @@
                                 <img src="/static/assets/images/active.png" class="status_icon"  alt="Click to Active" title="Click to Active">
                             <% } %>
                           </a>
-                          
                           <a href="javascript:void(0)" alt="Edit Cuisin" title="Edit Cuisin" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/cuisines/edit/<%=cuisines[i].id%>"><img src="/static/assets/images/edit.png" class="status_icon"></a>
-                          
-                          
-                          
                         </td>
-                  </tr>
-                <% } %>
-              <% }else{ %>
+                    </tr>
+                   <% } %>
+                  <% } else { %>
                   <tr><td align="center" colspan="6">No Result Found.</td></tr>
-              <% } %>
-          </tbody>
-      </table>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    
+    
+    
+     <!-- /.Icon Table -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Icon Info
+                    </div>
+                    <div class="panel-body">
+                      <img src="/static/assets/images/info.png" class="status_icon">&nbsp;View Detail&nbsp;&nbsp;|&nbsp;
+                      <img src="/static/assets/images/delete.png" class="status_icon">&nbsp;Delete&nbsp;&nbsp;|&nbsp;
+                      <img src="/static/assets/images/active.png" class="status_icon">&nbsp;Click to Active&nbsp;&nbsp;|&nbsp;
+                      <img src="/static/assets/images/inactive.png" class="status_icon">&nbsp;Click to Inactive&nbsp;&nbsp;|&nbsp;
+                      <img src="/static/assets/images/edit.png" class="status_icon">&nbsp;Edit&nbsp;&nbsp;
+                      <!-- /.table-responsive -->
+                    </div>
+                </div>
+                <!-- /.panel -->
+            </div>
+        </div>
+        <!-- /.Icon Table -->
+    
+    
   </div>
-  </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#dataTableApnd').DataTable({
+          responsive: true,
+          scroller:    false,
+          // sort:false,
+          "oLanguage":{
+          "sEmptyTable":"No Records found.",
+  				"emptyTable": "No Records found.",
+  				},
+  				"language": {
+  					"emptyTable": "No Records found.",
+  				},
+  				"aoColumnDefs" : [ { "bSortable" : false, "aTargets" : [ "sorting_disabled" ] } ],
+  				"iDisplayLength": 10, //Pagination limit
+      });
+      
+      
+     
+      
+    });
+  </script>

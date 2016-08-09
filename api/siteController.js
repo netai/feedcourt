@@ -171,4 +171,9 @@ module.exports = {
       res.status(500).json({msg: error.message, status: 'error', code: 'SYSERR'});
     });
   },
+  
+  // POST /search
+  search: function(req, res, next) {
+
+  },
 };

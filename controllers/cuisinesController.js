@@ -25,11 +25,16 @@ module.exports = {
   // GET /portal/cuisine
   cuisines_list: function(req, res, next) {
     var sess = req.session;
-    cuisinesModel.where('status', '!=', '2')
+     var context = {'SessionData':sess};
+    cuisinesModel
+    .where('status', '!=', '2')
+    .orderBy('title')
     .fetchAll()
+    
     .then(function (model) {
       if(model){
-        var context = {
+        
+        context = {
           cuisines: model.toJSON(),
           'SessionData':sess
         };
@@ -39,7 +44,6 @@ module.exports = {
           'SessionData':sess
         };
       }
-
       res.render('cuisines/cuisines_list', context);
     })
     .catch(function (error) {

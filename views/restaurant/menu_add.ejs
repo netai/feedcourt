@@ -17,6 +17,14 @@
                   </div>
               </div>
               <div class="col-md-6">
+                  <div class="form-group">
+                      <label>Group:</label>
+                      <select class="form-control" name="menu_group_id">
+                          <option value="">---Select Group---</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="col-md-6">
                 <div class="form-group">
                   <label class="control-label">Title:</label>
                     <input  type="text" name="title" class="form-control required" autofocus >
@@ -61,6 +69,12 @@
           $.each(data.cuisines,function(idx,val){
             $("select[name='cuisine']").append('<option value="'+val.id+'">'+val.title+'</option>');
           });
+      });
+      // Group List
+      $.get('/portal/menu_group_list_data/'+$("input[name='restaurant_id']").val(),function(data) {
+        $.each(data,function(idx,val){
+          $("select[name='menu_group_id']").append('<option value="'+val.id+'">'+val.name+'</option>');
+        });
       });
     //get uint list
     $( "input[name='unit']" ).autocomplete({

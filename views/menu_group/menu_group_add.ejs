@@ -1,0 +1,41 @@
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add Group</h4>
+      </div>
+      <form role="form" method="post" action="/portal/menu_group_add/<%=restaurant_id%>" id="addMenuGroupForm" name="addMenuGroupForm" enctype="multipart/form-data" >
+        <input  type="hidden" name="restaurant_id" value="<%=restaurant_id%>" >
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="control-label">Name:</label>
+                  <input  type="text" name="name" value="" class="form-control required" autofocus >
+                </div>
+                </div>
+                <div class="col-md-6">
+                <div class="form-group">
+                  <label class="control-label">Description:</label>
+                  <input  type="text" name="description"  class="form-control" >
+                </div>
+                </div>
+                <div class="col-md-6">
+                <div class="form-group">
+                  <label class="control-label">Image:</label>
+                  <input type="file" class="form-control" name="image">
+                </div>
+                </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-primary cancel" data-dismiss="modal">Cancel</button>
+      </div>
+      </form>
+      
+<script>
+	$(document).ready(function(){
+  	  $("#addMenuGroupForm").validate({});
+	});
+</script>

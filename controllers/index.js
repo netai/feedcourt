@@ -9,6 +9,7 @@ function controllersFactory () {
     controllers.cuisines = require('./cuisinesController');
     controllers.menues = require('./menuesController');
     controllers.reviews= require('./reviewsController');
+    controllers.menue_group= require('./menueGroupController');
     return controllers;
 };
 

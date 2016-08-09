@@ -1,0 +1,91 @@
+       <!-- Bootstrap thumbnail-image-gallery CSS -->
+    
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal">&times;</button>
+      <h4 class="modal-title">Manage Menu Image</h4>
+     <div class="notify"></div>
+    </div>
+    <% if(typeof menu_images !=undefined && menu_images.length>0){ %>
+      <div class="modal-body">
+        <div class="row">
+          <% for(var i=0;i<menu_images.length;i++){ %>
+            <div class="col-md-4 col-xs-6 thumb">
+                <a class="thumbnail thumb_fixed_height " href="javascript:void(0)">
+                    <img class="img-responsive" src="/media/images/<%= menu_images[i].img_name %>" alt="">
+                    <span class="delete_img" data-id="<%=menu_images[i].id%>">
+                      <img src="/static/assets/images/delete.png" alt="Click to Delete" title="Click to Delete">
+                    </span>
+                    <%if(menu_images[i].is_default!=1){%>
+                      <span class="image_default_status default_image" data-id="<%=menu_images[i].id%>" data-status="<%=menu_images[i].status%>">
+                        <img src="/static/assets/images/active.png" alt="Click to Active Default" title="Click to Active Default">
+                      </span>
+                    <% } else { %>
+                      <span class="image_default_status default_image" data-id="<%=menu_images[i].id%>" data-status="<%=menu_images[i].status%>">
+                        <img src="/static/assets/images/inactive.png" alt="Click to Inctive Default" title="Click to Inctive Default">
+                      </span>
+                    <% } %>
+                </a>
+            </div>
+            <% } %>
+        </div>
+      </div>
+    <% } %>    
+    <form role="form" method="post" action="/portal/menu_images/view/<%=restaurant_id%>/<%= menu_id%>" id="addRestaurant" name="addRestaurant" enctype="multipart/form-data" >
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label class="control-label">Upload Image:</label>
+              <input type="file" class="form-control required" name="image">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-primary cancel" data-dismiss="modal">Cancel</button>
+      </div>
+    </form>
+<script>
+	$(document).ready(function(){
+	   $("#addRestaurant").validate({});
+	});
+	
+	$(".delete_img").click(function(){
+	  var obj=$(this);
+	  $('.notify').html('<span class="notify_error">Please wait....</span>');
+	  $.post("/portal/menu_images/delete",
+	  {'id':$(obj).data('id')},
+    function(data, status){
+        if(typeof data.status!==undefined && data.status=='success'){
+          $(obj).parent().closest('div').remove();
+          $('.notify').html('<span class="notify_succes">Image has been deleted successfully</span>');
+        } else{
+          $('.notify').html('<span class="notify_error">Please try again later</span>');
+        }
+        setTimeout(function(){ $('.notify').empty(); }, 3000);
+    });
+	});
+	$(".default_image").click(function(){
+	  var obj=$(this);
+	  $.post("/portal/menu_images/default",
+	  {'id':$(this).data('id')},
+    function(data, status){
+        if(typeof data.status!==undefined && data.status=='success'){
+          if(data.change_status==1){         
+              $(".image_default_status img").attr('src','/static/assets/images/active.png');
+              $(".image_default_status").addClass('default_image');
+          }else{
+            $(".image_default_status img").attr('src','/static/assets/images/inactive.png');
+            $(".image_default_status").removeClass('default_image');
+          }
+          $('.notify').html('<span class="notify_succes">Default image has been changed successfully</span>');
+        } else{
+          $('.notify').html('<span class="notify_error">Please try again later</span>');
+        }
+        setTimeout(function(){ $('.notify').empty(); }, 3000);
+    });
+	});
+	
+	
+</script>

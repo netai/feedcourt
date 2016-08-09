@@ -15,13 +15,17 @@ exports.setup = function (params) {
     app.post(v1_api+'/login', api_controllers.site.login);
     app.post(v1_api+'/signup', api_controllers.site.signup);
     app.post(v1_api+'/facebook_signup', api_controllers.site.facebook_signup);
+    app.get(v1_api+'/search', api_controllers.site.search);
+    
+    //restaurants router
+    app.get(v1_api+'/restaurant/:id', auth.api_authenticated, api_controllers.restaurants.restaurantDetail);
     
     
     /*****************portal router*********************/
     
     //site router
     app.get('/', controllers.site.home);
-	   app.get('/portal', auth.portal_authenticated, controllers.site.dashboard);
+	app.get('/portal', auth.portal_authenticated, controllers.site.dashboard);
     app.all('/portal/login', controllers.site.portal_login);
     app.all('/portal/changepassword', auth.portal_authenticated, controllers.site.change_password);
     app.get('/portal/logout', controllers.site.portal_logout);
@@ -47,6 +51,9 @@ exports.setup = function (params) {
     app.get('/portal/restaurants/changestatus/:id', auth.portal_authenticated, controllers.restaurants.change_status);
     app.all('/portal/restaurant/edit/:id',auth.portal_authenticated,upload.single('image'),controllers.restaurants.edit_restaurant);
     app.all('/portal/restaurant/add',auth.portal_authenticated,upload.single('image'),controllers.restaurants.add_restaurant);
+    app.all('/portal/restaurant_images/view/:id',auth.portal_authenticated,upload.single('image'),controllers.restaurants.resturant_images);
+    app.post('/portal/restaurant_image_status/default',auth.portal_authenticated,controllers.restaurants.default_image_status);
+    app.post('/portal/restaurant_image/delete',auth.portal_authenticated,controllers.restaurants.delete_image);
     
     
     //orders route
@@ -72,13 +79,36 @@ exports.setup = function (params) {
     
     //Menu Route
     app.get('/portal/menu/:id',auth.portal_authenticated,controllers.menues.menu_list);
-    app.get('/portal/menu/view/:id',auth.portal_authenticated,controllers.menues.menu_view);
+    app.get('/portal/menu/:feedcourt/:id',auth.portal_authenticated,controllers.menues.menu_list);
+    app.get('/portal/menu/view/:restaurant/:id',auth.portal_authenticated,controllers.menues.menu_view);
     app.get('/portal/menu/delete/:id',auth.portal_authenticated,controllers.menues.menu_delete);
     app.get('/portal/menu/changestatus/:id',auth.portal_authenticated,controllers.menues.change_status);
     app.all('/portal/add_menu/:id',auth.portal_authenticated,upload.single('image'),controllers.menues.menu_add);
     app.all('/portal/edit_menu/:restaurant/:id',auth.portal_authenticated,upload.single('image'),controllers.menues.menu_edit);
+    app.all('/portal/menu_images/view/:restaurant/:id',auth.portal_authenticated,upload.single('image'),controllers.menues.menu_images);
+    app.post('/portal/menu_images/default',auth.portal_authenticated,controllers.restaurants.default_image_status);
+    app.post('/portal/menu_images/delete',auth.portal_authenticated,controllers.restaurants.delete_image);
     
-    //app.get('/portal/menu/:id',auth.portal_authenticated,controllers.menues.menu_list);
+    //Menu Group
+    //app.get('/portal/menu_group_list/',auth.portal_authenticated,controllers.menue_group.menu_group_list);
+    // app.all('/portal/menu_group_add/',auth.portal_authenticated,upload.single('image'),auth.portal_authenticated,controllers.menue_group.menu_group_add);
+    // app.all('/portal/menu_group_edit/:id',auth.portal_authenticated,upload.single('image'),auth.portal_authenticated,controllers.menue_group.menu_group_edit);
+    // app.get('/portal/menu_group_view/:id',auth.portal_authenticated,controllers.menue_group.menu_group_view);
+    // app.get('/portal/menu_group_change_status/:id',auth.portal_authenticated,controllers.menue_group.menu_group_change_status);
+    // app.get('/portal/menu_group_delete/:id',auth.portal_authenticated,controllers.menue_group.menu_group_delete);
+    // app.get('/portal/menu_group_list_data',controllers.menue_group.menu_group_list_data);
+    
+    
+    app.get('/portal/menu_group_list/:restaurant',auth.portal_authenticated,controllers.menue_group.menu_group_list);
+    app.get('/portal/menu_group_list/:feedcourt/:restaurant',auth.portal_authenticated,controllers.menue_group.menu_group_list);
+    
+    app.all('/portal/menu_group_add/:restaurant',auth.portal_authenticated,upload.single('image'),auth.portal_authenticated,controllers.menue_group.menu_group_add);
+    app.all('/portal/menu_group_edit/:restaurant/:id',auth.portal_authenticated,upload.single('image'),auth.portal_authenticated,controllers.menue_group.menu_group_edit);
+    app.get('/portal/menu_group_view/:restaurant/:id',auth.portal_authenticated,controllers.menue_group.menu_group_view);
+    app.get('/portal/menu_group_change_status/:restaurant/:id',auth.portal_authenticated,controllers.menue_group.menu_group_change_status);
+    app.get('/portal/menu_group_delete/:restaurant/:id',auth.portal_authenticated,controllers.menue_group.menu_group_delete);
+    app.get('/portal/menu_group_list_data/:restaurant',controllers.menue_group.menu_group_list_data);
+    
     
     //Review 
      app.get('/portal/reviews',auth.portal_authenticated,controllers.reviews.review_list);
@@ -87,7 +117,7 @@ exports.setup = function (params) {
      //My-Profile
      app.all('/portal/profile',auth.portal_authenticated,controllers.site.edit_profile);
      
-     app.all('/portal/restaurant_images/view/:id',auth.portal_authenticated,upload.single('image'),controllers.restaurants.resturant_images);
+     
      
      app.get('/portal/sent_mail',controllers.site.mail_test);
     

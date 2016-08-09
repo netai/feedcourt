@@ -12,7 +12,7 @@ var customersModel = db.Model.extend({
   validate: function() {return new Checkit(this.validations).run(this.attributes);},
   tableName: 'users',
   addresses: function() {
-      return this.belongsTo(addressModel,'address_id');
+     return this.hasMany(addressModel,'user_id');
   },
   state: function() {
       return this.belongsTo(statesModel,'state_id');  // belongsTo, hasMany, morphMany, morphTo

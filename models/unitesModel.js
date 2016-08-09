@@ -6,7 +6,7 @@ var unitesModel = db.Model.extend({
     db.Model.apply(this, arguments); // super()
     this.on('saving', this.validate.bind(this));
   },
-  validations: {title: ['required'],added_by: ['required']},
+  validations: {title: ['required'],restaurant_id: ['required']},
   validate: function() {return new Checkit(this.validations).run(this.attributes);},
   tableName: 'unites'
 });

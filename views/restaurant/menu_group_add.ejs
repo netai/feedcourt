@@ -1,0 +1,77 @@
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add Menu</h4>
+      </div>
+      <form role="form" method="post" action="/portal/add_menu/<%= restaurant_id %>" id="addMenu" name="addMenu" enctype="multipart/form-data" >
+      
+      <input  type="hidden" name="restaurant_id" value="<%= restaurant_id %>" >
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label>Cuisine:</label>
+                      <select class="form-control required" name="cuisine">
+                          <option value="">---Select Cuisine---</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="control-label">Title:</label>
+                    <input  type="text" name="title" class="form-control required" autofocus >
+                </div>
+              </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="control-label">Price:</label>
+                    <input  type="text" name="price" class="form-control required decimal">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="control-label">Unit:</label>
+                    <input  type="text" name="unit"  class="form-control required" >
+                    <input type="hidden" name="unit_id" value="0"/>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="control-label">Description:</label>
+                    <textarea name="description" class="form-control required"></textarea>
+                  </div>
+                </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-primary cancel" data-dismiss="modal">Cancel</button>
+      </div>
+      </form>
+          <!-- jquery ui CSS -->
+    <link href="/static/assets/vendor/jquery-ui/css/jquery-ui.min.css" rel="stylesheet">
+    
+    <!-- jquery ui JavaScript -->
+    <script src="/static/assets/vendor/jquery-ui/js/jquery-ui.min.js"></script>
+<script>
+	$(document).ready(function(){
+	   $("#addMenu").validate({ });
+     	$.get('/portal/cuisines_list',function(data) {
+          $.each(data.cuisines,function(idx,val){
+            $("select[name='cuisine']").append('<option value="'+val.id+'">'+val.title+'</option>');
+          });
+      });
+    //get uint list
+    $( "input[name='unit']" ).autocomplete({
+      source: "/portal/unit_list",
+      minLength: 2,
+      select: function( event, ui ) {
+        $("input[name='unit_id']").val(ui.item.id);
+      }
+    });
+    $("input[name='unit']" ).keyup(function(){
+      $("input[name='unit_id']").val(0);
+    });
+	});
+</script>

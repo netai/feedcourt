@@ -1,10 +1,12 @@
-var usersModel = require('../models/usersModel');
-var addressModel = require('../models/addressModel');
-var statesModel = require('../models/statesModel');
-var citiesModel = require('../models/citiesModel');
-var cuisinesModel = require('../models/cuisinesModel');
-var unitesModel = require('../models/unitesModel');
-var menuesModel =require('../models/menuesModel');
+var usersModel = require('../models/usersModel'),
+    addressModel = require('../models/addressModel'),
+    statesModel = require('../models/statesModel'),
+    citiesModel = require('../models/citiesModel'),
+    cuisinesModel = require('../models/cuisinesModel'),
+    unitesModel = require('../models/unitesModel'),
+    menusModel =require('../models/menusModel');
+
+var config = require('../config/app');
 
 module.exports = {
     // GET /
@@ -282,7 +284,7 @@ module.exports = {
   menu_list: function(req, res, next){
    var restaurant_id= req.body.restaurant_id;
    var title_menu=req.body.menu;
-    menuesModel.where({'added_by':restaurant_id,'status':'1'})
+    menusModel.where({'restaurant_id':restaurant_id,'status':'1'})
     .where('title', 'LIKE', '%'+title_menu+'%')
     .fetchAll({columns:['id','title']})
     .then(function (model) {
@@ -364,41 +366,31 @@ module.exports = {
   mail_test : function(req, res, next){
 var nodemailer = require("nodemailer");
 var smtpTransport = require('nodemailer-smtp-transport');
+res.render('mail/test.ejs', {msg: 'just test'}, function(err, html){
+  if(err){
+    console.log(err);
+  } else {
+      var transport = nodemailer.createTransport(smtpTransport(config.mail.smtp));
 
-var transport = nodemailer.createTransport(smtpTransport({
-    host : "smtp.webfaction.com",
-    secureConnection : true,
-    port: 465,
-    auth : {
-        user : "feedcourt",
-        pass : "feedcourt123"
-    }
-}));
+      var mailOptions={
+          from : config.mail.form_mail,
+          to : "net.nayek@gmail.com",
+          subject : "Your Subject",
+          html : html,
+      }
 
-    var mailOptions={
-        from : "info@feedcourt.com",
-        to : "net.nayek@gmail.com",
-        subject : "Your Subject",
-        text : "Your Text",
-/*        html : "<b>HTML GENERATED</b>",
-        attachments : [
-            {   // file on disk as an attachment
-                filename: 'text3.txt',
-                path: 'Your File path' // stream this file
-            }
-        ]*/
-    }
-
-    transport.sendMail(mailOptions, function(error, response){
-        if(error){
-            console.log(error);
-            res.end("error");
-        }else{
-            console.log(response.response.toString());
-            console.log("Message sent: " + response.message);
-            res.end("sent");
-        }
-    });
+      transport.sendMail(mailOptions, function(error, response){
+          if(error){
+              console.log(error);
+              res.end("error");
+          }else{
+              console.log(response.response.toString());
+              console.log("Message sent: " + response.message);
+              res.end("sent");
+          }
+      });
+  }
+});
   },
   
   

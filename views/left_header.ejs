@@ -42,7 +42,9 @@
               <% } %>
             <li><a href="/portal/orders"><img src="/static/assets/images/order_64.png" style="width:12%">&nbsp;Manage Orders</a></li>
             <% if(typeof SessionData.user_type!==undefined && (SessionData.user_type=='1')){ %>
-                  <li><a href="/portal/cuisines"><img src="/static/assets/images/cuisine.png" style="width:12%">&nbsp;Manage Cuisines</a></li>
+                  <li><a href="/portal/cuisines"><img src="/static/assets/images/cuisine.png" style="width:12%">&nbsp;Manage Cuisines</a>
+                  </li>
+                  
             <% } %>
             <li><a href="/portal/reviews"><img src="/static/assets/images/review.png" style="width:12%">&nbsp;Manage Reviews</a></li>
 

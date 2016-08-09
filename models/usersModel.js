@@ -3,6 +3,8 @@ var db = require('../config/db');
 var addressModel = require('./addressModel');
 var citiesModel = require('./citiesModel');
 var statesModel = require('./statesModel');
+var imagesModel = require('./imagesModel');
+
 
 var usersModel = db.Model.extend({
   constructor: function() {
@@ -12,8 +14,11 @@ var usersModel = db.Model.extend({
   validations: {email: ['required', 'email'], password: ['required'],phone_no: ['required'], full_name: ['required']},
   validate: function() {return new Checkit(this.validations).run(this.attributes);},
   tableName: 'users',
+  images: function() {
+      return this.hasMany(imagesModel,'reference_id');
+  },
   addresses: function() {
-      return this.belongsTo(addressModel,'address_id');
+      return this.hasMany(addressModel,'user_id');
   },
   state: function() {
       return this.belongsTo(statesModel,'state_id');  // belongsTo, hasMany, morphMany, morphTo

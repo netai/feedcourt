@@ -1,7 +1,8 @@
 var gm = require('gm').subClass({ imageMagick: true }),
     path = require('path'),
-    fs = require('fs-extra');
-
+    fs = require('fs-extra'),
+    lwip = require('lwip');
+    
 module.exports = {
   getFileName: function(name){
     var file_name_arr = name.split('.');
@@ -15,14 +16,25 @@ module.exports = {
       if (err){
         console.log(err);
       } else{
-        fs.copy(file.destination+'/'+file.filename, thumb_path, function (err) {
+            // obtain an image object:
+        lwip.open(dest_path, function(err, image){
           if (err){
             console.log(err);
-          }
-        });
-        fs.remove(file.destination, function (err) {
+          } else {
+            var width = 300;
+var ratio = width / image.width();
+            image.batch()
+            .scale(ratio)
+            .writeFile(thumb_path, function(err){
+if (err){
+                console.log(err);
+              }
+              fs.remove(file.destination+'/'+file.filename, function (err) {
           if (err) {console.log(err)}
           next();
+        });
+    });
+          }
         });
       }
     });

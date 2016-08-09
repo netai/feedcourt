@@ -1,118 +1,49 @@
-var restaurantsModel = require('../models/restaurantsModel');
-var foodcourtsModel = require('../models/foodcourtsModel');
-var citiesModel = require('../models/citiesModel');
+var restaurantsModel = require('../models/restaurantsModel'),
+    foodcourtsModel = require('../models/foodcourtsModel'),
+    citiesModel = require('../models/citiesModel'),
+    imagesModel =require('../models/imagesModel');
 
 module.exports = {
-  // GET /Restaurant/:id
-  getRestaurant: function(req, res, next) {
+  
+  // GET /restaurant/:id
+  restaurantDetail: function(req, res, next) {
     var id = req.params.id;
-      restaurantsModel.forge({id:id})
-    .fetch()
-    .then(function (model) {
-      response = {};
-        if(model){
-          response = {
-            data: model.toJSON(),
-            message: 'Restaurant detail',
-            status: 'success',
-            code: '1005'
-          };
-        } else {
-          response = {
-            message: 'no restaurant found',
-            status: 'success',
-            code: '1005'
-          };
-        }
-        res.json(response);
-    })
-    .catch(function (error) {
-      res.status(500).json({msg: error.message});
-    });
-  },
-
-  // GET /Restaurants
-  getRestaurants: function(req, res, next) {
-    restaurantsModel.where({user_type: 3})
-    .fetchAll({withRelated: ['addresses','addresses.state','addresses.city']})
-    .then(function (model) {
-      response = {};
-      if(model){
-        response = {
-          data: model.toJSON(),
-          message: 'Restaurant list',
-          status: 'success',
-          code: '1005'
-        };
-      } else {
-        response = {
-          message: 'no restaurant found',
-          status: 'success',
-          code: '1005'
-        };
-      }
-
-      res.json(response);
-    })
-    .catch(function (error) {
-      res.status(500).json({msg: error.message});
-    });
-  },
-  // GET /Restaurant under foodcourt/:id
-  getFoodcourtRestaurant: function(req, res, next) {
-    var id = req.params.id;
-    foodcourtsModel.where({user_type:3,parent_id:id})
-    .fetchAll({withRelated: ['addresses','foodcourt']})
-    .then(function (model) {
-      console.log(model.toJSON());
-      response = {};
-        if(model){
-          response = {
-            data: model.toJSON(),
-            message: 'Restaurant list under foodcourt.',
-            status: 'success',
-            code: '1005'
-          };
-        } else {
-          response = {
-            message: 'no restaurant found under foodcourt',
-            status: 'success',
-            code: '1005'
-          };
-        }
-        res.json(response);
-    })
-    .catch(function (error) {
-      res.status(500).json({msg: error.message});
-    });
-  },
-  // Put /Resturant/Changestatus
-  changeStatus: function(req, res, next) {
-    var id = req.body.id;
-    var status = req.body.status;
     restaurantsModel.forge({id:id})
-    .fetch()
+    .fetch({withRelated: ['addresses','addresses.state','addresses.city']})
     .then(function (model) {
-      model.save({status: status})
-      .then(function(){
-        response = {
-          message: 'Restaurant status update successfully.',
-          status: 'success',
-          code: '2006'
-        };
-      })
-      .catch(function(err){
-        response = {
-          message: 'Restaurant status update unsuccessfull.',
-          status: 'error',
-          code: '2006'
-        };
-      });
-
-      res.json(response);
+      var response = {};
+        if(model){
+            imagesModel.where({reference_id:id, type:'1'})
+            .fetchAll()
+            .then(function (images){
+              if(model.get('status') == 1){
+                response = {
+                  data: model.toJSON(),
+                  status: 'success'
+                };
+                response.data.images = images.toJSON();
+              } else {
+                response = {
+                  message: 'restaurant blocked by admin',
+                  status: 'error',
+                  code: '2007'
+                };
+              }
+              res.json(response);
+              //response.data['images'] = images.toJSON();
+            });
+        } else {
+          response = {
+            message: 'restaurant not found',
+            status: 'error',
+            code: '2006'
+          };
+          res.json(response);
+        }
     })
     .catch(function (error) {
-      res.status(500).json({msg: error.message});
+      res.status(500).json({msg: error.message, status: 'error', code: 'SYSERR'});
     });
-  }
+  },
+
 };

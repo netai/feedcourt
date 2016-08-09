@@ -12,63 +12,108 @@
                     <button class="btn btn-success pop-link" data-href="/portal/foodcourt/add" data-toggle="modal" data-target="#popup">Add Foodcourt</button>
                   </div>
               </div>
-
-    <div class="row">
-    <div class="col-lg-12">
-    <div class="panel panel-default">
-    <!--<div class="panel-heading">
-    Basic Table
-    </div>-->
-    <div class="panel-body">
-    <div class="table-responsive">
-      <table class="table">
-          <thead>
-              <tr>
-                  <th>SL</th>
-                  <th>Name</th>
-                  <th>Email </th>
-                  <th>Phone</th>
-                  <th>Status</th>
-                  <th>Action</th>
-              </tr>
-          </thead>
-          <tbody>
-            <% if(typeof foodcourt!='undefined' && foodcourt.length>0 && status=='success'){ %>
-                <% var counter=1 %>
-                <% for(var i=0; i < foodcourt.length; i++) { %>
-                  <tr>
-                        <td><%= counter++ %></td>
-                        <td><%=foodcourt[i].full_name %></td>
-                        <td><%= foodcourt[i].email %></td>
-                        <td> <%= foodcourt[i].phone_no %></td>
-                        <td><span><%=foodcourt[i].status==1?'Active':'Inactive'%></span> </td>
-                        <td>
-                          <a href="javascript:void(0)"  alt="View Detail" title="View Detail" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/feedcourt/view/<%=foodcourt[i].id%>"><img src="/static/assets/images/info.png" class="status_icon"></a>
-                          
-                          <a href="/portal/foodcourt/restaurants/<%= foodcourt[i].id %>"  alt="View Restaurants" title="View Restaurants"><img src="/static/assets/images/restaurant.png" class="status_icon"></a>
-                          
-                          <a href="/portal/foodcourt/changestatus/<%=foodcourt[i].id%>">
-                            <% if(foodcourt[i].status==0){ %>
-                                <img src="/static/assets/images/inactive.png" class="status_icon"  alt="Click to Inactive" title="Click to Inactive">
-                            <% }else if(foodcourt[i].status==1){ %>
-                                <img src="/static/assets/images/active.png" class="status_icon"  alt="Click to Active" title="Click to Active">
-                            <% } %>
-                          </a>
-                          &nbsp;
-                          <a href="javascript:void(0)" alt="Edit Menu" title="Edit Foodcourt" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/foodcourt/edit/<%=foodcourt[i].id%>"><img src="/static/assets/images/edit.png" class="status_icon"></a>
-                        </td>
-                  </tr>
-                <% } %>
-              <% }else{ %>
-                  <tr><td align="center" colspan="6">No Result Found.</td></tr>
-              <% } %>
-          </tbody>
-      </table>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="panel panel-default">
+                    <!--<div class="panel-heading">
+                    Basic Table
+                    </div>-->
+                    <div class="panel-body">
+                      <div class="dataTable_wrapper">
+                        <table class="table" id="dataTableApnd">
+                            <thead>
+                                <tr>
+                                    <th>SL</th>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Email </th>
+                                    <th>Phone</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              <% if(typeof foodcourt!='undefined' && foodcourt.length>0 && status=='success'){ %>
+                                  <% var counter=1 %>
+                                  <% for(var i=0; i < foodcourt.length; i++) { %>
+                                    <tr>
+                                          <td align="center"><%= counter++ %></td>
+                                          <td align="center">
+                                           <span><%if(foodcourt[i].images.length>0 && foodcourt[i].images[0].img_name!==undefined ){%>
+                                            <img class="img-responsive" src="/media/images/thumb/<%= foodcourt[i].images[0].img_name%>" width='50px' height='50px' alt="">
+                                           <%}%></span>
+                                         </td>
+                                          <td align="center"><%=foodcourt[i].full_name %></td>
+                                          <td align="center"><%= foodcourt[i].email %></td>
+                                          <td align="center"> <%= foodcourt[i].phone_no %></td>
+                                          <td align="center"><span><%=foodcourt[i].status==1?'Active':'Inactive'%></span> </td>
+                                          <td align="center">
+                                            <a href="javascript:void(0)"  alt="View Detail" title="View Detail" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/feedcourt/view/<%=foodcourt[i].id%>"><img src="/static/assets/images/info.png" class="status_icon"></a>
+                                            
+                                            <a href="/portal/foodcourt/restaurants/<%= foodcourt[i].id %>"  alt="View Restaurants" title="View Restaurants"><img src="/static/assets/images/restaurant.png" class="status_icon"></a>
+                                            
+                                            <a href="/portal/foodcourt/changestatus/<%=foodcourt[i].id%>">
+                                              <% if(foodcourt[i].status==0){ %>
+                                                  <img src="/static/assets/images/inactive.png" class="status_icon"  alt="Click to Inactive" title="Click to Inactive">
+                                              <% }else if(foodcourt[i].status==1){ %>
+                                                  <img src="/static/assets/images/active.png" class="status_icon"  alt="Click to Active" title="Click to Active">
+                                              <% } %>
+                                            </a>
+                                            &nbsp;
+                                            <a href="javascript:void(0)" alt="Edit Menu" title="Edit Foodcourt" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/foodcourt/edit/<%=foodcourt[i].id%>"><img src="/static/assets/images/edit.png" class="status_icon"></a>
+                                          </td>
+                                    </tr>
+                                  <% } %>
+                                <% }else{ %>
+                                    <tr><td align="center" colspan="6">No Result Found.</td></tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.Icon Table -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Icon Info
+                        </div>
+                         <!-- /.panel-heading -->
+                        <div class="panel-body">
+                          <img src="/static/assets/images/info.png" class="status_icon">&nbsp;View Detail&nbsp;&nbsp;|&nbsp;
+                          <img src="/static/assets/images/restaurant.png" class="status_icon">&nbsp;View Restaurants&nbsp;&nbsp;|&nbsp;
+                          <img src="/static/assets/images/active.png" class="status_icon">&nbsp;Click to Active&nbsp;&nbsp;|&nbsp;
+                          <img src="/static/assets/images/inactive.png" class="status_icon">&nbsp;Click to Inactive&nbsp;&nbsp;|&nbsp;
+                          <img src="/static/assets/images/edit.png" class="status_icon">&nbsp;Edit&nbsp;&nbsp;
+                          <!-- /.table-responsive -->
+                        </div>
+                    <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+            </div>
+            <!-- /.Icon Table -->
+        </div>
+      </div>
   </div>
-  </div>
-  </div>
-  </div>
-  </div>
-    </div>
-  </div>
-  </div>
+  <script>
+    $(document).ready(function() {
+        $('#dataTableApnd').DataTable({
+          responsive: true,
+          scroller:    false,
+          // sort:false,
+          "oLanguage":{
+          "sEmptyTable":"No Records found.",
+  				"emptyTable": "No Records found.",
+  				},
+  				"language": {
+  					"emptyTable": "No Records found.",
+  				},
+  				"aoColumnDefs" : [ { "bSortable" : false, "aTargets" : [ "sorting_disabled" ] } ],
+  				"iDisplayLength": 10, //Pagination limit
+      });
+    });
+  </script>
