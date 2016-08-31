@@ -1,7 +1,7 @@
 
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Restaurant Detail</h4>
+        <h4 class="modal-title">Outlet Detail</h4>
       </div>
       <div class="modal-body">
           <% if(restaurant.images.length>0 && restaurant.images[0].img_name!=='undefined'){ %>      
@@ -49,12 +49,16 @@
                     <td><%if(typeof restaurant.addresses[0].zip_code!==undefined){%><%=restaurant.addresses[0].zip_code%><%}%></td>
                 </tr>
                 <tr>
-                    <td>No. of Rate</td>
+                    <td>No. of Rating </td>
                     <td><%=restaurant.total_rate%></td>
                 </tr>
                 <tr>
-                     <td>Avg. Rate</td>
+                     <td>Avg. Rating </td>
                     <td><%=restaurant.avg_rate%></td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td><%=restaurant.description%></td>
                 </tr>
             </tbody>
         </table>

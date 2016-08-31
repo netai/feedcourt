@@ -36,6 +36,14 @@
                         <td><%=foodcourt.contact_person%></td>
                     </tr>
                     <tr>
+                        <td>Convenient-fee</td>
+                        <td><%=foodcourt.convenient_fee%></td>
+                    </tr>
+                    <tr>
+                        <td>Description</td>
+                        <td><%=foodcourt.description%></td>
+                    </tr>
+                    <tr>
                         <td>State</td>
                         <td><%if(typeof foodcourt.addresses[0].state.name!==undefined && foodcourt.addresses.length>0){%><%=foodcourt.addresses[0].state.name%><%}%></td>
                     </tr>

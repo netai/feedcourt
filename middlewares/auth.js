@@ -5,8 +5,7 @@ var secretKey = config.secretKey;
 
 module.exports = {
   api_authenticated: function(req,res,next){
-    console.log(req.body);
-    var token = req.body.token || req.param('token') || req.headers['x-access-token'];
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
     if(token){
       jsonwebtoken.verify(token, secretKey, function(err,decoded){
         if(err){

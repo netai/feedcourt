@@ -20,12 +20,7 @@
                     <td>Menu Name</td>
                     <td><%=menu.title%></td>
                 </tr>
-                <%if(menu.cuisines.title!==undefined){%>
-                <tr>
-                    <td>Cuisine</td>
-                    <td><%=menu.cuisines.title%></td>
-                </tr>
-                <%}%>
+                
                 
                 <%if(menu.menu_groups.id!==undefined){%>
                     <tr>
@@ -44,6 +39,10 @@
                 <tr>
                     <td>Unit</td>
                     <td><%if(typeof menu.unites.title!=undefined){%><%=menu.unites.title%><%}%></td>
+                </tr>
+                <tr>
+                    <td>Order</td>
+                    <td><%=menu.order_sequence%></td>
                 </tr>
                 <tr>
                     <td>Description</td>

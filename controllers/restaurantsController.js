@@ -53,6 +53,11 @@ module.exports = {
     if(typeof sess.user_type!='undefined' && sess.user_type=='3'){
       res.redirect('/portal');
     }
+     var foodcourt_id ="";
+     if(req.params.foodcourt_id!==undefined){
+       foodcourt_id=req.params.foodcourt_id;
+     }
+
     if(typeof sess.user_type!='undefined' && sess.user_type=='2'){
         restaurantsModel.query('orderBy', 'id', 'desc').where({'parent_id':sess.user_id,'user_type':'3'})
         .fetchAll({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
@@ -61,11 +66,13 @@ module.exports = {
             context = {
               restaurants: model.toJSON(),
               'SessionData':sess,
+              'foodcourt_id':foodcourt_id
             };
           } else {
             context = {
               restaurants: {},
               'SessionData':sess,
+              'foodcourt_id':foodcourt_id
             };
           }
           res.render('restaurant/restaurant_list', context);
@@ -74,18 +81,26 @@ module.exports = {
           res.status(500).json({msg: error.message});
         });
     } else {
-      restaurantsModel.query('orderBy', 'id', 'desc').where({user_type: 3})
+      
+      var where_cond={user_type: 3};
+      if(foodcourt_id!==""){
+        where_cond={'parent_id':foodcourt_id,'user_type': 3};
+      }
+      
+      restaurantsModel.query('orderBy', 'id', 'desc').where(where_cond)
         .fetchAll({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
         .then(function (model) {
           if(model){
             context = {
               restaurants: model.toJSON(),
               'SessionData':sess,
+              'foodcourt_id':foodcourt_id
             };
           } else {
             context = {
               restaurants: {},
               'SessionData':sess,
+              'foodcourt_id':foodcourt_id
             };
           }
           res.render('restaurant/restaurant_list', context);
@@ -122,7 +137,7 @@ module.exports = {
    add_restaurant: function(req, res, next) {
       var sess = req.session;
       if(req.method == 'POST'){
-            var restaurant_data={'full_name':req.body.full_name,'user_type':3,'parent_id':req.body.foodcourt,'email':req.body.email,'password':req.body.password,'phone_no':req.body.phone_no,'contact_person':req.body.contact_person}; 
+            var restaurant_data={'full_name':req.body.full_name,'user_type':3,'parent_id':req.body.foodcourt,'email':req.body.email,'password':req.body.password,'phone_no':req.body.phone_no,'contact_person':req.body.contact_person,'description':req.body.description}; 
             usersModel.forge(restaurant_data)
             .save()
             .then(function (model) {
@@ -161,7 +176,7 @@ module.exports = {
             .fetch()
             .then(function (is_restaurant){
               var restaurant_data=is_restaurant.toJSON();
-              var update_restaurant_data={'full_name':req.body.full_name,'user_type':3,'parent_id':req.body.foodcourt,'email':restaurant_data.email,'password':restaurant_data.password,'phone_no':req.body.phone_no,'contact_person':req.body.contact_person}; 
+              var update_restaurant_data={'full_name':req.body.full_name,'user_type':3,'parent_id':req.body.foodcourt,'email':restaurant_data.email,'password':restaurant_data.password,'phone_no':req.body.phone_no,'contact_person':req.body.contact_person,'description':req.body.description}; 
               is_restaurant.save(update_restaurant_data).then(function (){
                 var address_data={'country_id':'1','state_id':req.body.state,'city_id':req.body.city,'zip_code':req.body.zip,'phone_no':req.body.phone_no,'user_id':restaurant_data.id};
                 addressModel.forge({'user_id':restaurant_data.id})
@@ -277,4 +292,34 @@ module.exports = {
       });
      }
   },
+  
+  
+  // GET /restaurant_list_by_ajax/
+  restaurant_list_by_ajax: function(req, res, next){
+    //var id=req.params.id;
+    usersModel.where({status:'1',user_type:'3'}) 
+    .fetchAll({columns:['id','full_name']})
+    .then(function (model) {
+      var context = {};
+      if(model){
+        context = {
+          foodcourt: model.toJSON(),
+        };
+      } else {
+        context = {
+          foodcourt: {},
+        };
+      }
+      res.json(context);
+    })
+    .catch(function (error) {
+      var context = {
+          foodcourt: {},
+          message: error.message,
+          status: 'error',
+        };
+        res.json(context);
+    });
+  },
+  
 };

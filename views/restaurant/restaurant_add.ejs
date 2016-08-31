@@ -1,11 +1,15 @@
        <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Add Restaurant</h4>
+        <h4 class="modal-title">Add Outlet</h4>
       </div>
       <form role="form" method="post" action="/portal/restaurant/add" id="addRestaurant" name="addRestaurant" enctype="multipart/form-data" >
       <div class="modal-body">
         <div class="row">
             <div class="col-md-12">
+              
+              <%if(SessionData.user_type=='2'){%>
+              <input  type="hidden" name="foodcourt" class="form-control required" autofocus >
+              <%}else{%>
               <div class="col-md-6">
                 <div class="form-group">
                     <label>Foodcourt:</label>
@@ -14,6 +18,8 @@
                     </select>
                 </div>
                 </div>
+                <%}%>
+                
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="control-label">Name:</label>
@@ -72,6 +78,12 @@
                   <input type="text" class="form-control required" name="zip">
                 </div>
                 </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="control-label">Description:</label>
+                    <textarea name="description" class="form-control" ></textarea>
+                  </div>
+                </div>
           </div>
         </div>
       </div>
@@ -103,11 +115,9 @@
             $("select[name='state']").append('<option value="'+val.id+'">'+val.name+'</option>');
           });
       });
-      $.get('/portal/foodcourt_list',function(data) {
-          $.each(data.foodcourt,function(idx,val){
-             $("select[name='foodcourt']").append('<option value="'+val.id+'">'+val.full_name+'</option>');
-         });
-      });
+      
+     
+      
    	  $('select[name="state"]').change(function(){
         $("select[name='city']").html('<option value="">---Select City---</option>');
       	$.get('/portal/city/'+$(this).val(),function(data) {
@@ -118,3 +128,12 @@
       });
 	});
 </script>
+<%if(SessionData.user_type!=='2'){%>
+<script>
+   $.get('/portal/foodcourt_list',function(data) {
+          $.each(data.foodcourt,function(idx,val){
+             $("select[name='foodcourt']").append('<option value="'+val.id+'">'+val.full_name+'</option>');
+         });
+      });
+</script>
+<%}%>

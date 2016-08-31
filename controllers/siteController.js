@@ -374,7 +374,7 @@ res.render('mail/test.ejs', {msg: 'just test'}, function(err, html){
 
       var mailOptions={
           from : config.mail.form_mail,
-          to : "net.nayek@gmail.com",
+          to : "achinta.achinta@gmail.com",
           subject : "Your Subject",
           html : html,
       }

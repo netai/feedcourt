@@ -163,13 +163,15 @@ module.exports = {
     var sess = req.session;
     if(req.method == 'POST'){
       var req_data = {
-      email: req.body.email,
-      full_name: req.body.full_name,
-      password: req.body.password,
-      phone_no: req.body.phone_no,
-      contact_person:req.body.contact_person,
-      user_type: 2,
-      status: 1
+      'email': req.body.email,
+      'full_name': req.body.full_name,
+      'password': req.body.password,
+      'phone_no': req.body.phone_no,
+      'contact_person':req.body.contact_person,
+      'convenient_fee':req.body.convenient_fee,
+      'description':req.body.description,
+      'user_type': 2,
+      'status': 1
       }
      usersModel .forge(req_data)
       .save()
@@ -223,7 +225,17 @@ module.exports = {
             .then(function (is_foodcourt){
               if(is_foodcourt){
                var foodcourt_data=is_foodcourt.toJSON();
-               var save_foodcourt_data={'full_name':req.body.full_name,'user_type':2,'parent_id':'0','email':foodcourt_data.email,'password':foodcourt_data.password,'phone_no':req.body.phone_no,'contact_person':req.body.contact_person};
+               var save_foodcourt_data={
+                      'full_name':req.body.full_name,
+                      'user_type':2,
+                      'parent_id':'0',
+                      'email':foodcourt_data.email,
+                      'password':foodcourt_data.password,
+                      'phone_no':req.body.phone_no,
+                      'contact_person':req.body.contact_person,
+                      'convenient_fee':req.body.convenient_fee,
+                      'description':req.body.description,
+                };
                 is_foodcourt.save(save_foodcourt_data).then(function (model){
                   foodcourt_data=model.toJSON();
                  var address_data={'state_id':req.body.state,'city_id':req.body.city,'zip_code':req.body.zip,'phone_no':req.body.phone_no,'email_id':foodcourt_data.email,'user_id':foodcourt_data.id}; //addressModel

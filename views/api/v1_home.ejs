@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app='feedcourt'>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>feedcourt api v1</title>
+    <link href="/static/assets/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!--------Page Content -------->
+    <div class="api-contain">
+        <div class="api-logo">feedcourt API v1</div>
+        <div class="api-desc">Please put the auth token in header parameter 'x-access-token'<br/>x-access-token = < token ></div>
+        <div class="api-desc">all image path is -<br/>Large Image - https://www.feedcourt.com/media/images/< file name ><br/>Thumb Image - https://www.feedcourt.com/media/images/thumb/< file name ></div>
+        <div class="api-table">
+            <table cellspacing=0>
+                <tr>
+                    <th width="5%">SL</th>
+                    <th width="10%">Name</th>
+                    <th width="20%">Description</th>
+                    <th width="30%">Url</th>
+                    <th width="5%">Token</th>
+                    <th width="10%">Method</th>
+                    <th width="30%">Request</th>
+                </tr>
+                <tr>
+                    <td>1.</td>
+                    <td>Login</td>
+                    <td>customer login</td>
+                    <td>http://www.feedcourt.com/api/v1/login</td>
+                    <td></td>
+                    <td>POST</td>
+                    <td>email, password</td>
+                </tr>
+                <tr>
+                    <td>2.</td>
+                    <td>Signup</td>
+                    <td>customer signup</td>
+                    <td>http://www.feedcourt.com/api/v1/signup</td>
+                    <td></td>
+                    <td>POST</td>
+                    <td>email, password, name, phone</td>
+                </tr>
+                <tr>
+                    <td>3.</td>
+                    <td>Signup(facebook)</td>
+                    <td>customer facebook signup</td>
+                    <td>http://www.feedcourt.com/api/v1/facebook_signup</td>
+                    <td></td>
+                    <td>POST</td>
+                    <td>email, password, name, phone, facebook_id</td>
+                </tr>
+                <tr>
+                    <td>4.</td>
+                    <td>Cities</td>
+                    <td>City list</td>
+                    <td>http://www.feedcourt.com/api/v1/states/:id/cities</td>
+                    <td>YES</td>
+                    <td>GET</td>
+                    <td>state id (WB = 35)</td>
+                </tr>
+                <tr>
+                    <td>5.</td>
+                    <td>States</td>
+                    <td>state list</td>
+                    <td>http://www.feedcourt.com/api/v1/states</td>
+                    <td>YES</td>
+                    <td>GET</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>6.</td>
+                    <td>Restaurants List</td>
+                    <td>foodcourt restaurant list</td>
+                    <td>http://www.feedcourt.com/api/v1/foodcourts/:id/restaurants</td>
+                    <td>YES</td>
+                    <td>GET</td>
+                    <td>foodcourt id</td>
+                </tr>
+                <tr>
+                    <td>7.</td>
+                    <td>Restaurant Detail</td>
+                    <td>Restaurant Detail</td>
+                    <td>http://www.feedcourt.com/api/v1/restaurants/:id</td>
+                    <td>YES</td>
+                    <td>GET</td>
+                    <td>restaurant id</td>
+                </tr>
+                <tr>
+                    <td>8.</td>
+                    <td>Foodcourt List</td>
+                    <td>Foodcourt list</td>
+                    <td>http://www.feedcourt.com/api/v1/cities/:id/foodcourts</td>
+                    <td>YES</td>
+                    <td>GET</td>
+                    <td>city id</td>
+                </tr>
+                <tr>
+                    <td>9.</td>
+                    <td>Search</td>
+                    <td>Search foodcourt or restaurant</td>
+                    <td>http://www.feedcourt.com/api/v1/search</td>
+                    <td>YES</td>
+                    <td>POST</td>
+                    <td>city_id, q (search keyword)</td>
+                </tr>
+                <tr>
+                    <td>10.</td>
+                    <td>Show Reviews</td>
+                    <td>Show restaurant reviews</td>
+                    <td>http://www.feedcourt.com/api/v1/restaurants/:id/reviews</td>
+                    <td>YES</td>
+                    <td>GET</td>
+                    <td>restaurants id</td>
+                </tr>
+                <tr>
+                    <td>11.</td>
+                    <td>Send Reviews</td>
+                    <td>Send restaurant reviews</td>
+                    <td>http://www.feedcourt.com/api/v1/restaurants/reviews</td>
+                    <td>YES</td>
+                    <td>POST</td>
+                    <td>user_id, restaurant_id, comment</td>
+                </tr>
+                
+            </table>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -25,7 +25,7 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="panel panel-default">
-          <div class="panel-body">
+          <div class="panel-body table-responsive">
             <div class="dataTable_wrapper">
               <table class="table" id="dataTableApnd">
                <thead>
@@ -115,19 +115,35 @@
 </div>
 <script>
     $(document).ready(function() {
-        $('#dataTableApnd').DataTable({
-          responsive: true,
-          scroller:    false,
-          // sort:false,
-          "oLanguage":{
-          "sEmptyTable":"No Records found.",
-  				"emptyTable": "No Records found.",
-  				},
-  				"language": {
-  					"emptyTable": "No Records found.",
-  				},
-  				"aoColumnDefs" : [ { "bSortable" : false, "aTargets" : [ "sorting_disabled" ] } ],
-  				"iDisplayLength": 10, //Pagination limit
-      });
+      //   $('#dataTableApnd').DataTable({
+      //     responsive: true,
+      //     scroller:    false,
+      //     // sort:false,
+      //     "oLanguage":{
+      //     "sEmptyTable":"No Records found.",
+  				// "emptyTable": "No Records found.",
+  				// },
+  				// "language": {
+  				// 	"emptyTable": "No Records found.",
+  				// },
+  				// "aoColumnDefs" : [ { "bSortable" : false, "aTargets" : [ "sorting_disabled" ] } ],
+  				// "iDisplayLength": 10, //Pagination limit
+      // });
+      
+      $('#dataTableApnd').DataTable({
+            responsive: true,
+            "ordering": false,
+            "info":     false,
+            "oLanguage":{
+            "sEmptyTable":"No Records found.",
+            "emptyTable": "No Records found.",
+            },
+            "language": {
+                "emptyTable": "No Records found.",
+            },
+            "aoColumnDefs" : [ { "bSortable" : false, "aTargets" : [ "sorting_disabled" ] } ],
+            "iDisplayLength": '10', //Pagination limit
+        });
+      
     });
   </script>

@@ -411,5 +411,3 @@ table.dataTable thead .sorting:after {
 .table tr:nth-child(odd) {background: #FFF}
 .pagination>.active>a{background-color:#468298;border-color: #468298}
 .pagination>.active>a:hover{background-color:#468298;border-color: #468298}
-.loged_member_title{color:#FFF !important;}
-.api-desc{margin:10px 0;color:#6666ff;}

@@ -30,20 +30,24 @@
                 
                 <div class="form-group">
                   <label class="control-label">State:</label>
-                   <select class="form-control required" name="state" data-select="<%=profile.addresses.state.id%>">
+                  <%if(typeof profile.addresses.state!='undefined' || profile.addresses.state!=undefined){var p_a_s_id=profile.addresses.state.id; }else{var p_a_s_id="";}%>
+                   <select class="form-control required" name="state" data-select="<%=p_a_s_id%>">
                         <option value="">---Select State---</option>
                     </select>
                 </div>
                 <div class="form-group">
                   <label class="control-label">City:</label>
-                   <select class="form-control required" name="city" data-select="<%=profile.addresses.city.id%>">
+                  
+                  <%if(typeof profile.addresses.city!='undefined' || profile.addresses.city!=undefined){var p_a_c_id=profile.addresses.city.id; }else{var p_a_c_id="";}%>
+                   <select class="form-control required" name="city" data-select="<%=p_a_c_id%>">
                         <option value="">---Select City---</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
                   <label class="control-label">Zip:</label>
-                  <input type="text" name="zip" value="<%=profile.addresses.zip_code%>" class="form-control required" >
+                  <%if(typeof profile.addresses.zip_code!='undefined' || profile.addresses.zip_code!=undefined){var p_a_zip_code=profile.addresses.zip_code; }else{var p_a_zip_code="";}%>
+                  <input type="text" name="zip" value="<%=p_a_zip_code%>" class="form-control required" >
                 </div>
                 
                 <div class="form-group">

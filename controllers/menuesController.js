@@ -24,9 +24,9 @@ module.exports = {
     .then(function (model) {
       if(model){
         var  restaurant_data=model.toJSON();
-        menusModel.where({'restaurant_id':id})
+        menusModel.query('orderBy', 'order_sequence', 'asc').where({'restaurant_id':id})
         .where('status','!=',2)
-        .fetchAll({withRelated: ['menu_groups','cuisines','unites',{menu_images: function(query) { query.where({'type':'2','is_default':1}); }}]})
+        .fetchAll({withRelated: ['menu_groups','unites',{menu_images: function(query) { query.where({'type':'2','is_default':1}); }}]})
         .then(function (menues_data) {
           if(menues_data){
             context = {
@@ -76,7 +76,7 @@ module.exports = {
             .then(function (saveUnit){
               if(saveUnit){
                 var new_uint=saveUnit.toJSON();
-                menusModel.forge({cuisine_id: req.body.cuisine, title: req.body.title, price:req.body.price,unit_id:new_uint.id,description:req.body.description,restaurant_id:restaurant_id,menu_group_id:'0',status: '1'})
+                menusModel.forge({cuisine_id: 0, title: req.body.title, price:req.body.price,unit_id:new_uint.id,description:req.body.description,restaurant_id:restaurant_id,menu_group_id:req.body.menu_group_id,'order_sequence':req.body.order_sequence,status: '1'})
                 .save()
                 .then(function(saveMenu){
                   if(saveMenu){
@@ -89,7 +89,7 @@ module.exports = {
             });
           }
           else if(req.body.unit_id>0){
-            menusModel.forge({cuisine_id: req.body.cuisine, title: req.body.title, price:req.body.price,unit_id:req.body.unit_id,description:req.body.description,restaurant_id:req.body.restaurant_id,menu_group_id:'0',status: '1'})
+            menusModel.forge({cuisine_id: 0, title: req.body.title, price:req.body.price,unit_id:req.body.unit_id,description:req.body.description,restaurant_id:req.body.restaurant_id,menu_group_id:req.body.menu_group_id,'order_sequence':req.body.order_sequence,status: '1'})
                 .save()
                 .then(function(saveMenu){
                   if(saveMenu){
@@ -131,7 +131,7 @@ module.exports = {
                       .fetch()
                       .then(function(is_menu){
                         var menu=is_menu.toJSON();
-                        var updated_menu_data={cuisine_id: req.body.cuisine, title: req.body.title, price:req.body.price,unit_id:new_uint.id,description:req.body.description,restaurant_id:menu.restaurant_id,menu_group_id:req.body.menu_group_id, status: menu.status};
+                        var updated_menu_data={cuisine_id: '0', title: req.body.title, price:req.body.price,unit_id:new_uint.id,description:req.body.description,restaurant_id:menu.restaurant_id,menu_group_id:req.body.menu_group_id,'order_sequence':req.body.order_sequence, status: menu.status};
                         is_menu.save(updated_menu_data).then(function(){
                           res.redirect('/portal/menu/'+restaurant_id);
                         });
@@ -145,7 +145,7 @@ module.exports = {
                 .fetch()
                 .then(function(is_menu){
                   var menu=is_menu.toJSON();
-                  var updated_menu_data={cuisine_id: req.body.cuisine, title: req.body.title, price:req.body.price,unit_id:req.body.unit_id,description:req.body.description,restaurant_id:menu.restaurant_id,menu_group_id:'0',status: menu.status};
+                  var updated_menu_data={cuisine_id: '0', title: req.body.title, price:req.body.price,unit_id:req.body.unit_id,description:req.body.description,restaurant_id:menu.restaurant_id,menu_group_id:req.body.menu_group_id,'order_sequence':req.body.order_sequence,status: menu.status};
                   is_menu.save(updated_menu_data).then(function(){
                     res.redirect('/portal/menu/'+restaurant_id);
                   });
@@ -160,7 +160,7 @@ module.exports = {
         .then(function(is_restaurant){
             var restaurant=is_restaurant.toJSON();
             menusModel.forge({'id':menu_id})
-            .fetch({withRelated: ['menu_groups','cuisines','unites',{menu_images: function(query) { query.where({'type':'2','is_default':1}); }}]})
+            .fetch({withRelated: ['menu_groups','unites',{menu_images: function(query) { query.where({'type':'2','is_default':1}); }}]})
             .then(function(is_menu){
               contex={'SessionData':sess,'restaurant':restaurant,'menu':is_menu.toJSON()};
               res.render('restaurant/menu_edit',contex);
@@ -183,7 +183,7 @@ module.exports = {
       .then(function(is_restaurant){
           var restaurant=is_restaurant.toJSON();
           menusModel.forge({'id':menu_id})
-          .fetch({withRelated: ['menu_groups','cuisines','unites',{menu_images: function(query) { query.where({'type':'2','is_default':1}); }}]})
+          .fetch({withRelated: ['menu_groups','unites',{menu_images: function(query) { query.where({'type':'2','is_default':1}); }}]})
           .then(function(is_menu){
             contex={'SessionData':sess,'restaurant':restaurant,'menu':is_menu.toJSON()};
             res.render('restaurant/menue_detail',contex);

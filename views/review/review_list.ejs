@@ -14,12 +14,31 @@
     <div class="row">
     <div class="col-lg-12">
     <div class="panel panel-default">
-    <!--<div class="panel-heading">
-    Basic Table
-    </div>-->
-    <div class="panel-body">
-    <div class="table-responsive">
-      <table class="table">
+        <div class="panel-body table-responsive">
+          <div class="dataTable_wrapper">
+              
+              <% if(typeof SessionData.user_type!=undefined && (SessionData.user_type=='1')){ %>
+              <div id="dataTableApnd_filter" class="dataTables_filter" style="float:left;">
+                <label>
+                  <select class="form-control input-sm" name="foodcourt_list" aria-controls="dataTableApnd"  data-select_val="<%=req_foodcourt_id%>" >
+                    <option value="">---Select Food Court---</option>
+                  </select>
+                  
+                </label>
+              </div>
+              <% }if(typeof SessionData.user_type!==undefined && (SessionData.user_type=='2' || SessionData.user_type=='1')){ %>
+              &nbsp;&nbsp;
+              <div id="dataTableApnd_filter" class="dataTables_filter" style="float:left; margin-left:10px;">
+                <label>
+                  <select class="form-control input-sm" name="restaurant_list" aria-controls="dataTableApnd"  data-select_val="<%=req_restaurant_id%>" >
+                    <option value="">---Select Restaurant---</option>
+                  </select>
+                  
+                </label>
+              </div>
+              <%}%>
+      
+       <table class="table" id="dataTableApnd">
           <thead>
               <tr>
                   <th>SL</th>
@@ -58,9 +77,8 @@
                         <% } %>
                       </tr>
                 <% } %>
-              <% }else{ %>
-                  <tr><td align="center" colspan="6">No Result Found.</td></tr>
-              <% } %>
+              <% }%>
+                  
           </tbody>
       </table>
   </div>
@@ -71,3 +89,65 @@
     </div>
   </div>
   </div>
+  <script>
+    $(document).ready(function() {
+      $('#dataTableApnd').DataTable({
+            responsive: true,
+            "ordering": false,
+            "info":     false,
+            "oLanguage":{
+            "sEmptyTable":"No Records found.",
+            "emptyTable": "No Records found.",
+            },
+            "language": {
+                "emptyTable": "No Records found.",
+            },
+            "aoColumnDefs" : [ { "bSortable" : false, "aTargets" : [ "sorting_disabled" ] } ],
+            "iDisplayLength": '10', //Pagination limit
+        });
+      
+     
+      });
+    
+     $('select[name="foodcourt_list"]').change(function(){
+      window.location.assign("/portal/reviews/?foodcourt="+$(this).val());
+    });
+     $('select[name="restaurant_list"]').change(function(){
+      window.location.assign("/portal/reviews/?restaurant="+$(this).val());
+    });
+    </script>    
+    
+     <% if(typeof SessionData.user_type!=undefined && (SessionData.user_type=='1')){ %>
+     <script>
+      $(document).ready(function() {
+       $.get('/portal/foodcourt_list/',function(resp_data){
+            if(resp_data.foodcourt!==undefined){
+              $.each(resp_data.foodcourt,function(key,val){
+                var selected="";
+                if(val.id==$("select[name='foodcourt_list']").data('select_val')){
+                  selected="selected";
+                }
+                $('select[name="foodcourt_list"]').append('<option value="'+val.id+'" '+selected+'>'+val.full_name+'</option>');
+              });
+            }
+          }); 
+      });
+     </script>
+     
+     <% }if(typeof SessionData.user_type!=undefined && (SessionData.user_type=='2' || SessionData.user_type=='1')){ %>
+     <script>
+      $(document).ready(function() {
+       $.get('/portal/restaurant_list_by_ajax/',function(resp_data){
+            if(resp_data.foodcourt!==undefined){
+              $.each(resp_data.foodcourt,function(key,val){
+                var selected="";
+                if(val.id==$("select[name='restaurant_list']").data('select_val')){
+                  selected="selected";
+                }
+                $('select[name="restaurant_list"]').append('<option value="'+val.id+'" '+selected+'>'+val.full_name+'</option>');
+              });
+            }
+          }); 
+      });
+      </script>
+     <%}%>

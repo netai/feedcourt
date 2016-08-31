@@ -28,7 +28,7 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="panel panel-default">
-          <div class="panel-body">
+          <div class="panel-body table-responsive">
             <div class="dataTable_wrapper">
               <table class="table" id="dataTableApnd">
                <thead>
@@ -36,10 +36,11 @@
                         <th>SL</th>
                         <th>Image</th>
                         <th>Name</th>
-                        <th>Cuisine</th>
+                       
                         <th>Price</th>
                         <th>Unit</th>
                         <th>Group</th>
+                        <th>Order</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -58,9 +59,7 @@
                           <td align="center">
                             <span><%=menues[i].title%></span>
                           </td>
-                          <td align="center">
-                            <span><% if(menues[i].cuisines.title!==undefined && menues[i].cuisines.title!==null){%><%=menues[i].cuisines.title%><%}%></span>
-                          </td>
+                         
                           <td align="center">
                             <span><%=menues[i].price%></span>
                           </td>
@@ -69,6 +68,9 @@
                           </td>
                           <td align="center">
                             <%if(menues[i].menu_groups.name!==undefined && menues[i].menu_groups.name!==null){%><%=menues[i].menu_groups.name%><%}%>
+                          </td>
+                          <td align="center">
+                            <span><%=menues[i].order_sequence%></span>
                           </td>
                           <td align="center">
                             <span><%=menues[i].status==1?'Active':'Inactive'%></span>
@@ -134,19 +136,33 @@
 </div>
 <script>
     $(document).ready(function() {
-        $('#dataTableApnd').DataTable({
-          responsive: true,
-          scroller:    false,
-          // sort:false,
-          "oLanguage":{
-          "sEmptyTable":"No Records found.",
-  				"emptyTable": "No Records found.",
-  				},
-  				"language": {
-  					"emptyTable": "No Records found.",
-  				},
-  				"aoColumnDefs" : [ { "bSortable" : false, "aTargets" : [ "sorting_disabled" ] } ],
-  				"iDisplayLength": 10, //Pagination limit
-      });
+      //   $('#dataTableApnd').DataTable({
+      //     responsive: true,
+      //     scroller:    false,
+      //     // sort:false,
+      //     "oLanguage":{
+      //     "sEmptyTable":"No Records found.",
+  				// "emptyTable": "No Records found.",
+  				// },
+  				// "language": {
+  				// 	"emptyTable": "No Records found.",
+  				// },
+  				// "aoColumnDefs" : [ { "bSortable" : false, "aTargets" : [ "sorting_disabled" ] } ],
+  				// "iDisplayLength": 10, //Pagination limit
+      // });
+      $('#dataTableApnd').DataTable({
+            responsive: true,
+            "ordering": false,
+            "info":     false,
+            "oLanguage":{
+            "sEmptyTable":"No Records found.",
+            "emptyTable": "No Records found.",
+            },
+            "language": {
+                "emptyTable": "No Records found.",
+            },
+            "aoColumnDefs" : [ { "bSortable" : false, "aTargets" : [ "sorting_disabled" ] } ],
+            "iDisplayLength": '10', //Pagination limit
+    });
     });
   </script>

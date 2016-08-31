@@ -5,33 +5,27 @@ var restaurantsModel = require('../models/restaurantsModel'),
 
 module.exports = {
   
-  // GET /restaurant/:id
+  // GET /restaurants/:id
   restaurantDetail: function(req, res, next) {
     var id = req.params.id;
-    restaurantsModel.forge({id:id})
-    .fetch({withRelated: ['addresses','addresses.state','addresses.city']})
+    restaurantsModel.forge({id:id,'user_type':3})
+    .fetch({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
     .then(function (model) {
       var response = {};
-        if(model){
-            imagesModel.where({reference_id:id, type:'1'})
-            .fetchAll()
-            .then(function (images){
-              if(model.get('status') == 1){
-                response = {
-                  data: model.toJSON(),
-                  status: 'success'
-                };
-                response.data.images = images.toJSON();
-              } else {
-                response = {
-                  message: 'restaurant blocked by admin',
-                  status: 'error',
-                  code: '2007'
-                };
-              }
-              res.json(response);
-              //response.data['images'] = images.toJSON();
-            });
+      if(model){
+        if(model.get('status') == 1){
+          response = {
+            restaurant: model.toJSON(),
+            status: 'success'
+          };
+        } else {
+          response = {
+            message: 'restaurant blocked by admin',
+            status: 'error',
+            code: '2007'
+          };
+        }
+        res.json(response);
         } else {
           response = {
             message: 'restaurant not found',

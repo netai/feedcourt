@@ -17,18 +17,11 @@
         <% } %>
         <div class="row">
             <div class="col-md-12">
-              <div class="col-md-6">
-                  <div class="form-group">
-                      <label>Cuisine:</label>
-                      <select class="form-control required" name="cuisine" data-select="<%=menu.cuisine_id%>">
-                          <option value="">---Select Cuisine---</option>
-                      </select>
-                  </div>
-              </div>
+              
               <div class="col-md-6">
                   <div class="form-group">
                       <label>Group:</label>
-                      <select class="form-control" name="menu_group_id" data-select="<%=menu.menu_group_id%>">
+                      <select class="form-control required" name="menu_group_id" data-select="<%=menu.menu_group_id%>">
                           <option value="">---Select Group---</option>
                       </select>
                   </div>
@@ -52,6 +45,12 @@
                     <input type="hidden" name="unit_id" value="<%=menu.unit_id%>"/>
                   </div>
                 </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="control-label">Order:</label>
+                    <input  type="text" name="order_sequence"  class="form-control" id="orderSequence" value="<%=menu.order_sequence%>">
+                  </div>
+                </div>
                 <div class="col-md-12">
                   <div class="form-group">
                     <label class="control-label">Description:</label>
@@ -73,14 +72,23 @@
     <script src="/static/assets/vendor/jquery-ui/js/jquery-ui.min.js"></script>
 <script>
 	$(document).ready(function(){
-	   $("#editMenu").validate({ });
-     	$.get('/portal/cuisines_list',function(data) {
-     	  var selected_val=$("select[name='cuisine']").data('select');
-          $.each(data.cuisines,function(idx,val){
-            var select= selected_val==val.id?'selected':'';
-            $("select[name='cuisine']").append('<option value="'+val.id+'" '+select+'>'+val.title+'</option>');
-          });
-      });
+	    $("#editMenu").validate({
+	      rules: {
+					order_sequence:{digits:$("#orderSequence").val()},
+				},
+				submitHandler : function(form) {
+				  $('button').prop('disabled',true);
+				  form.submit();
+				}
+	   });
+     	// $.get('/portal/cuisines_list',function(data) {
+     	//   var selected_val=$("select[name='cuisine']").data('select');
+      //     $.each(data.cuisines,function(idx,val){
+      //       var select= selected_val==val.id?'selected':'';
+      //       $("select[name='cuisine']").append('<option value="'+val.id+'" '+select+'>'+val.title+'</option>');
+      //     });
+      // });
+      
       // Group List
        $.get('/portal/menu_group_list_data/'+$("input[name='restaurant_id']").val(),function(data) {
         var selected_val=$("select[name='menu_group_id']").data('select');

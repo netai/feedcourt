@@ -18,7 +18,7 @@
                     <!--<div class="panel-heading">
                     Basic Table
                     </div>-->
-                    <div class="panel-body">
+                    <div class="panel-body table-responsive">
                       <div class="dataTable_wrapper">
                         <table class="table" id="dataTableApnd">
                             <thead>
@@ -50,7 +50,7 @@
                                           <td align="center">
                                             <a href="javascript:void(0)"  alt="View Detail" title="View Detail" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/feedcourt/view/<%=foodcourt[i].id%>"><img src="/static/assets/images/info.png" class="status_icon"></a>
                                             
-                                            <a href="/portal/foodcourt/restaurants/<%= foodcourt[i].id %>"  alt="View Restaurants" title="View Restaurants"><img src="/static/assets/images/restaurant.png" class="status_icon"></a>
+                                            <a href="/portal/foodcourt/restaurants/<%= foodcourt[i].id %>"  alt="View Outlet" title="View Outlet"><img src="/static/assets/images/restaurant.png" class="status_icon"></a>
                                             
                                             <a href="/portal/foodcourt/changestatus/<%=foodcourt[i].id%>">
                                               <% if(foodcourt[i].status==0){ %>
@@ -64,8 +64,6 @@
                                           </td>
                                     </tr>
                                   <% } %>
-                                <% }else{ %>
-                                    <tr><td align="center" colspan="6">No Result Found.</td></tr>
                                 <% } %>
                             </tbody>
                         </table>
@@ -84,7 +82,7 @@
                          <!-- /.panel-heading -->
                         <div class="panel-body">
                           <img src="/static/assets/images/info.png" class="status_icon">&nbsp;View Detail&nbsp;&nbsp;|&nbsp;
-                          <img src="/static/assets/images/restaurant.png" class="status_icon">&nbsp;View Restaurants&nbsp;&nbsp;|&nbsp;
+                          <img src="/static/assets/images/restaurant.png" class="status_icon">&nbsp;View Outlet&nbsp;&nbsp;|&nbsp;
                           <img src="/static/assets/images/active.png" class="status_icon">&nbsp;Click to Active&nbsp;&nbsp;|&nbsp;
                           <img src="/static/assets/images/inactive.png" class="status_icon">&nbsp;Click to Inactive&nbsp;&nbsp;|&nbsp;
                           <img src="/static/assets/images/edit.png" class="status_icon">&nbsp;Edit&nbsp;&nbsp;
@@ -101,19 +99,33 @@
   </div>
   <script>
     $(document).ready(function() {
+      //   $('#dataTableApnd').DataTable({
+      //     responsive: true,
+      //     scroller:    false,
+      //     // sort:false,
+      //     "oLanguage":{
+      //     "sEmptyTable":"No Records found.",
+  				// "emptyTable": "No Records found.",
+  				// },
+  				// "language": {
+  				// 	"emptyTable": "No Records found.",
+  				// },
+  				// "aoColumnDefs" : [ { "bSortable" : false, "aTargets" : [ "sorting_disabled" ] } ],
+  				// "iDisplayLength": 10, //Pagination limit
+      // });
         $('#dataTableApnd').DataTable({
-          responsive: true,
-          scroller:    false,
-          // sort:false,
-          "oLanguage":{
-          "sEmptyTable":"No Records found.",
-  				"emptyTable": "No Records found.",
-  				},
-  				"language": {
-  					"emptyTable": "No Records found.",
-  				},
-  				"aoColumnDefs" : [ { "bSortable" : false, "aTargets" : [ "sorting_disabled" ] } ],
-  				"iDisplayLength": 10, //Pagination limit
-      });
+            responsive: true,
+            "ordering": false,
+            "info":     false,
+            "oLanguage":{
+            "sEmptyTable":"No Records found.",
+            "emptyTable": "No Records found.",
+            },
+            "language": {
+                "emptyTable": "No Records found.",
+            },
+            "aoColumnDefs" : [ { "bSortable" : false, "aTargets" : [ "sorting_disabled" ] } ],
+            "iDisplayLength": '10', //Pagination limit
+        });
     });
   </script>

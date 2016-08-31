@@ -7,8 +7,21 @@ var reviewsModel = require('../models/reviewsModel'),
 module.exports = {
   // GET /portal/reviews/
   review_list: function(req, res, next) {
+    var req_foodcourt_id="";
+    var req_restaurant_id="";
+    
     var sess = req.session;
     var review_conditions={};
+    if(req.param('foodcourt')!==undefined){
+      review_conditions={'review_to':req.param('foodcourt')};
+      req_foodcourt_id=req.param('foodcourt');
+    }
+    else if(req.param('restaurant')!==undefined){
+      review_conditions={'review_to':req.param('restaurant')};
+      req_restaurant_id=req.param('restaurant');
+    }
+    
+    
     if(sess.user_type!==undefined && sess.user_type==3){
       var review_conditions={review_to:sess.user_id};
     }
@@ -18,9 +31,9 @@ module.exports = {
     .fetchAll({withRelated: ['users','restaurants']})
     .then(function (model) {
       if(model){
-        context={'reviews':model.toJSON(),'SessionData':sess};
+        context={'reviews':model.toJSON(),'SessionData':sess,'req_restaurant_id':req_restaurant_id,'req_foodcourt_id':req_foodcourt_id};
       } else {
-        context={'reviews':{},'SessionData':sess};
+        context={'reviews':{},'SessionData':sess,'req_restaurant_id':req_restaurant_id,'req_foodcourt_id':req_foodcourt_id};
       }
        res.render('review/review_list', context);
     })
