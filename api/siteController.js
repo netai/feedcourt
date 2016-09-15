@@ -10,6 +10,28 @@ module.exports = {
   v1_home: function(req, res, next){
     res.render('api/v1_home',{});
   },
+  
+  // GET /api_token
+  api_token: function(req, res, next) {
+    var req_data = {
+      device_id : req.body.device_id,
+      device_name : req.body.device_name,
+    }
+    if(req_data.device_id!=undefined && req_data.device_id!='' && req_data.device_id!=undefined && req_data.device_id!=''){
+      var response = {
+        token: tokenHelper.createAPIToken(req_data),
+        status: 'success'
+      };
+    } else {
+      response = {
+              message: 'Bad Request',
+              status: 'error',
+              code: '2400'
+      };
+    }
+    res.json(response);
+  },
+  
   // POST /login
   login: function(req, res, next) {
     var email = req.body.email;
@@ -57,38 +79,29 @@ module.exports = {
   // POST /signup
   signup: function(req, res, next) {
     var req_data = {
-      email : req.body.email,
-      password : req.body.password,
+      password : 'feedcourt#$&123',
       full_name : req.body.name,
       phone_no : req.body.phone,
+      user_type: 4,
       status : 1
     }
     var response = {};
-    usersModel.forge({email: req_data.email, facebook_id:0})
+    usersModel.forge({phone_no:req_data.phone_no, user_type:4, facebook_id:0})
     .fetch()
     .then(function (model) {
       if(model){
         response = {
-          message: 'email id exist',
-          status: 'error',
-          code: '2004'
+          data: model.toJSON(),
+          status: 'success'
         };
-        
         res.json(response);
       } else {
         usersModel.forge(req_data)
         .save()
         .then(function (model) {
-          
           if(model){
               response = {
-                data: {
-                  id: model.id,
-                  name: model.get('full_name'),
-                  email: model.get('email'),
-                  phone: model.get('phone_no'),
-                },
-                token: tokenHelper.createToken(model),
+                data: model.toJSON(),
                 status: 'success',
               };
           } else {
@@ -127,13 +140,7 @@ module.exports = {
     .then(function (model) {
       if(model){
           response = {
-            data: {
-              id: model.id,
-              name: model.get('full_name'),
-              email: model.get('email'),
-              phone: model.get('phone_no'),
-            },
-            token: tokenHelper.createToken(model),
+            data: model.toJSON(),
             status: 'success',
           };
         
@@ -145,13 +152,7 @@ module.exports = {
           
           if(model){
               response = {
-                data: {
-                  id: model.id,
-                  name: model.get('full_name'),
-                  email: model.get('email'),
-                  phone: model.get('phone_no'),
-                },
-                token: tokenHelper.createToken(model),
+                data: model.toJSON(),
                 status: 'success',
               };
           } else {
@@ -179,40 +180,48 @@ module.exports = {
   search: function(req, res, next) {
     var q = req.body.q;
     var city_id=parseInt(req.body.city_id);
-    foodcourtsModel.query(function(qb) {
-      qb.innerJoin('addresses', function () {
-        this.on('users.id', '=', 'addresses.user_id')
-        .andOn('addresses.city_id', '=', city_id);
+    if(q!=undefined && q!='' && city_id!=undefined && city_id!=''){
+      foodcourtsModel.query(function(qb) {
+        qb.innerJoin('addresses', function () {
+          this.on('users.id', '=', 'addresses.user_id')
+          .andOn('addresses.city_id', '=', city_id);
+        })
       })
-    })
-    .orderBy('id','desc')
-    .where({user_type:2, 'users.status':1})
-    .where('full_name', 'LIKE', '%'+q+'%')
-    .fetchAll({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1'}); }}]})
-    .then(function (foodcourts_model) {
-      restaurantsModel.query('orderBy', 'id', 'desc').where({'user_type':'3','status': 1}).where('full_name', 'LIKE', '%'+q+'%')
-      .fetchAll({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
-      .then(function (restaurants_model) {
-        var response = {
-          foodcourts: foodcourts_model.toJSON(),
-          restaurants: restaurants_model.toJSON(),
-          status: 'success'
-        };
-        res.json(response);
+      .orderBy('id','desc')
+      .where({user_type:2, 'users.status':1})
+      .where('full_name', 'LIKE', '%'+q+'%')
+      .fetchAll({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1'}); }}]})
+      .then(function (foodcourts_model) {
+        restaurantsModel.query('orderBy', 'id', 'desc').where({'user_type':'3','status': 1}).where('full_name', 'LIKE', '%'+q+'%')
+        .fetchAll({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
+        .then(function (restaurants_model) {
+          var response = {
+            foodcourts: foodcourts_model.toJSON(),
+            restaurants: restaurants_model.toJSON(),
+            status: 'success'
+          };
+          res.json(response);
+        })
+        .catch(function (error) {
+          res.status(500).json({msg: error.message, status: 'error', code: 'SYSERR'});
+        });
       })
       .catch(function (error) {
         res.status(500).json({msg: error.message, status: 'error', code: 'SYSERR'});
       });
-    })
-    .catch(function (error) {
-      res.status(500).json({msg: error.message, status: 'error', code: 'SYSERR'});
-    });
+    } else {
+      var response = {
+              message: 'Bad Request',
+              status: 'error',
+              code: '2400'
+      };
+      res.json(response);
+    }
   },
   
   // GET /states/:id/cities
   city_list: function(req, res, next){
-    var id=req.params.id;
-    citiesModel.where({state_id:id})
+    citiesModel.query('orderBy', 'name', 'asc').where({is_selected:1})
     .fetchAll()
     .then(function (model) {
       var response = {

@@ -1,0 +1,108 @@
+<% layout('../portal_layout') %>
+<% include ../left_header %>
+<div id="wrapper">
+  <div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header page_title">City List</h1>
+        </div>
+        <div class="col-lg-2 add_btn" >
+          <button class="btn btn-success pop-link" data-href="/portal/city_add" data-toggle="modal" data-target="#popup">Add City</button>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="panel panel-default">
+          <div class="panel-body table-responsive">
+            <div class="dataTable_wrapper">
+              <table class="table" id="dataTableApnd">
+               <thead>
+                    <tr>
+                        <th>SL</th>
+                        <th>State</th>
+                        <th>City</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <% for(var i=0;i<cities.length;i++){ %>
+                  <tr>
+                      <td align="center"><%=i+1%></td>
+                      <td align="center">
+                      <span><%=cities[i].state.name%></span>
+                      </td>
+                      <td align="center">
+                      <span><%=cities[i].name%></span>
+                      </td>
+                      <td align="center">
+                        <a href="/portal/city_delete/<%=cities[0].id%>"  alt="Delete" title="Delete"><img src="/static/assets/images/delete.png" class="status_icon"></a>
+                      </td>
+                  </tr>
+                  <%}%>
+                      
+                </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <!-- /.Icon Table -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Icon Info
+                    </div>
+                     <!-- /.panel-heading -->
+                    <div class="panel-body">
+                      <img src="/static/assets/images/delete.png" class="status_icon">&nbsp;Delete&nbsp;&nbsp;
+                      <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+        </div>
+        <!-- /.Icon Table -->
+    
+    
+    
+  </div>
+</div>
+<script>
+    $(document).ready(function() {
+      //   $('#dataTableApnd').DataTable({
+      //     responsive: true,
+      //     scroller:    false,
+      //     // sort:false,
+      //     "oLanguage":{
+      //     "sEmptyTable":"No Records found.",
+  				// "emptyTable": "No Records found.",
+  				// },
+  				// "language": {
+  				// 	"emptyTable": "No Records found.",
+  				// },
+  				// "aoColumnDefs" : [ { "bSortable" : false, "aTargets" : [ "sorting_disabled" ] } ],
+  				// "iDisplayLength": 10, //Pagination limit
+      // });
+      
+      $('#dataTableApnd').DataTable({
+            responsive: true,
+            "ordering": false,
+            "info":     false,
+            "oLanguage":{
+            "sEmptyTable":"No Records found.",
+            "emptyTable": "No Records found.",
+            },
+            "language": {
+                "emptyTable": "No Records found.",
+            },
+            "aoColumnDefs" : [ { "bSortable" : false, "aTargets" : [ "sorting_disabled" ] } ],
+            "iDisplayLength": '10', //Pagination limit
+        });
+      
+    });
+  </script>

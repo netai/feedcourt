@@ -147,7 +147,7 @@
 	function get_city(state_id=null){
     if(state_id!=null){
       $("select[name='city']").html('<option value="">---Select City---</option>');
-    	$.get('/portal/city/'+state_id,function(data) {
+    	$.get('/portal/city/'+state_id+'/1',function(data) {
           $.each(data.city,function(idx,val){
             var selected="";
             if(val.id==$("select[name='city']").data('select')){

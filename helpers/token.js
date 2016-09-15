@@ -12,5 +12,15 @@ module.exports = {
       expirtesInMinute: 1440
     });
     return token;
+  },
+  
+  createAPIToken: function(device){
+    var token = jsonwebtoken.sign({
+      device_id: device.device_id,
+      device_name: device.device_name
+    }, secretKey, {
+      expirtesInMinute: 1440
+    });
+    return token;
   }
 };

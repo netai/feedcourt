@@ -120,7 +120,7 @@
 			});
    	  $('select[name="state"]').change(function(){
         $("select[name='city']").html('<option value="">---Select City---</option>');
-      	$.get('/portal/city/'+$(this).val(),function(data) {
+      	$.get('/portal/city/'+$(this).val()+'/1',function(data) {
             $.each(data.city,function(idx,val){
               $("select[name='city']").append('<option value="'+val.id+'">'+val.name+'</option>');
             });

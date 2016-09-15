@@ -10,6 +10,8 @@ function controllersFactory () {
     controllers.menues = require('./menuesController');
     controllers.reviews= require('./reviewsController');
     controllers.menue_group= require('./menueGroupController');
+    controllers.cities= require('./citiesController');
+    
     return controllers;
 };
 

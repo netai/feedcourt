@@ -41,6 +41,7 @@
         <ul class="nav left-side-ul-sec" id="side-menu">
             <li class="active left-sidebar-parent dashboard-home"><a href="/portal"><img src="/static/assets/images/dashboard.png" style="width:12%">&nbsp;&nbsp;Dashboard</a></li>
             <% if(typeof SessionData.user_type!==undefined  && (SessionData.user_type=='1')){ %>
+                <li><a href="/portal/cities_list"><img src="/static/assets/images/cities.png" style="width:12%">&nbsp;Manage Cities</a></li>
                 <li><a href="/portal/foodcourts"><img src="/static/assets/images/feedcourt_128.png" style="width:12%">&nbsp;Manage Foodcourt</a></li>
             <% } %>
               

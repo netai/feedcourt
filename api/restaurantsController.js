@@ -9,7 +9,7 @@ module.exports = {
   restaurantDetail: function(req, res, next) {
     var id = req.params.id;
     restaurantsModel.forge({id:id,'user_type':3})
-    .fetch({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
+    .fetch({withRelated: ['addresses','addresses.state','addresses.city','menu_groups','menu_groups.menus',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
     .then(function (model) {
       var response = {};
       if(model){

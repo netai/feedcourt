@@ -1,6 +1,7 @@
 var Checkit = require('checkit');
 var db = require('../config/db');
 var usersModel = require('./usersModel'),
+    menusModel = require('./menusModel'),
     imagesModel=require('./imagesModel');
 
 
@@ -19,6 +20,9 @@ var menugroupsModel = db.Model.extend({
   tableName: 'menu_groups',
   menu_group_images: function() {
       return this.hasMany(imagesModel,'reference_id');
+  },
+  menus: function() {
+      return this.hasMany(menusModel,'menu_group_id');
   },
 });
 

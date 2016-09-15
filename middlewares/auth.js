@@ -5,7 +5,7 @@ var secretKey = config.secretKey;
 
 module.exports = {
   api_authenticated: function(req,res,next){
-    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+    var token = req.body.token || req.query.token || req.headers['x-auth-token'];
     if(token){
       jsonwebtoken.verify(token, secretKey, function(err,decoded){
         if(err){
@@ -17,6 +17,21 @@ module.exports = {
       });
     } else {
       res.status(403).send({status:'error',code: '2403',message: 'No token provided'});
+    }
+  },
+  api_authorized: function(req,res,next){
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+    if(token){
+      jsonwebtoken.verify(token, secretKey, function(err,decoded){
+        if(err){
+          res.status(403).send({status: 'error',code: '2403', message: 'failed to authorization'});
+        } else {
+          req.decoded = decoded;
+          next();
+        }
+      });
+    } else {
+      res.status(403).send({status:'error',code: '2403',message: 'No access token provided'});
     }
   },
   portal_authenticated: function(req,res,next){

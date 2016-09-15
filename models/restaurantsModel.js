@@ -3,6 +3,7 @@ var Checkit = require('checkit'),
     addressModel = require('./addressModel'),
     citiesModel = require('./citiesModel'),
     statesModel = require('./statesModel'),
+    menugroupsModel = require('./menugroupsModel'),
     imagesModel = require('./imagesModel');
 
 
@@ -31,6 +32,9 @@ var restaurantsModel = db.Model.extend({
   },
   images: function() {
       return this.hasMany(imagesModel,'reference_id');
+  },
+  menu_groups: function() {
+      return this.hasMany(menugroupsModel,'restaurant_id');
   },
   
 });

@@ -14,7 +14,7 @@
     <!--------Page Content -------->
     <div class="api-contain">
         <div class="api-logo">feedcourt API v1</div>
-        <div class="api-desc">Please put the auth token in header parameter 'x-access-token'<br/>x-access-token = < token ></div>
+        <div class="api-desc">Please put the access token in header parameter 'x-access-token'<br/>x-access-token = < token ></div>
         <div class="api-desc">all image path is -<br/>Large Image - https://www.feedcourt.com/media/images/< file name ><br/>Thumb Image - https://www.feedcourt.com/media/images/thumb/< file name ></div>
         <div class="api-table">
             <table cellspacing=0>
@@ -23,11 +23,11 @@
                     <th width="10%">Name</th>
                     <th width="20%">Description</th>
                     <th width="30%">Url</th>
-                    <th width="5%">Token</th>
+                    <th width="5%">Access Token</th>
                     <th width="10%">Method</th>
                     <th width="30%">Request</th>
                 </tr>
-                <tr>
+                <!--<tr>
                     <td>1.</td>
                     <td>Login</td>
                     <td>customer login</td>
@@ -35,13 +35,22 @@
                     <td></td>
                     <td>POST</td>
                     <td>email, password</td>
+                </tr>-->
+                <tr>
+                    <td>1.</td>
+                    <td>Token</td>
+                    <td>get api access token</td>
+                    <td>http://www.feedcourt.com/api/v1/api_token</td>
+                    <td></td>
+                    <td>POST</td>
+                    <td>device_id, device_name</td>
                 </tr>
                 <tr>
                     <td>2.</td>
                     <td>Signup</td>
                     <td>customer signup</td>
                     <td>http://www.feedcourt.com/api/v1/signup</td>
-                    <td></td>
+                    <td>YES</td>
                     <td>POST</td>
                     <td>email, password, name, phone</td>
                 </tr>
@@ -50,7 +59,7 @@
                     <td>Signup(facebook)</td>
                     <td>customer facebook signup</td>
                     <td>http://www.feedcourt.com/api/v1/facebook_signup</td>
-                    <td></td>
+                    <td>YES</td>
                     <td>POST</td>
                     <td>email, password, name, phone, facebook_id</td>
                 </tr>
@@ -58,10 +67,10 @@
                     <td>4.</td>
                     <td>Cities</td>
                     <td>City list</td>
-                    <td>http://www.feedcourt.com/api/v1/states/:id/cities</td>
+                    <td>http://www.feedcourt.com/api/v1/cities</td>
                     <td>YES</td>
                     <td>GET</td>
-                    <td>state id (WB = 35)</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>5.</td>
@@ -124,7 +133,7 @@
                     <td>http://www.feedcourt.com/api/v1/restaurants/reviews</td>
                     <td>YES</td>
                     <td>POST</td>
-                    <td>restaurant_id, comment</td>
+                    <td>restaurant_id, comment, user_id</td>
                 </tr>
                 
             </table>

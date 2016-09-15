@@ -23,7 +23,7 @@ module.exports = {
   // POST /restaurants/reviews
   add_restaurant_reviews: function(req, res, next) {
     var review_data={
-      'review_by': req.decoded.id,
+      'review_by': req.body.user_id,
       'review_to': req.body.restaurant_id,
       'comment': req.body.comment,
       'status': 0

@@ -177,7 +177,11 @@ module.exports = {
   // GET /Cities/
   city_list: function(req, res, next){
     var id=req.params.id;
-    citiesModel.where({state_id:id})
+    var conditions={'state_id':id,'is_selected':'1'};
+    if(req.params.is_selected!==null || req.params.is_selected!==undefined){
+        conditions={'state_id':id,'is_selected':req.params.is_selected};
+    }
+    citiesModel.where(conditions)
     .fetchAll()
     .then(function (model) {
       var context = {};

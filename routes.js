@@ -12,23 +12,23 @@ exports.setup = function (params) {
     
  //site router
  app.all(v1_api+'/', api_controllers.site.v1_home);
- app.post(v1_api+'/login', api_controllers.site.login);
- app.post(v1_api+'/signup', api_controllers.site.signup);
- app.post(v1_api+'/facebook_signup', api_controllers.site.facebook_signup);
- app.post(v1_api+'/search', auth.api_authenticated, api_controllers.site.search);
- app.get(v1_api+'/states/:id/cities',auth.api_authenticated, api_controllers.site.city_list);
- app.get(v1_api+'/states', auth.api_authenticated, api_controllers.site.state_list);
+ app.post(v1_api+'/api_token', api_controllers.site.api_token);
+ app.post(v1_api+'/login', auth.api_authorized, api_controllers.site.login);
+ app.post(v1_api+'/signup', auth.api_authorized, api_controllers.site.signup);
+ app.post(v1_api+'/facebook_signup', auth.api_authorized, api_controllers.site.facebook_signup);
+ app.post(v1_api+'/search', auth.api_authorized, api_controllers.site.search);
+ app.get(v1_api+'/cities', auth.api_authorized, api_controllers.site.city_list);
  
  //restaurants router
- app.get(v1_api+'/restaurants/:id', auth.api_authenticated, api_controllers.restaurants.restaurantDetail);
+ app.get(v1_api+'/restaurants/:id', auth.api_authorized, api_controllers.restaurants.restaurantDetail);
     
  //foodcourt router
- app.get(v1_api+'/foodcourts/:id/restaurants', auth.api_authenticated, api_controllers.foodcourts.restaurants_list);
- app.get(v1_api+'/cities/:id/foodcourts', auth.api_authenticated, api_controllers.foodcourts.foodcourt_list);
+ app.get(v1_api+'/foodcourts/:id/restaurants', auth.api_authorized, api_controllers.foodcourts.restaurants_list);
+ app.get(v1_api+'/cities/:id/foodcourts', auth.api_authorized, api_controllers.foodcourts.foodcourt_list);
  
  //reviews router
- app.get(v1_api+'/restaurants/:id/reviews', auth.api_authenticated, api_controllers.reviews.restaurant_reviews);
- app.post(v1_api+'/restaurants/reviews', auth.api_authenticated, api_controllers.reviews.add_restaurant_reviews);
+ app.get(v1_api+'/restaurants/:id/reviews', auth.api_authorized, api_controllers.reviews.restaurant_reviews);
+ app.post(v1_api+'/restaurants/reviews', auth.api_authorized, api_controllers.reviews.add_restaurant_reviews);
     
     
     /*****************portal router*********************/
@@ -40,13 +40,18 @@ exports.setup = function (params) {
  app.all('/portal/changepassword', auth.portal_authenticated, controllers.site.change_password);
  app.get('/portal/logout', controllers.site.portal_logout);
  app.all('/portal/state',auth.portal_authenticated, controllers.site.state_list);
- app.all('/portal/city/:id',auth.portal_authenticated, controllers.site.city_list);
+ app.all('/portal/city/:id/:is_selected',auth.portal_authenticated, controllers.site.city_list);
  app.all('/portal/foodcourt_list/',auth.portal_authenticated, controllers.site.foodcourt_list);
  app.all('/portal/cuisines_list/', controllers.site.cuines_list);
  app.get('/portal/unit_list/', controllers.site.unit_list);
  app.all('/portal/menu_list/', controllers.site.menu_list);
  app.all('/portal/emailexist/', controllers.site.email_exist);
-    
+ 
+ //manage-cities
+ app.get('/portal/cities_list', auth.portal_authenticated, controllers.cities.cities_list);
+ app.all('/portal/city_add', auth.portal_authenticated, controllers.cities.city_add);
+ app.get('/portal/city_delete/:id', auth.portal_authenticated, controllers.cities.city_delete);
+ 
  //customers router
  app.get('/portal/customers', auth.portal_authenticated, controllers.customers.customers_list);
  app.get('/portal/customers/view/:id', auth.portal_authenticated, controllers.customers.customer_detail);
