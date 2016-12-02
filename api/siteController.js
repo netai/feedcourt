@@ -1,8 +1,4 @@
-var usersModel = require('../models/usersModel'),
-    statesModel = require('../models/statesModel'),
-    foodcourtsModel = require('../models/foodcourtsModel'),
-    restaurantsModel = require('../models/restaurantsModel'),
-    citiesModel = require('../models/citiesModel');
+var models = require('../models1');
 var tokenHelper = require('../helpers/token');
 
 module.exports = {
@@ -37,7 +33,7 @@ module.exports = {
     var email = req.body.email;
     var password = req.body.password;
     var user_type= 4; //customer type
-    usersModel.forge({email: email,password: password,user_type:user_type, facebook_id:0})
+    models.usersModel.forge({email: email,password: password,user_type:user_type, facebook_id:0})
     .fetch()
     .then(function (model) {
       var response = {};
@@ -86,7 +82,7 @@ module.exports = {
       status : 1
     }
     var response = {};
-    usersModel.forge({phone_no:req_data.phone_no, user_type:4, facebook_id:0})
+    models.usersModel.forge({phone_no:req_data.phone_no, user_type:4, facebook_id:0})
     .fetch()
     .then(function (model) {
       if(model){
@@ -96,7 +92,7 @@ module.exports = {
         };
         res.json(response);
       } else {
-        usersModel.forge(req_data)
+      models.usersModel.forge(req_data)
         .save()
         .then(function (model) {
           if(model){
@@ -135,7 +131,7 @@ module.exports = {
       status : 1
     }
     var response = {};
-    usersModel.forge({facebook_id: req_data.facebook_id})
+    models.usersModel.forge({facebook_id: req_data.facebook_id})
     .fetch()
     .then(function (model) {
       if(model){
@@ -146,7 +142,7 @@ module.exports = {
         
         res.json(response);
       } else {
-        usersModel.forge(req_data)
+      models.usersModel.forge(req_data)
         .save()
         .then(function (model) {
           
@@ -181,7 +177,7 @@ module.exports = {
     var q = req.body.q;
     var city_id=parseInt(req.body.city_id);
     if(q!=undefined && q!='' && city_id!=undefined && city_id!=''){
-      foodcourtsModel.query(function(qb) {
+    models.foodcourtsModel.query(function(qb) {
         qb.innerJoin('addresses', function () {
           this.on('users.id', '=', 'addresses.user_id')
           .andOn('addresses.city_id', '=', city_id);
@@ -192,7 +188,7 @@ module.exports = {
       .where('full_name', 'LIKE', '%'+q+'%')
       .fetchAll({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1'}); }}]})
       .then(function (foodcourts_model) {
-        restaurantsModel.query('orderBy', 'id', 'desc').where({'user_type':'3','status': 1}).where('full_name', 'LIKE', '%'+q+'%')
+      models.restaurantsModel.query('orderBy', 'id', 'desc').where({'user_type':'3','status': 1}).where('full_name', 'LIKE', '%'+q+'%')
         .fetchAll({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
         .then(function (restaurants_model) {
           var response = {
@@ -221,7 +217,7 @@ module.exports = {
   
   // GET /states/:id/cities
   city_list: function(req, res, next){
-    citiesModel.query('orderBy', 'name', 'asc').where({is_selected:1})
+    models.citiesModel.query('orderBy', 'name', 'asc').where({is_selected:1})
     .fetchAll()
     .then(function (model) {
       var response = {
@@ -237,7 +233,7 @@ module.exports = {
   
   // GET /states/
   state_list: function(req, res, next){
-    statesModel.fetchAll()
+    models.statesModel.fetchAll()
     .then(function (model) {
       var response = {
         states: model.toJSON(),

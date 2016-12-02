@@ -4,6 +4,7 @@ var Checkit = require('checkit'),
     citiesModel = require('./citiesModel'),
     statesModel = require('./statesModel'),
     menugroupsModel = require('./menugroupsModel'),
+    menusModel=require('../models/menusModel'),
     imagesModel = require('./imagesModel');
 
 
@@ -24,12 +25,12 @@ var restaurantsModel = db.Model.extend({
   addresses: function() {
       return this.hasMany(addressModel,'user_id');
   },
-  state: function() {
+/*  state: function() {
       return this.belongsTo(statesModel,'state_id');  // belongsTo, hasMany, morphMany, morphTo
   },
   city: function() {
       return this.belongsTo(citiesModel,'city_id');  // belongsTo, hasMany, morphMany, morphTo
-  },
+  },*/
   images: function() {
       return this.hasMany(imagesModel,'reference_id');
   },
@@ -37,6 +38,18 @@ var restaurantsModel = db.Model.extend({
       return this.hasMany(menugroupsModel,'restaurant_id');
   },
   
+/*  resturant_images: function() {
+      return this.hasMany(imagesModel,'reference_id');
+  },
+  menu_group_images: function() {
+      return this.hasMany(imagesModel,'reference_id');
+  },
+  restaurant_menus:function(){
+    return this.hasMany(menusModel,'restaurant_id');
+  },
+  menu_images: function() {
+      return this.hasMany(imagesModel,'reference_id');
+  },*/
 });
 
 module.exports = restaurantsModel;

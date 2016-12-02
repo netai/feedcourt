@@ -35,7 +35,7 @@
                       <span><%=cities[i].name%></span>
                       </td>
                       <td align="center">
-                        <a href="/portal/city_delete/<%=cities[0].id%>"  alt="Delete" title="Delete"><img src="/static/assets/images/delete.png" class="status_icon"></a>
+                        <a href="/portal/city_delete/<%=cities[i].id%>"  alt="Delete" title="Delete"><img src="/static/assets/images/delete.png" class="status_icon"></a>
                       </td>
                   </tr>
                   <%}%>
@@ -74,21 +74,6 @@
 </div>
 <script>
     $(document).ready(function() {
-      //   $('#dataTableApnd').DataTable({
-      //     responsive: true,
-      //     scroller:    false,
-      //     // sort:false,
-      //     "oLanguage":{
-      //     "sEmptyTable":"No Records found.",
-  				// "emptyTable": "No Records found.",
-  				// },
-  				// "language": {
-  				// 	"emptyTable": "No Records found.",
-  				// },
-  				// "aoColumnDefs" : [ { "bSortable" : false, "aTargets" : [ "sorting_disabled" ] } ],
-  				// "iDisplayLength": 10, //Pagination limit
-      // });
-      
       $('#dataTableApnd').DataTable({
             responsive: true,
             "ordering": false,

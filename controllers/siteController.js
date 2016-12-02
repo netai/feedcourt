@@ -1,10 +1,4 @@
-var usersModel = require('../models/usersModel'),
-    addressModel = require('../models/addressModel'),
-    statesModel = require('../models/statesModel'),
-    citiesModel = require('../models/citiesModel'),
-    cuisinesModel = require('../models/cuisinesModel'),
-    unitesModel = require('../models/unitesModel'),
-    menusModel =require('../models/menusModel');
+var models = require('../models1');
 
 var config = require('../config/app');
 
@@ -28,7 +22,7 @@ module.exports = {
         if(req.method == 'POST'){
         var email = req.body.email;
         var password = req.body.password;
-        usersModel.where({'email':email,'password':password,'status':'1'})
+        models.usersModel.where({'email':email,'password':password,'status':'1'})
         .where('user_type','!=','4')
         .fetch()
         .then(function (model) {
@@ -63,13 +57,13 @@ module.exports = {
     var contex={};
     if(typeof sess.user_id!=undefined && sess.user_id!=""){
       if(req.method=='POST'){
-        usersModel.forge({id:sess.user_id})
+        models.usersModel.forge({id:sess.user_id})
         .fetch()
         .then(function(is_profile_data){
             var profile_data=is_profile_data.toJSON();
             var update_profile_data={'full_name':req.body.name,'user_type':profile_data.user_type,'parent_id':profile_data.parent_id,'address_id':profile_data.address_id,'email':req.body.email,'password':profile_data.password,'phone_no':req.body.phone};
             is_profile_data.save(update_profile_data).then(function(){
-                addressModel.forge({id:profile_data.address_id})
+                models.addressModel.forge({id:profile_data.address_id})
                 .fetch()
                 .then(function(is_address){
                     var address_data={'state_id':req.body.state,'city_id':req.body.city,'zip_code':req.body.zip,'phone_no':req.body.phone,'email_id':req.body.email}; 
@@ -92,7 +86,7 @@ module.exports = {
         });
         
       } else{
-        usersModel.forge({id:sess.user_id})
+        models.usersModel.forge({id:sess.user_id})
         .fetch({withRelated: ['addresses','addresses.state','addresses.city']})
         .then(function(profile_data){
           contex={'profile':profile_data.toJSON(),'SessionData':sess,'error':''};
@@ -115,7 +109,7 @@ module.exports = {
         if(req.method == 'POST'){
         var opassword = req.body.opassword;
         var npassword = req.body.npassword;
-        usersModel.forge({password: opassword,id: sess.user_id})
+        models.usersModel.forge({password: opassword,id: sess.user_id})
         .fetch()
         .then(function (model) {
           if(model){
@@ -151,7 +145,7 @@ module.exports = {
   },
   // GET /StateList/
   state_list: function(req, res, next){
-    statesModel.fetchAll()
+    models.statesModel.fetchAll()
     .then(function (model) {
       var context = {};
       if(model){
@@ -181,7 +175,7 @@ module.exports = {
     if(req.params.is_selected!==null || req.params.is_selected!==undefined){
         conditions={'state_id':id,'is_selected':req.params.is_selected};
     }
-    citiesModel.where(conditions)
+    models.citiesModel.where(conditions)
     .fetchAll()
     .then(function (model) {
       var context = {};
@@ -208,7 +202,7 @@ module.exports = {
   // GET /Foodcourt List/
   foodcourt_list: function(req, res, next){
     //var id=req.params.id;
-    usersModel.where({status:'1',user_type:'2'}) 
+    models.usersModel.where({status:'1',user_type:'2'}) 
     .fetchAll({columns:['id','full_name']})
     .then(function (model) {
       var context = {};
@@ -235,7 +229,7 @@ module.exports = {
   // GET /cusine list/
   cuines_list: function(req, res, next){
     //var id=req.params.id;
-    cuisinesModel.where({status:'1'}) 
+    models.cuisinesModel.where({status:'1'}) 
     .fetchAll({columns:['id','title']})
     .then(function (model) {
       var context = {};
@@ -262,7 +256,7 @@ module.exports = {
   // GET /Unit list/
   unit_list: function(req, res, next){
    var title=req.query.term;
-    unitesModel.where({'status':'1'})
+    models.unitesModel.where({'status':'1'})
     .where('title', 'LIKE', '%'+title+'%')
     .fetchAll({columns:['id','title']})
     .then(function (model) {
@@ -288,7 +282,7 @@ module.exports = {
   menu_list: function(req, res, next){
    var restaurant_id= req.body.restaurant_id;
    var title_menu=req.body.menu;
-    menusModel.where({'restaurant_id':restaurant_id,'status':'1'})
+    models.menusModel.where({'restaurant_id':restaurant_id,'status':'1'})
     .where('title', 'LIKE', '%'+title_menu+'%')
     .fetchAll({columns:['id','title']})
     .then(function (model) {
@@ -308,7 +302,7 @@ module.exports = {
   email_exist: function(req, res, next){
     var email=req.body.email;
     if(typeof req.body.id!=undefined && req.body.id!=null && req.body.id!=""){
-      usersModel.where({'email':email, facebook_id:0})
+      models.usersModel.where({'email':email, facebook_id:0})
       .where('id','!=', req.body.id)
       .fetch()
       .then(function (model) {
@@ -338,7 +332,7 @@ module.exports = {
       
     } else {
       
-        usersModel.where({email:email,facebook_id:0})
+        models.usersModel.where({email:email,facebook_id:0})
         .fetch()
         .then(function (model) {
           var context = {};

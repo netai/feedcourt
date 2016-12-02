@@ -72,7 +72,7 @@
                     <td>GET</td>
                     <td></td>
                 </tr>
-                <tr>
+<!--                <tr>
                     <td>5.</td>
                     <td>States</td>
                     <td>state list</td>
@@ -80,9 +80,9 @@
                     <td>YES</td>
                     <td>GET</td>
                     <td></td>
-                </tr>
+                </tr>-->
                 <tr>
-                    <td>6.</td>
+                    <td>5.</td>
                     <td>Restaurants List</td>
                     <td>foodcourt restaurant list</td>
                     <td>http://www.feedcourt.com/api/v1/foodcourts/:id/restaurants</td>
@@ -90,8 +90,17 @@
                     <td>GET</td>
                     <td>foodcourt id</td>
                 </tr>
+<!--                <tr>
+                    <td>6.</td>
+                    <td>Restaurants MenuGroup Menues</td>
+                    <td>restaurant menugroup menues</td>
+                    <td>http://www.feedcourt.com/api/v1/restaurants-group-menus/:restaurant_id/:menu_group_id</td>
+                    <td>YES</td>
+                    <td>GET</td>
+                    <td>restaurant_id , menu_group_id</td>
+                </tr>-->
                 <tr>
-                    <td>7.</td>
+                    <td>6.</td>
                     <td>Restaurant Detail</td>
                     <td>Restaurant Detail</td>
                     <td>http://www.feedcourt.com/api/v1/restaurants/:id</td>
@@ -100,7 +109,7 @@
                     <td>restaurant id</td>
                 </tr>
                 <tr>
-                    <td>8.</td>
+                    <td>7.</td>
                     <td>Foodcourt List</td>
                     <td>Foodcourt list</td>
                     <td>http://www.feedcourt.com/api/v1/cities/:id/foodcourts</td>
@@ -109,7 +118,7 @@
                     <td>city id</td>
                 </tr>
                 <tr>
-                    <td>9.</td>
+                    <td>8.</td>
                     <td>Search</td>
                     <td>Search foodcourt or restaurant</td>
                     <td>http://www.feedcourt.com/api/v1/search</td>
@@ -118,7 +127,7 @@
                     <td>city_id, q (search keyword)</td>
                 </tr>
                 <tr>
-                    <td>10.</td>
+                    <td>9.</td>
                     <td>Show Reviews</td>
                     <td>Show restaurant reviews</td>
                     <td>http://www.feedcourt.com/api/v1/restaurants/:id/reviews</td>
@@ -127,13 +136,83 @@
                     <td>restaurants id</td>
                 </tr>
                 <tr>
-                    <td>11.</td>
+                    <td>10.</td>
                     <td>Send Reviews</td>
                     <td>Send restaurant reviews</td>
                     <td>http://www.feedcourt.com/api/v1/restaurants/reviews</td>
                     <td>YES</td>
                     <td>POST</td>
                     <td>restaurant_id, comment, user_id</td>
+                </tr>
+                 <tr>
+                    <td>11.</td>
+                    <td>Make Order</td>
+                    <td>Make a New Order</td>
+                    <td>http://www.feedcourt.com/api/v1/makeorder</td>
+                    <td>YES</td>
+                    <td>POST</td>
+                    <td>Pass Raw json data Like
+                    <p>
+                        
+                        {
+                        "customer_id":"1",
+                        "total_amount":"23.00",
+                        "address":{
+                        "billing_address":{
+                        "address_id":"",
+                        "state_id":"1",
+                        "city_id":"2",
+                        "zip_code":"2345678",
+                        "phone_no":"12344",
+                        "email_id":"test@x"
+                        },
+                        "shipping_address":{
+                        "address_id":"",
+                        "state_id":"1",
+                        "city_id":"2",
+                        "zip_code":"2345678",
+                        "phone_no":"12344",
+                        "email_id":"test@x"
+                        }
+                        },
+                        "order_details":[
+                        {
+                        "restaurant_id":"3",
+                        "menu_id":"4",
+                        "price":"100.05",
+                        "qty":"2"
+                        },
+                        {"restaurant_id":"3",
+                        "menu_id":"4",
+                        "price":"100.05",
+                        "qty":"2"
+                        }
+                        ]
+                        }
+                        
+                    </p>
+                    </td>
+                    
+                <tr>
+                    <td>12.</td>
+                    <td>Order list</td>
+                    <td>To get all order data</td>
+                    <td>http://www.feedcourt.com/api/v1/order-list/:customer_id</td>
+                    <td>YES</td>
+                    <td>GET</td>
+                    <td>customer_id</td>
+                </tr>
+                 <tr>
+                    <td>13.</td>
+                    <td>Order Detail</td>
+                    <td>To view detail of an order</td>
+                    <td>http://www.feedcourt.com/api/v1//order-detail/:customer_id/:order_detail_id</td>
+                    <td>YES</td>
+                    <td>GET</td>
+                    <td>customer_id , order_detail_id</td>
+                </tr>
+                    
+                    
                 </tr>
                 
             </table>

@@ -35,7 +35,6 @@ var menusModel = db.Model.extend({
   menu_groups: function() {
     return this.belongsTo(menugroupsModel,'menu_group_id');
   },
-  
 });
 
 module.exports = menusModel;

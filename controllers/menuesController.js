@@ -1,8 +1,4 @@
-var usersModel = require('../models/usersModel'),
-    menusModel =require('../models/menusModel'),
-    unitesModel =require('../models/unitesModel'),
-    imagesModel =require('../models/imagesModel'),
-    menugroupsModel =require('../models/menugroupsModel'),
+var models = require('../models1'),
     utility = require('../helpers/utility');
 
 
@@ -19,12 +15,12 @@ module.exports = {
     if(req.params.feedcourt!==undefined){
       foodcourt_id=req.params.feedcourt;
     }
-    usersModel.forge({id:id})
+    models.usersModel.forge({id:id})
     .fetch({columns: ['full_name']})
     .then(function (model) {
       if(model){
         var  restaurant_data=model.toJSON();
-        menusModel.query('orderBy', 'order_sequence', 'asc').where({'restaurant_id':id})
+        models.menusModel.query('orderBy', 'order_sequence', 'asc').where({'restaurant_id':id})
         .where('status','!=',2)
         .fetchAll({withRelated: ['menu_groups','unites',{menu_images: function(query) { query.where({'type':'2','is_default':1}); }}]})
         .then(function (menues_data) {
@@ -71,12 +67,12 @@ module.exports = {
     if(req.method == 'POST'){
         restaurant_id = req.body.restaurant_id;
           if(req.body.unit_id<=0){
-             unitesModel.forge({title: req.body.unit, restaurant_id: req.body.restaurant_id, status: '1'})
+             models.unitesModel.forge({title: req.body.unit, restaurant_id: req.body.restaurant_id, status: '1'})
             .save()
             .then(function (saveUnit){
               if(saveUnit){
                 var new_uint=saveUnit.toJSON();
-                menusModel.forge({cuisine_id: 0, title: req.body.title, price:req.body.price,unit_id:new_uint.id,description:req.body.description,restaurant_id:restaurant_id,menu_group_id:req.body.menu_group_id,'order_sequence':req.body.order_sequence,status: '1'})
+                models.menusModel.forge({cuisine_id: 0, title: req.body.title, price:req.body.price,unit_id:new_uint.id,description:req.body.description,restaurant_id:restaurant_id,menu_group_id:req.body.menu_group_id,'order_sequence':req.body.order_sequence,status: '1'})
                 .save()
                 .then(function(saveMenu){
                   if(saveMenu){
@@ -89,7 +85,7 @@ module.exports = {
             });
           }
           else if(req.body.unit_id>0){
-            menusModel.forge({cuisine_id: 0, title: req.body.title, price:req.body.price,unit_id:req.body.unit_id,description:req.body.description,restaurant_id:req.body.restaurant_id,menu_group_id:req.body.menu_group_id,'order_sequence':req.body.order_sequence,status: '1'})
+            models.menusModel.forge({cuisine_id: 0, title: req.body.title, price:req.body.price,unit_id:req.body.unit_id,description:req.body.description,restaurant_id:req.body.restaurant_id,menu_group_id:req.body.menu_group_id,'order_sequence':req.body.order_sequence,status: '1'})
                 .save()
                 .then(function(saveMenu){
                   if(saveMenu){
@@ -117,17 +113,17 @@ module.exports = {
       if(req.method == 'POST'){
           menu_id=req.body.menu_id;
           restaurant_id=req.body.restaurant_id;
-          usersModel.forge({id:restaurant_id})
+          models.usersModel.forge({id:restaurant_id})
           .fetch()
           .then(function(is_restaurant){
               var restaurant=is_restaurant.toJSON();
               if(req.body.unit_id<=0){
-                  unitesModel.forge({title: req.body.unit, restaurant_id: restaurant.id, status: '1'})
+                  models.unitesModel.forge({title: req.body.unit, restaurant_id: restaurant.id, status: '1'})
                   .save()
                   .then(function (saveUnit){
                     if(saveUnit){
                       var new_uint=saveUnit.toJSON();
-                      menusModel.forge({id:menu_id})
+                      models.menusModel.forge({id:menu_id})
                       .fetch()
                       .then(function(is_menu){
                         var menu=is_menu.toJSON();
@@ -141,7 +137,7 @@ module.exports = {
                     }
                   });
               } else if(req.body.unit_id>0) {
-                menusModel.forge({id:menu_id})
+                models.menusModel.forge({id:menu_id})
                 .fetch()
                 .then(function(is_menu){
                   var menu=is_menu.toJSON();
@@ -155,11 +151,11 @@ module.exports = {
             }
         });
       } else {
-        usersModel.forge({id:restaurant_id})
+        models.usersModel.forge({id:restaurant_id})
         .fetch()
         .then(function(is_restaurant){
             var restaurant=is_restaurant.toJSON();
-            menusModel.forge({'id':menu_id})
+            models.menusModel.forge({'id':menu_id})
             .fetch({withRelated: ['menu_groups','unites',{menu_images: function(query) { query.where({'type':'2','is_default':1}); }}]})
             .then(function(is_menu){
               contex={'SessionData':sess,'restaurant':restaurant,'menu':is_menu.toJSON()};
@@ -178,11 +174,11 @@ module.exports = {
       restaurant_id=sess.user_id;
     }
     var contex={'SessionData':sess};
-    usersModel.forge({id:restaurant_id})
+    models.usersModel.forge({id:restaurant_id})
       .fetch()
       .then(function(is_restaurant){
           var restaurant=is_restaurant.toJSON();
-          menusModel.forge({'id':menu_id})
+          models.menusModel.forge({'id':menu_id})
           .fetch({withRelated: ['menu_groups','unites',{menu_images: function(query) { query.where({'type':'2','is_default':1}); }}]})
           .then(function(is_menu){
             contex={'SessionData':sess,'restaurant':restaurant,'menu':is_menu.toJSON()};
@@ -200,7 +196,7 @@ module.exports = {
   // Put /Resturant/Changestatus
   change_status: function(req, res, next) {
     var id = req.params.id;
-    menusModel.forge({id:id})
+    models.menusModel.forge({id:id})
     .fetch()
     .then(function (model) {
       var status = model.get('status')==1?0:1;
@@ -222,7 +218,7 @@ module.exports = {
   // Put /menu/delete
   menu_delete: function(req, res, next) {
     var id = req.params.id;
-    menusModel.forge({id:id})
+    models.menusModel.forge({id:id})
     .fetch()
     .then(function (model) {
       model.save({status: 2})
@@ -251,7 +247,7 @@ module.exports = {
       if(req.file.originalname!=undefined){
         var file_name = utility.getFileName(req.file.originalname);
         utility.saveImageAndThumb(req.file,file_name,function(){
-          imagesModel.forge({img_name: file_name, type: 2, reference_id:id, added_by: sess.user_id})
+          models.imagesModel.forge({img_name: file_name, type: 2, reference_id:id, added_by: sess.user_id})
           .save()
           .then(function (imgmodel) {
             res.redirect('/portal/menu/'+restaurant_id);
@@ -262,7 +258,7 @@ module.exports = {
         }); 
       }
     } else {
-      imagesModel.where({reference_id:id,type:'2'})
+      models.imagesModel.where({reference_id:id,type:'2'})
       .fetchAll()
       .then(function (menu_images){
             context={'SessionData':sess,'menu_images':menu_images.toJSON(),'menu_id':id,'restaurant_id':restaurant_id};
@@ -275,7 +271,7 @@ module.exports = {
     var context = {status: 'error'};
     if(req.method=='POST'){
        var id=req.body.id;
-      imagesModel.where({id:id})
+      models.imagesModel.where({id:id})
       .fetch()
       .then(function (model) {
          var defautt_status = model.get('is_default')==1?0:1;
@@ -304,7 +300,7 @@ module.exports = {
      if(req.method=='POST'){
         var fs= require('fs-extra')
       var id=req.body.id;
-      imagesModel.where({id:id})
+      models.imagesModel.where({id:id})
       .fetch()
       .then(function (model) {
         var image_name = model.get('img_name');

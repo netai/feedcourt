@@ -17,7 +17,7 @@ exports.setup = function (params) {
  app.post(v1_api+'/signup', auth.api_authorized, api_controllers.site.signup);
  app.post(v1_api+'/facebook_signup', auth.api_authorized, api_controllers.site.facebook_signup);
  app.post(v1_api+'/search', auth.api_authorized, api_controllers.site.search);
- app.get(v1_api+'/cities', auth.api_authorized, api_controllers.site.city_list);
+ app.get(v1_api+'/cities', auth.api_authorized, auth.api_authorized, api_controllers.site.city_list);
  
  //restaurants router
  app.get(v1_api+'/restaurants/:id', auth.api_authorized, api_controllers.restaurants.restaurantDetail);
@@ -29,8 +29,11 @@ exports.setup = function (params) {
  //reviews router
  app.get(v1_api+'/restaurants/:id/reviews', auth.api_authorized, api_controllers.reviews.restaurant_reviews);
  app.post(v1_api+'/restaurants/reviews', auth.api_authorized, api_controllers.reviews.add_restaurant_reviews);
-    
-    
+ //Order controller
+  app.post(v1_api+'/makeorder', auth.api_authorized, api_controllers.orders.makeOrder);
+  //order list
+  app.get(v1_api+'/order-list/:customer_id', auth.api_authorized, api_controllers.orders.orderList);
+  app.get(v1_api+'/order-detail/:customer_id/:order_detail_id', auth.api_authorized, api_controllers.orders.orderDetail);
     /*****************portal router*********************/
     
  //site router

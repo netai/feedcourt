@@ -1,11 +1,11 @@
-var reviewsModel = require('../models/reviewsModel');
+var models = require('../models1');
     
 module.exports = {
   
   // GET /restaurants/:id/reviews
   restaurant_reviews: function(req, res, next) {
     var restaurant_id = req.params.id;
-    reviewsModel.where('status','=','1')
+    models.reviewsModel.where('status','=','1')
     .where({review_to: restaurant_id})
     .fetchAll({withRelated: ['users']})
     .then(function (model) {
@@ -29,7 +29,7 @@ module.exports = {
       'status': 0
     };
     var response = {};
-    reviewsModel.forge(review_data)
+    models.reviewsModel.forge(review_data)
     .save()
     .then(function (model) {
       if(model){

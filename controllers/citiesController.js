@@ -1,12 +1,11 @@
-var statesModel = require('../models/statesModel'),
-    citiesModel = require('../models/citiesModel');
+var models = require('../models1');
     
 module.exports = {
   // GET /portal/reviews/
   cities_list: function(req, res, next) {
     var sess = req.session;
     var context ={'cities':'','SessionData':sess};
-    citiesModel.query('orderBy', 'state_id', 'ASC').where({'is_selected':'1'})
+    models.citiesModel.query('orderBy', 'state_id', 'ASC').where({'is_selected':'1'})
     .fetchAll({withRelated: ['state']})
     .then(function (model) {
       if(model){
@@ -24,7 +23,7 @@ module.exports = {
     var context={'SessionData':sess};
     if(req.method == 'POST'){
       
-      citiesModel.forge({'id':req.body.city_id})
+      models.citiesModel.forge({'id':req.body.city_id})
       .fetch()
       .then(function(is_city){
         is_city.save({'is_selected':'1'})
@@ -44,7 +43,7 @@ module.exports = {
   },
   city_delete: function(req, res, next) {
     var id = req.params.id;
-    citiesModel.forge({id:id})
+    models.citiesModel.forge({id:id})
     .fetch()
     .then(function (model) {
       var status = model.get('is_selected')==1?0:1;

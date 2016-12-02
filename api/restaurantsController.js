@@ -1,15 +1,19 @@
-var restaurantsModel = require('../models/restaurantsModel'),
-    foodcourtsModel = require('../models/foodcourtsModel'),
-    citiesModel = require('../models/citiesModel'),
-    imagesModel =require('../models/imagesModel');
-
+var models = require('../models1');
+    
 module.exports = {
   
   // GET /restaurants/:id
   restaurantDetail: function(req, res, next) {
     var id = req.params.id;
-    restaurantsModel.forge({id:id,'user_type':3})
-    .fetch({withRelated: ['addresses','addresses.state','addresses.city','menu_groups','menu_groups.menus',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
+    models.restaurantsModel.forge({id:id,'user_type':3})
+    .fetch({withRelated: ['addresses','addresses.state','addresses.city',
+    {images:function(query){query.where({'status':1,'type':1});}},
+    {menu_groups: function(query) { query.where({'status': 1});}},
+    {'menu_groups.images':function(query){query.where({'status':1,'type':3});}},
+    {'menu_groups.menus':function(query){query.where({'status':1});}},
+    {'menu_groups.menus.images':function(query){query.where({'status':1,'type':2});}},
+    {'menu_groups.menus.unites':function(query){query.where({'status':1});}}
+    ]})
     .then(function (model) {
       var response = {};
       if(model){
@@ -38,6 +42,6 @@ module.exports = {
     .catch(function (error) {
       res.status(500).json({msg: error.message, status: 'error', code: 'SYSERR'});
     });
-  },
-
+  }
+  
 };

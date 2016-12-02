@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "async": "^2.1.2",
     "body-parser": "~1.13.2",
     "bookshelf": "^0.9.4",
     "bookshelf-page": "^0.3.2",
