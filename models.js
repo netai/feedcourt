@@ -269,16 +269,17 @@ var orderMastersModel = db.Model.extend({
   validate: function() {return new Checkit(this.validations).run(this.attributes);},
   tableName: 'order_masters',
   customer: function() {
-      return this.belongsTo(usersModel,'customer_id');
+      return this.belongsTo(customersModel,'customer_id');
   },
+ 
   order_details: function() {
       return this.hasMany(orderDetailsModel,'order_master_id');
   },
-  payment_details: function() {
-    return this.belongsTo(paymentDetailsModel,'order_details_id');
-  },
-  payment_masters: function() {
+  payment_master: function() {
       return this.hasOne(paymentMastersModel,'order_master_id');
+  },
+ payment_detail: function() {
+      return this.hasMany(paymentDetailsModel,'payment_master_id');
   },
 });
 
@@ -293,7 +294,7 @@ var orderDetailsModel = db.Model.extend({
   tableName: 'order_details',
   
   order_master: function() {
-      return this.hasMany(orderMastersModel,'order_master_id');
+      return this.belongsTo(orderMastersModel,'order_master_id');
   },
   restaurant: function() {
       return this.belongsTo(usersModel,'restaurant_id');
@@ -308,7 +309,7 @@ var orderDetailsModel = db.Model.extend({
       return this.belongsTo(addressModel,'bill_address_id');
   },
   payment_detail: function() {
-      return this.belongsTo(paymentDetailsModel,'order_details_id');
+      return this.hasMany(paymentDetailsModel,'order_details_id');
   },
   
  
@@ -334,9 +335,10 @@ var paymentDetailsModel = db.Model.extend({
     db.Model.apply(this, arguments);
     this.on('saving', this.validate.bind(this));
   },
+  validations: {},
+  validate: function() {return new Checkit(this.validations).run(this.attributes);},
   tableName: 'payment_details',
 });
-
 
 
 var models = {

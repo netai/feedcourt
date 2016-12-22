@@ -1,4 +1,4 @@
-var models = require('../models1');
+var models = require('../models');
 
 var config = require('../config/app');
 
@@ -49,7 +49,6 @@ module.exports = {
         res.render('site/login', {error:''});
       }
     }
-
   },
   
   edit_profile:function(req,res,next){

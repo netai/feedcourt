@@ -74,7 +74,7 @@ exports.setup = function (params) {
     
  //orders route
  app.get('/portal/orders',auth.portal_authenticated,controllers.orders.order_list);
- app.get('/portal/restaurant/orders/:id',auth.portal_authenticated,controllers.orders.getRestaurantOrders);
+ app.get('/portal/restaurants/orders/:id',auth.portal_authenticated,controllers.orders.getRestaurantOrders);
  app.get('/portal/order/view/:id',auth.portal_authenticated,controllers.orders.order_detail);
     
  //foodcourts route

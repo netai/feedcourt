@@ -1,10 +1,4 @@
-var foodcourtsModel = require('../models/foodcourtsModel'),
-    statesModel = require('../models/statesModel'),
-    citiesModel = require('../models/citiesModel'),
-    addressModel = require('../models/addressModel'),
-    restaurantsModel = require('../models/restaurantsModel'),
-    usersModel = require('../models/usersModel'),
-    imagesModel = require('../models/imagesModel'),
+var models = require('../models'),
     utility = require('../helpers/utility'),
     fs   = require('fs-extra');
 
@@ -14,11 +8,11 @@ module.exports = {
     var sess = req.session;
     var id = req.params.id;
     if(typeof sess.user_type!=='undefined' && sess.user_type=='2'){
-        foodcourtsModel.forge({id: sess.user_id,user_type:2})
+        models.foodcourtsModel.forge({id: sess.user_id,user_type:2})
         .fetch()
         .then(function (model){
           var foodcourtDetail=model.toJSON();
-           restaurantsModel.query('orderBy', 'id', 'desc').where({parent_id: sess.user_id,user_type: 3})
+           models.restaurantsModel.query('orderBy', 'id', 'desc').where({parent_id: sess.user_id,user_type: 3})
           .fetchAll({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
           .then(function (restaurant) {
             var context = {};
@@ -49,11 +43,11 @@ module.exports = {
           res.redirect('/portal/foodcourts');
         });
     } else{
-        foodcourtsModel.forge({id: id,user_type:2})
+        models.foodcourtsModel.forge({id: id,user_type:2})
         .fetch()
         .then(function (model){
           var foodcourtDetail=model.toJSON();
-           restaurantsModel.query('orderBy', 'id', 'desc').where({parent_id: id,user_type: 3})
+           models.restaurantsModel.query('orderBy', 'id', 'desc').where({parent_id: id,user_type: 3})
           .fetchAll({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
           .then(function (restaurant) {
             var context = {};
@@ -92,7 +86,7 @@ module.exports = {
     if(typeof sess.user_type !='undefined' && sess.user_type!=1){
       res.redirect('/portal');
     }
-    foodcourtsModel.query('orderBy', 'id', 'desc').where({user_type:2})
+    models.foodcourtsModel.query('orderBy', 'id', 'desc').where({user_type:2})
     .fetchAll({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
     .then(function (model) {
       var context = {};
@@ -128,7 +122,7 @@ module.exports = {
     var sess = req.session;
     var id = req.params.id;
     var context = {'SessionData':sess};
-    foodcourtsModel.forge({id: id,user_type:2})
+    models.foodcourtsModel.forge({id: id,user_type:2})
     .fetch({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
     .then(function (model) {
       context ={'SessionData':sess, 'foodcourt': model.toJSON()};
@@ -142,7 +136,7 @@ module.exports = {
   // GET portal/foodcourt/changestatus
   change_status: function(req, res, next) {
     var id = req.params.id;
-    foodcourtsModel.forge({id:id})
+    models.foodcourtsModel.forge({id:id})
     .fetch()
     .then(function (model) {
       var status = model.get('status')==1?0:1;
@@ -173,7 +167,7 @@ module.exports = {
       'user_type': 2,
       'status': 1
       }
-     usersModel .forge(req_data)
+     models.usersModel .forge(req_data)
       .save()
       .then(function (save_feedcourt){
         var save_feedcourt_resp=save_feedcourt.toJSON();
@@ -185,13 +179,13 @@ module.exports = {
         'email_id': req.body.email,
         'user_id':save_feedcourt_resp.id
         }
-        addressModel.forge(address_data)
+        models.addressModel.forge(address_data)
         .save()
         .then(function (model) {
            if(req.file.originalname!==undefined){
               var file_name = utility.getFileName(req.file.originalname);
               utility.saveImageAndThumb(req.file,file_name,function(){
-              imagesModel.forge({img_name: file_name, type: 1, reference_id: save_feedcourt_resp.id, added_by: sess.user_id,'is_default':'1'})
+              models.imagesModel.forge({img_name: file_name, type: 1, reference_id: save_feedcourt_resp.id, added_by: sess.user_id,'is_default':'1'})
               .save()
               .then(function (imgmodel) {})
               .catch(function (error) {
@@ -220,7 +214,7 @@ module.exports = {
      var foodcourt_id= req.params.id;
       var sess = req.session;
        if(req.method == 'POST'){
-            foodcourtsModel.forge({id:req.body.foodcourt_id})
+            models.foodcourtsModel.forge({id:req.body.foodcourt_id})
             .fetch()
             .then(function (is_foodcourt){
               if(is_foodcourt){
@@ -239,7 +233,7 @@ module.exports = {
                 is_foodcourt.save(save_foodcourt_data).then(function (model){
                   foodcourt_data=model.toJSON();
                  var address_data={'state_id':req.body.state,'city_id':req.body.city,'zip_code':req.body.zip,'phone_no':req.body.phone_no,'email_id':foodcourt_data.email,'user_id':foodcourt_data.id}; //addressModel
-                 addressModel.forge({'user_id':foodcourt_data.id})
+                 models.addressModel.forge({'user_id':foodcourt_data.id})
                 .fetch()
                 .then(function (save_adress){
                   save_adress.save(address_data).then(function(){});
@@ -248,7 +242,7 @@ module.exports = {
                     var file_name = utility.getFileName(req.file.originalname);
                     utility.saveImageAndThumb(req.file,file_name,function(){
                     
-                     imagesModel.forge({reference_id: foodcourt_data.id})
+                     models.imagesModel.forge({reference_id: foodcourt_data.id})
                     .fetch()
                     .then(function (is_image){
                       var old_images=is_image.toJSON();
@@ -261,7 +255,7 @@ module.exports = {
                             console.log(error.message);
                         });
                       } else{
-                        imagesModel.forge({img_name: file_name, type: '1', reference_id: foodcourt_data.id, added_by: sess.user_id,'is_default':'1'})
+                        models.imagesModel.forge({img_name: file_name, type: '1', reference_id: foodcourt_data.id, added_by: sess.user_id,'is_default':'1'})
                         .save()
                         .then(function (imgmodel) {})
                         .catch(function (error) {
@@ -281,7 +275,7 @@ module.exports = {
             });
       } else {
         if(foodcourt_id!=""){
-           foodcourtsModel.forge({id:foodcourt_id,})
+           models.foodcourtsModel.forge({id:foodcourt_id,})
             .fetch({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
             .then(function (model){
               var contex = {};
@@ -300,6 +294,4 @@ module.exports = {
           }
       }
   },
-  
-  
 };

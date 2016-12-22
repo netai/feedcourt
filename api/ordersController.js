@@ -1,6 +1,6 @@
 var paymentDetailsCollection=require('../collections/paymentDetailsCollection'),
 orderDetailsCollection = require('../collections/orderDetailsCollection'),
-models = require('../models1');
+models = require('../models');
 module.exports = {
   // POST /makeOrder/:id
   makeOrder: function(req, res, next) {
@@ -96,7 +96,7 @@ module.exports = {
                                 'payment_master_id':payment_master_last_id,
                                 'amount':values.get('price'),
                                 'order_details_id':values.get('id'),
-                                'status':'1'
+                                'status':'2'
                               };
                                payment_details_data.push(paymentDetailsData);
                               });
@@ -180,7 +180,7 @@ module.exports = {
                                 'payment_master_id':payment_master_last_id,
                                 'amount':values.get('price'),
                                 'order_details_id':values.get('id'),
-                                'status':'1'
+                                'status':'2'
                               };
                                payment_details_data.push(paymentDetailsData);
                               });
@@ -258,7 +258,7 @@ module.exports = {
                                 'payment_master_id':payment_master_last_id,
                                 'amount':values.get('price'),
                                 'order_details_id':values.get('id'),
-                                'status':'1'
+                                'status':'2'
                               };
                                payment_details_data.push(paymentDetailsData);
                               });
@@ -337,7 +337,7 @@ module.exports = {
                                 'payment_master_id':payment_master_last_id,
                                 'amount':values.get('price'),
                                 'order_details_id':values.get('id'),
-                                'status':'1'
+                                'status':'2'
                               };
                                payment_details_data.push(paymentDetailsData);
                               });
@@ -381,7 +381,8 @@ module.exports = {
       models.orderMastersModel.query('orderBy', 'order_date', 'desc').where({'customer_id':customer_id})
       .fetchAll({withRelated: [
         'order_details',
-        'payment_masters',
+        'payment_master',
+        /*'payment_masters.payment_detail',*/
         'order_details.restaurant',
         'order_details.menu',
         'order_details.ship_address',
@@ -389,8 +390,8 @@ module.exports = {
         'order_details.ship_address.city',
         'order_details.bill_address',
         'order_details.bill_address.state',
-        'order_details.bill_address.city'
-        /*,'order_details.payment_detail'*/
+        'order_details.bill_address.city',
+        'order_details.payment_detail'
         ]})
       .then(function (model) { 
         if(model){
@@ -412,8 +413,8 @@ module.exports = {
     var order_detail_id = req.params.order_detail_id;
     if(customer_id!="" && customer_id>0 && customer_id!=undefined && customer_id!=null){
       models.orderDetailsModel.forge({id:order_detail_id})
-      .fetch({withRelated: [/*'payment_detail'*/,'restaurant','menu','ship_address','ship_address.state','ship_address.city','bill_address','bill_address.state','bill_address.city'
-      ]})
+      .fetch({withRelated: ['order_master','order_master.payment_master','restaurant','menu','ship_address','ship_address.state','ship_address.city','bill_address','bill_address.state','bill_address.city'
+      ,'payment_detail']})
       .then(function (model) { 
         if(model){
           response = {message: 'Order List',status:'success',data:model.toJSON(),code: '8022'};

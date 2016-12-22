@@ -17,16 +17,18 @@
                           <!--<div class="panel-heading">
                               Basic Table
                           </div>-->
-                          <div class="panel-body">
-                              <div class="table-responsive">
-                                  <table class="table">
+                          <div class="panel-body table-responsive">
+                              <div class="dataTable_wrapper">
+                                    <table class="table" id="dataTableApnd">
                                       <thead>
                                           <tr>
                                               <th>SL</th>
-                                              <th>Reataurant</th>
-                                              <th>Order QTY</th>
-                                              <th>Amount</th>
+                                              <th>Invoice No</th>
                                               <th>Order Date</th>
+                                              <th>QTY</th>
+                                              <th>Amount</th>
+                                              <th>Payment Mode</th>
+                                              <th>Order Status</th>
                                               <th>Action</th>
                                           </tr>
                                       </thead>
@@ -35,13 +37,22 @@
                                         <% var counter=1 %>
                                         <% for(var i=0; i < orders.length; i++) { %>
                                             <tr>
-                                                <td><%= counter++ %></td>
-                                                <td><%= orders[i].restaurant.full_name %></td>
-                                                <td><%= orders[i].qty %></td>
-                                                <td><%= orders[i].price %></td>
-                                                <td><%= orders[i].order_date %>
+                                                <td align="center"><%= counter++ %></td>
+                                                <td align="center"><%= orders[i].invoice_no %></td>
+                                                <td align="center"><%= orders[i].order_master.order_date %></td>
+                                                <td align="center"><%= orders[i].qty %></td>
+                                                <td align="center"><%= orders[i].price %></td>
+                                                <td align="center"><%= orders[i].order_master.payment_master.payment_type %></td>
                                                 </td>
-                                                <td>
+                                                <td align="center">
+                                                    <select >
+                                                      <option <% var select=""; if(orders[i].order_status==3){ select='selected="selected"'; } %><%= select %> value="3">Not Approved</option>
+                                                      <option <% var select=""; if(orders[i].order_status==2){ select='selected="selected"'; } %><%= select %> value="2">Processing</option>
+                                                      <option <% var select=""; if(orders[i].order_status==1){ select='selected="selected"'; } %><%= select %> value="1">Delevered</option>
+                                                      <option <% var select=""; if(orders[i].order_status==0){ select='selected="selected"'; } %><%= select %> value="0" selected>Cancel</option>
+                                                    </select>
+                                                </td>
+                                                <td align="center">
                                                 <a href="javascript:void(0)" alt="View Detail" title="View Detail" data-toggle="modal" data-target="#popup" class="pop-link" data-href="/portal/order/view/<%=orders[i].id%>"><img src="/static/assets/images/info.png" class="status_icon"></a>
                                               </td>
                                             </tr>
@@ -60,3 +71,21 @@
           </div>
       </div>
 </div>
+ <script>
+    $(document).ready(function() {
+        $('#dataTableApnd').DataTable({
+            responsive: true,
+            "ordering": false,
+            "info":     false,
+            "oLanguage":{
+            "sEmptyTable":"No Records found.",
+            "emptyTable": "No Records found.",
+            },
+            "language": {
+                "emptyTable": "No Records found.",
+            },
+            "aoColumnDefs" : [ { "bSortable" : false, "aTargets" : [ "sorting_disabled" ] } ],
+            "iDisplayLength": '10', //Pagination limit
+        });
+    });
+  </script>

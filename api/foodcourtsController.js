@@ -1,4 +1,4 @@
-var models = require('../models1');
+var models = require('../models');
 
 module.exports = {
   // GET /foodcourts/:id/restaurants

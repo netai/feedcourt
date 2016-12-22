@@ -1,4 +1,4 @@
-var cuisinesModel = require('../models/cuisinesModel');
+var models = require('../models');
 var fs   = require('fs-extra'),
     path = require('path'),
     util = require('util');
@@ -8,7 +8,7 @@ module.exports = {
   cuisines_detail: function(req, res, next) {
     var sess = req.session;
     var id = req.params.id;
-      cuisinesModel.forge({id:id})
+      models.cuisinesModel.forge({id:id})
       .fetch()
       .then(function (model) {
           var context = {
@@ -26,7 +26,7 @@ module.exports = {
   cuisines_list: function(req, res, next) {
     var sess = req.session;
      var context = {'SessionData':sess};
-    cuisinesModel
+    models.cuisinesModel
     .where('status', '!=', '2')
     .orderBy('title')
     .fetchAll()
@@ -54,7 +54,7 @@ module.exports = {
   // Put /cuisine/Changestatus
   change_status: function(req, res, next) {
     var id = req.params.id;
-    cuisinesModel.forge({id:id})
+    models.cuisinesModel.forge({id:id})
     .fetch()
     .then(function (model) {
       var status = model.get('status')==1?0:1;
@@ -77,7 +77,7 @@ module.exports = {
   // Put /cuisine/delete
   cuisines_delete: function(req, res, next) {
     var id = req.params.id;
-    cuisinesModel.forge({id:id})
+    models.cuisinesModel.forge({id:id})
     .fetch()
     .then(function (model) {
       model.save({status: 2})
@@ -99,7 +99,7 @@ module.exports = {
   add_cuisines: function(req, res, next) {
      var sess = req.session;
     if(req.method == 'POST'){
-          cuisinesModel.forge({'title':req.body.title,'description':req.body.description,'status':'1'})
+          models.cuisinesModel.forge({'title':req.body.title,'description':req.body.description,'status':'1'})
           .save()
           .then(function (model){
             if(model){
@@ -120,7 +120,7 @@ module.exports = {
       var contex={};
       if(req.method == 'POST'){
           cuisine_id=req.body.cuisin_id;
-          cuisinesModel.forge({id:cuisine_id})
+          models.cuisinesModel.forge({id:cuisine_id})
           .fetch()
           .then(function (is_cuisines){
             if(is_cuisines){
@@ -133,7 +133,7 @@ module.exports = {
             }
           });
       } else if(cuisine_id>0) {
-        cuisinesModel.forge({id:cuisine_id})
+        models.cuisinesModel.forge({id:cuisine_id})
         .fetch()
         .then(function (model){
           contex={'cuisin':model.toJSON(),'SessionData':sess};

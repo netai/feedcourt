@@ -1,11 +1,11 @@
-var customersModel = require('../models/customersModel');
+var models = require('../models');
 
 module.exports = {
   // GET /portal/customers/view/:id
   customer_detail: function(req, res, next) {
      var sess = req.session;
     var id = req.params.id;
-    customersModel.forge({id: id})
+    models.customersModel.forge({id: id})
     .fetch({withRelated: ['addresses','addresses.state','addresses.city']})
     .then(function (model) {
       var context = {
@@ -22,7 +22,7 @@ module.exports = {
   //GET /portal/customers
   customers_list: function(req, res, next) {
      var sess = req.session;
-    customersModel.where({user_type:4})
+    models.customersModel.where({user_type:4})
     .fetchAll({withRelated: ['addresses','addresses.state','addresses.city']})
     .then(function (model) {
 
@@ -47,7 +47,7 @@ module.exports = {
   // GET portal/customers/changestatus
   change_status: function(req, res, next) {
     var id = req.params.id;
-    customersModel.forge({id:id})
+    models.customersModel.forge({id:id})
     .fetch()
     .then(function (model) {
       var status = model.get('status')==1?0:1;

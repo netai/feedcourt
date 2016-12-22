@@ -1,10 +1,4 @@
-var restaurantsModel =require('../models/restaurantsModel');
-var foodcourtsModel =require('../models/foodcourtsModel');
-var citiesModel =require('../models/citiesModel');
-var addressModel =require('../models/addressModel');
-var usersModel =require('../models/usersModel');
-var menusModel =require('../models/menusModel');
-var imagesModel =require('../models/imagesModel');
+var models =require('../models');
 var utility = require('../helpers/utility');
 
 module.exports = {
@@ -13,7 +7,7 @@ module.exports = {
     var sess = req.session;
     var id = req.params.id;
     if(typeof sess.user_type!='undefined' && sess.user_type=='3'){
-        restaurantsModel.forge({id:sess.user_id})
+        models.restaurantsModel.forge({id:sess.user_id})
         .fetch({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
         .then(function (model) {
           var context = {
@@ -29,7 +23,7 @@ module.exports = {
         
     } else{
       
-      restaurantsModel.forge({id:id})
+      models.restaurantsModel.forge({id:id})
       .fetch({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
       .then(function (model) {
         var context = {
@@ -59,7 +53,7 @@ module.exports = {
      }
 
     if(typeof sess.user_type!='undefined' && sess.user_type=='2'){
-        restaurantsModel.query('orderBy', 'id', 'desc').where({'parent_id':sess.user_id,'user_type':'3'})
+        models.restaurantsModel.query('orderBy', 'id', 'desc').where({'parent_id':sess.user_id,'user_type':'3'})
         .fetchAll({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
         .then(function (model) {
           if(model){
@@ -87,7 +81,7 @@ module.exports = {
         where_cond={'parent_id':foodcourt_id,'user_type': 3};
       }
       
-      restaurantsModel.query('orderBy', 'id', 'desc').where(where_cond)
+      models.restaurantsModel.query('orderBy', 'id', 'desc').where(where_cond)
         .fetchAll({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
         .then(function (model) {
           if(model){
@@ -115,7 +109,7 @@ module.exports = {
   // Put /Resturant/Changestatus
   change_status: function(req, res, next) {
     var id = req.params.id;
-    restaurantsModel.forge({id:id})
+    models.restaurantsModel.forge({id:id})
     .fetch()
     .then(function (model) {
       var status = model.get('status')==1?0:1;
@@ -138,13 +132,13 @@ module.exports = {
       var sess = req.session;
       if(req.method == 'POST'){
             var restaurant_data={'full_name':req.body.full_name,'user_type':3,'parent_id':req.body.foodcourt,'email':req.body.email,'password':req.body.password,'phone_no':req.body.phone_no,'contact_person':req.body.contact_person,'description':req.body.description}; 
-            usersModel.forge(restaurant_data)
+            models.usersModel.forge(restaurant_data)
             .save()
             .then(function (model) {
               if(model){
                 var saved_restaurant_data=model.toJSON();
                 var address_data={'state_id':req.body.state,'city_id':req.body.city,'zip_code':req.body.zip,'phone_no':req.body.phone_no,'email_id':req.body.email,'user_id':saved_restaurant_data.id}; //addressModel
-                addressModel.forge(address_data)
+                models.addressModel.forge(address_data)
                 .save()
                 .then(function (address){
                   if(address){
@@ -172,14 +166,14 @@ module.exports = {
       var sess = req.session;
       if(req.method == 'POST'){
           restaurant_id=req.body.restaurant_id;
-            restaurantsModel.forge({id:restaurant_id})
+            models.restaurantsModel.forge({id:restaurant_id})
             .fetch()
             .then(function (is_restaurant){
               var restaurant_data=is_restaurant.toJSON();
               var update_restaurant_data={'full_name':req.body.full_name,'user_type':3,'parent_id':req.body.foodcourt,'email':restaurant_data.email,'password':restaurant_data.password,'phone_no':req.body.phone_no,'contact_person':req.body.contact_person,'description':req.body.description}; 
               is_restaurant.save(update_restaurant_data).then(function (){
                 var address_data={'country_id':'1','state_id':req.body.state,'city_id':req.body.city,'zip_code':req.body.zip,'phone_no':req.body.phone_no,'user_id':restaurant_data.id};
-                addressModel.forge({'user_id':restaurant_data.id})
+                models.addressModel.forge({'user_id':restaurant_data.id})
                 .fetch()
                 .then(function (save_adress){
                   save_adress.save(address_data).then(function(){});
@@ -189,7 +183,7 @@ module.exports = {
             });
       } else {
         if(restaurant_id!=""){
-           restaurantsModel.forge({id:restaurant_id})
+           models.restaurantsModel.forge({id:restaurant_id})
             .fetch({withRelated: ['addresses','addresses.state','addresses.city',{images: function(query) { query.where({'type':'1','is_default':1}); }}]})
             .then(function (model){
               var contex = {};
@@ -217,7 +211,7 @@ module.exports = {
       if(req.file.originalname!==undefined){
         var file_name = utility.getFileName(req.file.originalname);
         utility.saveImageAndThumb(req.file,file_name,function(){
-          imagesModel.forge({img_name: file_name, type: 1, reference_id:restaurant_id, added_by: sess.user_id})
+          models.imagesModel.forge({img_name: file_name, type: 1, reference_id:restaurant_id, added_by: sess.user_id})
           .save()
           .then(function (imgmodel) {
             res.redirect('/portal/restaurants');
@@ -228,7 +222,7 @@ module.exports = {
         }); 
       }
     } else {
-      imagesModel.where({reference_id:restaurant_id,type:'1'})
+      models.imagesModel.where({reference_id:restaurant_id,type:'1'})
       .fetchAll()
       .then(function (restaurant_images){
             contex={'SessionData':sess,'restaurant_images':restaurant_images.toJSON(),'restaurant_id':restaurant_id};
@@ -241,7 +235,7 @@ module.exports = {
     var context = {status: 'error'};
     if(req.method=='POST'){
        var id=req.body.id;
-      imagesModel.where({id:id})
+      models.imagesModel.where({id:id})
       .fetch()
       .then(function (model) {
          var defautt_status = model.get('is_default')==1?0:1;
@@ -270,7 +264,7 @@ module.exports = {
      if(req.method=='POST'){
         var fs= require('fs-extra')
       var id=req.body.id;
-      imagesModel.where({id:id})
+      models.imagesModel.where({id:id})
       .fetch()
       .then(function (model) {
         var image_name = model.get('img_name');
@@ -297,7 +291,7 @@ module.exports = {
   // GET /restaurant_list_by_ajax/
   restaurant_list_by_ajax: function(req, res, next){
     //var id=req.params.id;
-    usersModel.where({status:'1',user_type:'3'}) 
+    models.usersModel.where({status:'1',user_type:'3'}) 
     .fetchAll({columns:['id','full_name']})
     .then(function (model) {
       var context = {};

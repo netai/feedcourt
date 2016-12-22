@@ -1,8 +1,4 @@
-var reviewsModel = require('../models/reviewsModel'),
-    usersModel = require('../models/usersModel'),
-    addressModel = require('../models/addressModel'),
-    statesModel = require('../models/statesModel'),
-    citiesModel = require('../models/citiesModel');
+var models = require('../models');
     
 module.exports = {
   // GET /portal/reviews/
@@ -26,7 +22,7 @@ module.exports = {
       var review_conditions={review_to:sess.user_id};
     }
     var context ={};
-    reviewsModel.where('status','!=','2')
+    models.reviewsModel.where('status','!=','2')
     .where(review_conditions)
     .fetchAll({withRelated: ['users','restaurants']})
     .then(function (model) {
@@ -51,7 +47,7 @@ module.exports = {
       status='2';
     }
     if(status!=""){
-      reviewsModel.forge({id:req.query.id})
+      models.reviewsModel.forge({id:req.query.id})
       .fetch()
       .then(function (model) {
         model.save({status: status})

@@ -1,4 +1,4 @@
-var models = require('../models1');
+var models = require('../models');
 var tokenHelper = require('../helpers/token');
 
 module.exports = {

@@ -12,12 +12,12 @@
     <%
     var member_title='Admin';
     if(SessionData.user_type=='2'){
-        member_title="Food-court";
+        member_title="Foodcourt";
     } else if(SessionData.user_type=='3'){
         member_title="Outlet salutationt";
     }
     %>
-    <a class="navbar-brand loged_member_title">Hello <%=member_title%></a>
+    <a class="navbar-brand loged_member_title">Hello <%=SessionData.name.charAt(0).toUpperCase() + SessionData.name.slice(1)%></a>
     
 </div>
 
